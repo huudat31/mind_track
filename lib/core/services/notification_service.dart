@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import '../../features/home/main_navigation_screen.dart';
 import 'reminder_preferences_service.dart';
 
 class NotificationService {
   static final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
+
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
 
   static const int morningReminderId = 101;
   static const int eveningReminderId = 102;
@@ -51,7 +55,8 @@ class NotificationService {
 
       await _notificationsPlugin.initialize(
         initializationSettings,
-        onDidReceiveNotificationResponse: onNotificationTap,
+        onDidReceiveNotificationResponse:
+            onNotificationTap ?? handleNotificationTap,
       );
 
       _isInitialized = true;
@@ -59,6 +64,27 @@ class NotificationService {
     } catch (e) {
       debugPrint('❌ Lỗi khởi tạo NotificationService: $e');
     }
+  }
+
+  /// Kiểm tra xem ứng dụng có được mở lên từ việc bấm thông báo không
+  static Future<NotificationAppLaunchDetails?> getLaunchDetails() async {
+    try {
+      return await _notificationsPlugin.getNotificationAppLaunchDetails();
+    } catch (e) {
+      debugPrint('Lỗi lấy launch details: $e');
+      return null;
+    }
+  }
+
+  /// Xử lý khi người dùng chạm vào banner thông báo -> Chuyển thẳng vào màn hình "Cảm giác của bạn ngay lúc này"
+  static void handleNotificationTap(NotificationResponse response) {
+    debugPrint('🔔 Chạm thông báo, payload: ${response.payload}');
+
+    // Đóng bất kỳ popup / bottom sheet nào đang mở
+    navigatorKey.currentState?.popUntil((route) => route.isFirst);
+
+    // Chuyển thẳng sang Tab 2: "Chọn cảm giác của bạn ngay lúc này"
+    MainNavigationScreen.switchTab(2);
   }
 
   /// Yêu cầu cấp quyền gửi thông báo từ người dùng
@@ -119,8 +145,9 @@ class NotificationService {
     await _notificationsPlugin.show(
       testNotificationId,
       'MindTrack Thử Nghiệm 🔔',
-      'Thông báo nhắc nhở đã sẵn sàng! Chúc bạn một ngày bình an và vững vàng tâm trí 🌱',
+      'Chạm vào đây để ghi nhận cảm xúc và năng lượng của bạn ngay bây giờ 🌱',
       details,
+      payload: 'state_of_mind',
     );
   }
 
@@ -198,6 +225,7 @@ class NotificationService {
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
         matchDateTimeComponents: DateTimeComponents.time,
+        payload: 'state_of_mind',
       );
     } catch (e) {
       debugPrint('Lỗi đặt lịch thông báo id=$id: $e');

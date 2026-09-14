@@ -2,30 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseAuthService {
-  static final SupabaseClient _client = Supabase.instance.client;
+  static SupabaseClient? get _client {
+    try {
+      return Supabase.instance.client;
+    } catch (_) {
+      return null;
+    }
+  }
 
   /// User hiện tại đang đăng nhập
-  static User? get currentUser => _client.auth.currentUser;
+  static User? get currentUser => _client?.auth.currentUser;
 
   /// Kiểm tra có phải người dùng ẩn danh (Guest) hay không
   static bool get isAnonymous {
-    final user = _client.auth.currentUser;
+    final user = currentUser;
     if (user == null) return true;
     return user.isAnonymous;
   }
 
   /// Stream theo dõi trạng thái thay đổi Auth
-  static Stream<AuthState> get authStateChanges => _client.auth.onAuthStateChange;
+  static Stream<AuthState> get authStateChanges =>
+      _client?.auth.onAuthStateChange ?? const Stream.empty();
 
   /// Đảm bảo luôn có 1 phiên đăng nhập (tối thiểu là Anonymous)
   static Future<String> getUserId() async {
-    final user = _client.auth.currentUser;
+    final client = _client;
+    if (client == null) return 'anonymous_user';
+
+    final user = client.auth.currentUser;
     if (user != null) {
       return user.id;
     }
 
     try {
-      final res = await _client.auth.signInAnonymously();
+      final res = await client.auth.signInAnonymously();
       if (res.user != null) {
         return res.user!.id;
       }
@@ -41,8 +51,11 @@ class SupabaseAuthService {
     required String email,
     required String password,
   }) async {
+    final client = _client;
+    if (client == null) return 'Chưa kết nối Supabase';
+
     try {
-      final res = await _client.auth.signInWithPassword(
+      final res = await client.auth.signInWithPassword(
         email: email.trim(),
         password: password,
       );
@@ -62,13 +75,16 @@ class SupabaseAuthService {
     required String email,
     required String password,
   }) async {
+    final client = _client;
+    if (client == null) return 'Chưa kết nối Supabase';
+
     try {
-      final user = _client.auth.currentUser;
+      final user = client.auth.currentUser;
 
       // Nếu đang là phiên ẩn danh, nâng cấp phiên này thành tài khoản thật để không mất dữ liệu DASS-21/Daily log
       if (user != null && user.isAnonymous) {
         try {
-          await _client.auth.updateUser(
+          await client.auth.updateUser(
             UserAttributes(
               email: email.trim(),
               password: password,
@@ -80,7 +96,7 @@ class SupabaseAuthService {
         }
       }
 
-      final res = await _client.auth.signUp(
+      final res = await client.auth.signUp(
         email: email.trim(),
         password: password,
       );
@@ -98,11 +114,14 @@ class SupabaseAuthService {
 
   /// Đăng xuất tài khoản và chuyển về phiên Ẩn danh mới
   static Future<void> signOut() async {
+    final client = _client;
+    if (client == null) return;
+
     try {
-      await _client.auth.signOut();
+      await client.auth.signOut();
       // Sau khi đăng xuất, tự động tạo lại một phiên ẩn danh mới để người dùng vẫn ghi nhận được data
       try {
-        await _client.auth.signInAnonymously();
+        await client.auth.signInAnonymously();
       } catch (e) {
         debugPrint('SignOut anonymous fallback error: $e');
       }

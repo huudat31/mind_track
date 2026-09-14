@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mind_track/core/services/reminder_preferences_service.dart';
+import 'package:mind_track/features/home/main_navigation_screen.dart';
 import 'package:mind_track/features/home/widgets/reminder_settings_bottom_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -81,6 +82,33 @@ void main() {
 
       expect(find.text('Gửi thử thông báo ngay bây giờ'), findsOneWidget);
       expect(find.text('Lưu & Kích Hoạt Lịch Nhắc'), findsOneWidget);
+    });
+
+    testWidgets('MainNavigationScreen can switch directly to Tab 2 (StateOfMindScreen)', (
+      tester,
+    ) async {
+      SharedPreferences.setMockInitialValues({});
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MainNavigationScreen(
+            key: MainNavigationScreen.navKey,
+            initialIndex: 0,
+          ),
+        ),
+      );
+
+      await tester.pump(const Duration(milliseconds: 200));
+
+      // Initially on Home (Today) tab
+      expect(find.text('Hôm Nay Của Bạn'), findsOneWidget);
+
+      // Programmatically trigger switchTab(2) like a notification tap does
+      MainNavigationScreen.switchTab(2);
+      await tester.pump(const Duration(milliseconds: 200));
+
+      // Verify that StateOfMindScreen ('Chọn cảm giác của bạn') is active
+      expect(find.text('Chọn cảm giác của bạn\nngay lúc này'), findsOneWidget);
     });
   });
 }

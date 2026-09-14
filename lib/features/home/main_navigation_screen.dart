@@ -7,19 +7,37 @@ import '../report/screens/pdf_report_screen.dart';
 import 'widgets/today_companion_tab.dart';
 
 class MainNavigationScreen extends StatefulWidget {
-  const MainNavigationScreen({super.key});
+  final int initialIndex;
+
+  const MainNavigationScreen({super.key, this.initialIndex = 0});
+
+  static final GlobalKey<MainNavigationScreenState> navKey =
+      GlobalKey<MainNavigationScreenState>();
+
+  /// Chuyển đổi tab nhanh từ bất kỳ đâu trong app (như khi nhấn vào thông báo)
+  static void switchTab(int index) {
+    navKey.currentState?._switchTab(index);
+  }
 
   @override
-  State<MainNavigationScreen> createState() => _MainNavigationScreenState();
+  State<MainNavigationScreen> createState() => MainNavigationScreenState();
 }
 
-class _MainNavigationScreenState extends State<MainNavigationScreen> {
-  int _currentIndex = 0;
+class MainNavigationScreenState extends State<MainNavigationScreen> {
+  late int _currentIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialIndex;
+  }
 
   void _switchTab(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
+    if (mounted) {
+      setState(() {
+        _currentIndex = index;
+      });
+    }
   }
 
   List<Widget> get _screens => [

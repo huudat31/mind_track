@@ -161,6 +161,18 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
   }
 
   void _handleClose() {
+    if (mounted) {
+      setState(() {
+        _currentStep = 0;
+        _eventController.clear();
+        _thoughtController.clear();
+        _balancedController.clear();
+        _selectedFlags.clear();
+      });
+      if (_pageController.hasClients) {
+        _pageController.jumpToPage(0);
+      }
+    }
     if (widget.onClose != null) {
       widget.onClose!();
     } else if (Navigator.canPop(context)) {

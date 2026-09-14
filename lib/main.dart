@@ -18,19 +18,30 @@ Future<void> main() async {
   final reminderSettings = await ReminderPreferencesService.getSettings();
   await NotificationService.applySchedule(reminderSettings);
 
-  runApp(const ProviderScope(child: MyApp()));
+  final launchDetails = await NotificationService.getLaunchDetails();
+  final didNotificationLaunch =
+      launchDetails?.didNotificationLaunchApp ?? false;
+  final initialIndex = didNotificationLaunch ? 2 : 0;
+
+  runApp(ProviderScope(child: MyApp(initialIndex: initialIndex)));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final int initialIndex;
+
+  const MyApp({super.key, this.initialIndex = 0});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: NotificationService.navigatorKey,
       title: 'MindTrack',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const MainNavigationScreen(),
+      home: MainNavigationScreen(
+        key: MainNavigationScreen.navKey,
+        initialIndex: initialIndex,
+      ),
     );
   }
 }
