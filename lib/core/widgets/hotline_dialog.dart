@@ -17,22 +17,30 @@ class HotlineDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      decoration: BoxDecoration(
+        color: const Color(0xFF162329),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.6),
+            blurRadius: 30,
+            offset: const Offset(0, -5),
+          ),
+        ],
       ),
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 36),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Center(
             child: Container(
-              width: 40,
+              width: 44,
               height: 4,
               margin: const EdgeInsets.only(bottom: 20),
               decoration: BoxDecoration(
-                color: AppColors.border,
+                color: Colors.white24,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -40,15 +48,15 @@ class HotlineDialog extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: AppColors.accentCoral.withOpacity(0.12),
+                  color: AppColors.accentCoral.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
                   Icons.favorite_rounded,
                   color: AppColors.accentCoral,
-                  size: 24,
+                  size: 22,
                 ),
               ),
               const SizedBox(width: 12),
@@ -61,14 +69,14 @@ class HotlineDialog extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
+                        color: Colors.white,
                       ),
                     ),
                     Text(
                       'Bạn luôn có thể kết nối khi cần người lắng nghe',
                       style: TextStyle(
                         fontSize: 12,
-                        color: AppColors.textSecondary,
+                        color: Colors.white54,
                       ),
                     ),
                   ],
@@ -107,19 +115,19 @@ class HotlineDialog extends StatelessWidget {
           const SizedBox(height: 24),
           SizedBox(
             width: double.infinity,
+            height: 48,
             child: OutlinedButton(
               onPressed: () => Navigator.pop(context),
               style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: AppColors.border),
+                side: BorderSide(color: Colors.white.withValues(alpha: 0.18)),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(24),
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 14),
               ),
               child: const Text(
                 'Quay lại MindTrack',
                 style: TextStyle(
-                  color: AppColors.textPrimary,
+                  color: Colors.white70,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -139,10 +147,10 @@ class HotlineDialog extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: isEmergency ? AppColors.accentCoral.withOpacity(0.06) : AppColors.surfaceMuted,
-        borderRadius: BorderRadius.circular(14),
+        color: isEmergency ? AppColors.accentCoral.withValues(alpha: 0.1) : Colors.white.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isEmergency ? AppColors.accentCoral.withOpacity(0.2) : AppColors.border,
+          color: isEmergency ? AppColors.accentCoral.withValues(alpha: 0.3) : Colors.white.withValues(alpha: 0.1),
           width: 1,
         ),
       ),
@@ -157,26 +165,26 @@ class HotlineDialog extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
+                    color: Colors.white,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 3),
                 Text(
                   hours,
                   style: TextStyle(
                     fontSize: 11,
-                    color: isEmergency ? AppColors.accentCoral : AppColors.textSecondary,
-                    fontWeight: isEmergency ? FontWeight.w600 : FontWeight.normal,
+                    color: isEmergency ? AppColors.accentCoral : Colors.white54,
+                    fontWeight: isEmergency ? FontWeight.bold : FontWeight.normal,
                   ),
                 ),
               ],
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             decoration: BoxDecoration(
               color: isEmergency ? AppColors.accentCoral : AppColors.primary,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
               number,

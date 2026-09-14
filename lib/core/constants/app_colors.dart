@@ -24,4 +24,14 @@ class AppColors {
 
   // Borders & Dividers
   static const Color border = Color(0xFFE2E8F0);
+
+  // Dark Theme Palette (Obsidian & Serene Slate)
+  static const Color darkBg = Color(0xFF0E1418);
+  static const Color darkBgCenter = Color(0xFF162329);
+  static const Color darkSurface = Color(0xFF19252B);
+  static const Color darkCard = Color(0xFF1D2B32);
+  static const Color darkBorder = Color(0x24FFFFFF);
+  static const Color darkTextPrimary = Color(0xFFF1F5F9);
+  static const Color darkTextSecondary = Color(0xFF94A3B8);
+  static const Color darkTextMuted = Color(0xFF64748B);
 }
