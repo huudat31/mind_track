@@ -5,19 +5,28 @@ import '../../features/logging/models/daily_log_model.dart';
 import '../../features/report/models/report_config_model.dart';
 
 class SupabaseClinicalService {
-  static final SupabaseClient _client = Supabase.instance.client;
+  static SupabaseClient? get _client {
+    try {
+      return Supabase.instance.client;
+    } catch (_) {
+      return null;
+    }
+  }
 
   /// Lấy ID người dùng: ưu tiên ID của phiên đăng nhập Supabase Auth,
   /// nếu chưa đăng nhập thì tự động đăng nhập ẩn danh (anonymous auth)
   static Future<String> getUserId() async {
-    final currentUser = _client.auth.currentUser;
+    final client = _client;
+    if (client == null) return 'anonymous_user';
+
+    final currentUser = client.auth.currentUser;
     if (currentUser != null) {
       return currentUser.id;
     }
 
     try {
       // Đăng nhập ẩn danh tạo UID thật trên Supabase Auth
-      final authResponse = await _client.auth.signInAnonymously();
+      final authResponse = await client.auth.signInAnonymously();
       if (authResponse.user != null) {
         return authResponse.user!.id;
       }
@@ -40,10 +49,13 @@ class SupabaseClinicalService {
     required Map<int, int> answers,
   }) async {
     try {
+      final client = _client;
+      if (client == null) return false;
+
       final userId = await getUserId();
       final answersJson = answers.map((k, v) => MapEntry(k.toString(), v));
 
-      await _client.from('dass21_assessments').insert({
+      await client.from('dass21_assessments').insert({
         'user_id': userId,
         'depression_score': depressionScore,
         'anxiety_score': anxietyScore,
@@ -63,8 +75,11 @@ class SupabaseClinicalService {
   /// Lấy toàn bộ lịch sử các mốc đánh giá DASS-21 từ Supabase
   static Future<List<DassHistoryPoint>> getDassHistory() async {
     try {
+      final client = _client;
+      if (client == null) return [];
+
       final userId = await getUserId();
-      final response = await _client
+      final response = await client
           .from('dass21_assessments')
           .select()
           .eq('user_id', userId)
@@ -109,9 +124,12 @@ class SupabaseClinicalService {
     String? balancedResponse,
   }) async {
     try {
+      final client = _client;
+      if (client == null) return false;
+
       final userId = await getUserId();
 
-      await _client.from('daily_logs').insert({
+      await client.from('daily_logs').insert({
         'user_id': userId,
         'mood_score': moodScore,
         'valence': valence,
@@ -135,11 +153,14 @@ class SupabaseClinicalService {
   /// Lấy bản ghi check-in mới nhất của ngày hôm nay
   static Future<Map<String, dynamic>?> getTodayLog() async {
     try {
+      final client = _client;
+      if (client == null) return null;
+
       final userId = await getUserId();
       final now = DateTime.now();
       final startOfDay = DateTime(now.year, now.month, now.day).toIso8601String();
 
-      final response = await _client
+      final response = await client
           .from('daily_logs')
           .select()
           .eq('user_id', userId)
@@ -161,10 +182,13 @@ class SupabaseClinicalService {
   /// Lấy danh sách Daily Logs theo số ngày (7, 14, 28)
   static Future<List<Map<String, dynamic>>> getDailyLogs(int days) async {
     try {
+      final client = _client;
+      if (client == null) return [];
+
       final userId = await getUserId();
       final cutoff = DateTime.now().subtract(Duration(days: days)).toIso8601String();
 
-      final response = await _client
+      final response = await client
           .from('daily_logs')
           .select()
           .eq('user_id', userId)

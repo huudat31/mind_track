@@ -114,26 +114,30 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Bộ Lọc Quyền Riêng Tư & Nội Dung',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Tóm Tắt & Cấu Hình Báo Cáo',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    'Bạn hoàn toàn kiểm soát dữ liệu xuất hiện trên báo cáo',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.white.withValues(alpha: 0.6),
+                    const SizedBox(height: 2),
+                    Text(
+                      'Định hướng lâm sàng & tùy chỉnh quyền riêng tư trước khi xuất file',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: Colors.white.withValues(alpha: 0.6),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               IconButton(
                 onPressed: () => Navigator.pop(context),
@@ -151,6 +155,16 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // 0. Clinical Value Explanation Card
+                  _buildClinicalValueCard(),
+
+                  const SizedBox(height: 14),
+
+                  // 0.1 Components Checklist Card
+                  _buildComponentsSummaryCard(),
+
+                  const SizedBox(height: 14),
+
                   // 1. Anonymous Mode
                   _buildSectionCard(
                     title: 'Bảo mật danh tính (Ẩn danh)',
@@ -385,18 +399,19 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
           // Save Button
           SizedBox(
             width: double.infinity,
-            child: ElevatedButton(
+            child: ElevatedButton.icon(
               onPressed: _save,
+              icon: const Icon(Icons.check_circle_rounded, size: 18),
+              label: const Text(
+                'Đã Hiểu & Xem Báo Cáo',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+              ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryLight,
                 foregroundColor: AppColors.darkBg,
-                padding: const EdgeInsets.symmetric(vertical: 14),
+                padding: const EdgeInsets.symmetric(vertical: 15),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 elevation: 4,
-              ),
-              child: const Text(
-                'Lưu Cấu Hình & Cập Nhật Báo Cáo',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
               ),
             ),
           ),
@@ -417,21 +432,24 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            subtitle,
-            style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.55)),
-          ),
-          const SizedBox(height: 12),
-          child,
-        ],
+      child: Material(
+        color: Colors.transparent,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              subtitle,
+              style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.55)),
+            ),
+            const SizedBox(height: 12),
+            child,
+          ],
+        ),
       ),
     );
   }
@@ -452,6 +470,153 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
             value: value,
             onChanged: onChanged,
             activeColor: AppColors.primaryLight,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildClinicalValueCard() {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1B3B36).withValues(alpha: 0.45),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.primaryLight.withValues(alpha: 0.3)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.3),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.lightbulb_outline_rounded,
+              color: AppColors.primaryLight,
+              size: 18,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Giá Trị Của Báo Cáo Trước Trị Liệu',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.primaryLight,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Giúp tiết kiệm 20–30 phút thu thập bệnh sử ban đầu, giúp chuyên gia tâm lý nắm bắt ngay các vòng lặp triệu chứng thể chất, chỉ số DASS-21 và bối cảnh cốt lõi.',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.white.withValues(alpha: 0.8),
+                    height: 1.4,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildComponentsSummaryCard() {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.04),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Nội dung sẽ được xuất trong tài liệu A4:',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 10),
+          _buildCheckItem(
+            'Tuyên bố giới hạn y tế lâm sàng (Clinical Disclaimer)',
+            'Tự động nhúng trên đầu tài liệu',
+            true,
+          ),
+          _buildCheckItem(
+            'Bảng đối chiếu tiến trình DASS-21 (T0 vs Hiện tại)',
+            'Gồm Trầm cảm, Lo âu, Căng thẳng và xu hướng',
+            _includeDass21,
+          ),
+          _buildCheckItem(
+            'Bảng xếp hạng tần suất cờ đỏ thể chất & giấc ngủ',
+            'Các triệu chứng lặp lại trong chu kỳ quan sát',
+            _includeSymptomFrequency,
+          ),
+          _buildCheckItem(
+            'Thống kê đồng xuất hiện phi nhân quả (Co-occurrence)',
+            'Tương quan giữa bối cảnh và triệu chứng',
+            _includeCoOccurrence,
+          ),
+          _buildCheckItem(
+            'Trích đoạn nhật ký nhận thức - hành vi (CBT Excerpts)',
+            '${_selectedJournals.length} trích đoạn đã được chọn',
+            _selectedJournals.isNotEmpty,
+          ),
+          _buildCheckItem(
+            'Gợi ý chủ đề mở đầu buổi tham vấn cho chuyên gia',
+            'Định hướng câu hỏi gợi mở phiên gặp đầu tiên',
+            true,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCheckItem(String title, String subtitle, bool isEnabled) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            isEnabled ? Icons.check_circle_rounded : Icons.remove_circle_outline_rounded,
+            color: isEnabled ? AppColors.primaryLight : Colors.white24,
+            size: 15,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: isEnabled ? Colors.white : Colors.white38,
+                  ),
+                ),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: Colors.white.withValues(alpha: 0.5),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
