@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_strings.dart';
 import '../../../core/widgets/hotline_dialog.dart';
 import '../models/dass21_model.dart';
+
+import 'assessment_result_screen.dart';
 
 class AssessmentScreen extends StatefulWidget {
   const AssessmentScreen({super.key});
@@ -21,12 +22,12 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
       if (_currentIndex < Dass21Data.questions.length - 1) {
         _currentIndex++;
       } else {
-        _showCompletionDialog();
+        _navigateToResult();
       }
     });
   }
 
-  void _showCompletionDialog() {
+  void _navigateToResult() {
     int dep = 0, anx = 0, str = 0;
     for (int i = 0; i < Dass21Data.questions.length; i++) {
       final score = _answers[i] ?? 0;
@@ -36,66 +37,15 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
       if (q.category == DassCategory.stress) str += score;
     }
 
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text(
-          'Đã hoàn thành đánh giá',
-          style: TextStyle(fontWeight: FontWeight.bold),
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AssessmentResultScreen(
+          depressionScore: dep * 2,
+          anxietyScore: anx * 2,
+          stressScore: str * 2,
+          answers: Map.from(_answers),
         ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Điểm tự cảm nhận 7 ngày qua (DASS-21):',
-              style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
-            ),
-            const SizedBox(height: 12),
-            _buildScoreRow('Trầm cảm (Depression)', dep * 2, AppColors.accentLavender),
-            _buildScoreRow('Lo âu (Anxiety)', anx * 2, AppColors.accentAmber),
-            _buildScoreRow('Căng thẳng (Stress)', str * 2, AppColors.accentCoral),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceMuted,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Text(
-                AppStrings.clinicalDisclaimer,
-                style: TextStyle(fontSize: 11, color: AppColors.textMuted),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              HotlineDialog.show(context);
-            },
-            child: const Text('Xem Hotline'),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Đóng'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildScoreRow(String label, int score, Color color) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
-          Text('$score đ', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: color)),
-        ],
       ),
     );
   }

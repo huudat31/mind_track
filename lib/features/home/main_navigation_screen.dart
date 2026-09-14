@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/widgets/hotline_dialog.dart';
 import '../assessment/screens/assessment_screen.dart';
-import '../logging/screens/daily_logging_screen.dart';
+import '../logging/screens/state_of_mind_screen.dart';
 import '../dashboard/screens/frequency_dashboard_screen.dart';
 import '../report/screens/pdf_report_screen.dart';
 import '../breathing/screens/box_breathing_screen.dart';
@@ -20,7 +20,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   final List<Widget> _screens = const [
     _HomeDashboardTab(),
     AssessmentScreen(),
-    DailyLoggingScreen(),
+    StateOfMindScreen(),
     FrequencyDashboardScreen(),
     PdfReportScreen(),
   ];
@@ -151,6 +151,21 @@ class _HomeDashboardTab extends StatelessWidget {
           const Text(
             'Các hoạt động chính',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 12),
+
+          _buildActionCard(
+            context,
+            icon: Icons.spa_rounded,
+            color: const Color(0xFFEB6834),
+            title: 'Ghi nhận cảm xúc ngay lúc này',
+            subtitle: 'Trạng thái tâm trí (State of Mind) với hoạt họa bông hoa biến đổi cảm xúc',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const StateOfMindScreen()),
+              );
+            },
           ),
           const SizedBox(height: 12),
 

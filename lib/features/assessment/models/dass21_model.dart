@@ -64,4 +64,34 @@ class Dass21Data {
     'Đúng khá nhiều / Thường xuyên',
     'Rất đúng / Hầu hết thời gian',
   ];
+
+  // Ngưỡng phân loại chuẩn của DASS-21 (nhân hệ số 2)
+  static String getSeverity(DassCategory category, int score) {
+    switch (category) {
+      case DassCategory.depression:
+        if (score <= 9) return 'Bình thường';
+        if (score <= 13) return 'Nhẹ';
+        if (score <= 20) return 'Vừa phải';
+        if (score <= 27) return 'Nặng';
+        return 'Rất nặng';
+      case DassCategory.anxiety:
+        if (score <= 7) return 'Bình thường';
+        if (score <= 9) return 'Nhẹ';
+        if (score <= 14) return 'Vừa phải';
+        if (score <= 19) return 'Nặng';
+        return 'Rất nặng';
+      case DassCategory.stress:
+        if (score <= 14) return 'Bình thường';
+        if (score <= 18) return 'Nhẹ';
+        if (score <= 25) return 'Vừa phải';
+        if (score <= 33) return 'Nặng';
+        return 'Rất nặng';
+    }
+  }
+
+  static double getSeverityFraction(DassCategory category, int score) {
+    // Tối đa 42 điểm (7 câu * 3 điểm tối đa * hệ số 2)
+    return (score / 42.0).clamp(0.0, 1.0);
+  }
 }
+
