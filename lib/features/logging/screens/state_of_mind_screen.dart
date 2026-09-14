@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/services/supabase_clinical_service.dart';
 import '../../../core/widgets/hotline_dialog.dart';
 import '../models/daily_log_model.dart';
 import '../widgets/state_of_mind_flower.dart';
@@ -10,11 +11,7 @@ class StateOfMindScreen extends StatefulWidget {
   final VoidCallback? onBack;
   final VoidCallback? onClose;
 
-  const StateOfMindScreen({
-    super.key,
-    this.onBack,
-    this.onClose,
-  });
+  const StateOfMindScreen({super.key, this.onBack, this.onClose});
 
   @override
   State<StateOfMindScreen> createState() => _StateOfMindScreenState();
@@ -23,7 +20,8 @@ class StateOfMindScreen extends StatefulWidget {
 class _StateOfMindScreenState extends State<StateOfMindScreen>
     with SingleTickerProviderStateMixin {
   final PageController _pageController = PageController();
-  int _currentStep = 0; // 0: Cảm xúc, 1: Năng lượng & Cờ đỏ, 2: Tổng kết & Nhật ký
+  int _currentStep =
+      0; // 0: Cảm xúc, 1: Năng lượng & Cờ đỏ, 2: Tổng kết & Nhật ký
 
   double _sliderValue = 0.67; // Mặc định: "Hơi dễ chịu"
   late AnimationController _pulseController;
@@ -212,6 +210,24 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
   void _saveFinalLog() {
     HapticFeedback.mediumImpact();
 
+    final moodScore = (_sliderValue * 4).round() + 1;
+    SupabaseClinicalService.saveDailyLog(
+      moodScore: moodScore,
+      valence: _sliderValue,
+      energyLevel: _energyLevel,
+      contextTags: _selectedTags,
+      clinicalFlags: _selectedFlags,
+      triggerEvent: _eventController.text.trim().isNotEmpty
+          ? _eventController.text.trim()
+          : null,
+      automaticThought: _thoughtController.text.trim().isNotEmpty
+          ? _thoughtController.text.trim()
+          : null,
+      balancedResponse: _balancedController.text.trim().isNotEmpty
+          ? _balancedController.text.trim()
+          : null,
+    );
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -219,11 +235,19 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Row(
           children: [
-            Icon(Icons.check_circle_rounded, color: _currentTier.accentColor, size: 26),
+            Icon(
+              Icons.check_circle_rounded,
+              color: _currentTier.accentColor,
+              size: 26,
+            ),
             const SizedBox(width: 10),
             const Text(
               'Ghi nhận thành công',
-              style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
@@ -233,7 +257,11 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
           children: [
             Text(
               'Dữ liệu cảm xúc "${_currentTier.label}" và ${_selectedFlags.length} triệu chứng đã được lưu vào hồ sơ tự theo dõi.',
-              style: const TextStyle(color: Colors.white70, fontSize: 13, height: 1.4),
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 13,
+                height: 1.4,
+              ),
             ),
             const SizedBox(height: 12),
             Container(
@@ -258,7 +286,9 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
             style: ElevatedButton.styleFrom(
               backgroundColor: _currentTier.accentColor,
               foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
             child: const Text('Hoàn tất'),
           ),
@@ -279,10 +309,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
           gradient: RadialGradient(
             center: const Alignment(0, -0.2),
             radius: 1.25,
-            colors: [
-              tier.bgCenter,
-              tier.bgEdge,
-            ],
+            colors: [tier.bgCenter, tier.bgEdge],
             stops: const [0.25, 1.0],
           ),
         ),
@@ -290,7 +317,10 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 18,
+                  vertical: 8,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -443,11 +473,16 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
             children: [
               Center(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: tier.accentColor.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: tier.accentColor.withValues(alpha: 0.4)),
+                    border: Border.all(
+                      color: tier.accentColor.withValues(alpha: 0.4),
+                    ),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -507,10 +542,14 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                       data: SliderTheme.of(context).copyWith(
                         trackHeight: 6,
                         activeTrackColor: tier.accentColor,
-                        inactiveTrackColor: Colors.white.withValues(alpha: 0.15),
+                        inactiveTrackColor: Colors.white.withValues(
+                          alpha: 0.15,
+                        ),
                         thumbColor: Colors.white,
                         overlayColor: tier.accentColor.withValues(alpha: 0.25),
-                        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
+                        thumbShape: const RoundSliderThumbShape(
+                          enabledThumbRadius: 10,
+                        ),
                       ),
                       child: Slider(
                         value: _energyLevel,
@@ -532,7 +571,9 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                           style: TextStyle(
                             color: isCur ? Colors.white : Colors.white38,
                             fontSize: 11,
-                            fontWeight: isCur ? FontWeight.bold : FontWeight.normal,
+                            fontWeight: isCur
+                                ? FontWeight.bold
+                                : FontWeight.normal,
                           ),
                         );
                       }),
@@ -553,7 +594,11 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                   children: [
                     const Text(
                       'Chạm nhanh các phản ứng bạn gặp hôm nay để hỗ trợ buổi làm việc với chuyên gia:',
-                      style: TextStyle(color: Colors.white60, fontSize: 12, height: 1.3),
+                      style: TextStyle(
+                        color: Colors.white60,
+                        fontSize: 12,
+                        height: 1.3,
+                      ),
                     ),
                     const SizedBox(height: 14),
                     ...ClinicalFlagsCatalog.categories.map((cat) {
@@ -580,7 +625,9 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                               spacing: 8,
                               runSpacing: 8,
                               children: flagsInCat.map((flag) {
-                                final isSelected = _selectedFlags.contains(flag.id);
+                                final isSelected = _selectedFlags.contains(
+                                  flag.id,
+                                );
                                 return _buildGlassChip(
                                   label: flag.name,
                                   icon: flag.icon,
@@ -707,7 +754,11 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                                 color: tier.accentColor.withValues(alpha: 0.25),
                                 shape: BoxShape.circle,
                               ),
-                              child: Icon(Icons.spa_rounded, color: tier.accentColor, size: 18),
+                              child: Icon(
+                                Icons.spa_rounded,
+                                color: tier.accentColor,
+                                size: 18,
+                              ),
                             ),
                             const SizedBox(width: 10),
                             Column(
@@ -715,7 +766,11 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                               children: [
                                 const Text(
                                   'CẢM XÚC CHỦ ĐẠO',
-                                  style: TextStyle(color: Colors.white54, fontSize: 10, letterSpacing: 0.5),
+                                  style: TextStyle(
+                                    color: Colors.white54,
+                                    fontSize: 10,
+                                    letterSpacing: 0.5,
+                                  ),
                                 ),
                                 Text(
                                   tier.label,
@@ -730,14 +785,21 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                           ],
                         ),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
                             'Năng lượng: ${_energyLevel.toInt()}/5',
-                            style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ],
@@ -745,13 +807,21 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                     const Divider(color: Colors.white12, height: 24),
                     const Text(
                       'Triệu chứng ghi nhận:',
-                      style: TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     const SizedBox(height: 6),
                     if (selectedFlagNames.isEmpty)
                       const Text(
                         '• Không ghi nhận triệu chứng bất thường',
-                        style: TextStyle(color: Colors.white38, fontSize: 12, fontStyle: FontStyle.italic),
+                        style: TextStyle(
+                          color: Colors.white38,
+                          fontSize: 12,
+                          fontStyle: FontStyle.italic,
+                        ),
                       )
                     else
                       Wrap(
@@ -759,14 +829,20 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                         runSpacing: 6,
                         children: selectedFlagNames.map((name) {
                           return Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
                             decoration: BoxDecoration(
                               color: tier.accentColor.withValues(alpha: 0.18),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
                               '• $name',
-                              style: const TextStyle(color: Colors.white, fontSize: 11),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 11,
+                              ),
                             ),
                           );
                         }).toList(),
@@ -774,12 +850,21 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                     const SizedBox(height: 12),
                     const Text(
                       'Ngữ cảnh liên quan:',
-                      style: TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      _selectedTags.isEmpty ? 'Không gắn tag' : _selectedTags.join(' · '),
-                      style: TextStyle(color: tier.accentColor.withValues(alpha: 0.85), fontSize: 12),
+                      _selectedTags.isEmpty
+                          ? 'Không gắn tag'
+                          : _selectedTags.join(' · '),
+                      style: TextStyle(
+                        color: tier.accentColor.withValues(alpha: 0.85),
+                        fontSize: 12,
+                      ),
                     ),
                   ],
                 ),
@@ -788,13 +873,21 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
               _buildGlassSection(
                 tier: tier,
                 title: 'Nhật ký cân bằng (CBT 3 bước)',
-                trailing: const Icon(Icons.auto_stories_outlined, color: Colors.white54, size: 16),
+                trailing: const Icon(
+                  Icons.auto_stories_outlined,
+                  color: Colors.white54,
+                  size: 16,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
                       'Dành 1-2 phút ghi lại sự việc để chuyên gia hiểu rõ bối cảnh:',
-                      style: TextStyle(color: Colors.white60, fontSize: 12, height: 1.3),
+                      style: TextStyle(
+                        color: Colors.white60,
+                        fontSize: 12,
+                        height: 1.3,
+                      ),
                     ),
                     const SizedBox(height: 14),
                     _buildJournalTextField(
@@ -807,14 +900,16 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                     _buildJournalTextField(
                       controller: _thoughtController,
                       label: '2. Suy nghĩ đầu tiên nảy sinh?',
-                      hint: 'Ví dụ: Mình sẽ không kịp làm, mọi thứ thật quá tải...',
+                      hint:
+                          'Ví dụ: Mình sẽ không kịp làm, mọi thứ thật quá tải...',
                       tier: tier,
                     ),
                     const SizedBox(height: 14),
                     _buildJournalTextField(
                       controller: _balancedController,
                       label: '3. Góc nhìn cân bằng hoặc điều kiểm soát được?',
-                      hint: 'Ví dụ: Mình có thể xin lùi hạn hoặc ưu tiên việc quan trọng trước...',
+                      hint:
+                          'Ví dụ: Mình có thể xin lùi hạn hoặc ưu tiên việc quan trọng trước...',
                       tier: tier,
                       isBalanced: true,
                     ),
@@ -825,25 +920,42 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                         decoration: BoxDecoration(
                           color: AppColors.accentCoral.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: AppColors.accentCoral.withValues(alpha: 0.4)),
+                          border: Border.all(
+                            color: AppColors.accentCoral.withValues(alpha: 0.4),
+                          ),
                         ),
                         child: Row(
                           children: [
-                            const Icon(Icons.favorite_rounded, color: AppColors.accentCoral, size: 20),
+                            const Icon(
+                              Icons.favorite_rounded,
+                              color: AppColors.accentCoral,
+                              size: 20,
+                            ),
                             const SizedBox(width: 10),
                             const Expanded(
                               child: Text(
                                 'Có vẻ bạn đang trải qua cảm giác quá tải. Bạn có muốn gọi ai đó lắng nghe không?',
-                                style: TextStyle(fontSize: 12, color: Colors.white),
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                             TextButton(
                               onPressed: () => HotlineDialog.show(context),
                               style: TextButton.styleFrom(
                                 foregroundColor: AppColors.accentCoral,
-                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                ),
                               ),
-                              child: const Text('Hotline', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                              child: const Text(
+                                'Hotline',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -993,10 +1105,16 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
           minLines: 1,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.3), fontSize: 12),
+            hintStyle: TextStyle(
+              color: Colors.white.withValues(alpha: 0.3),
+              fontSize: 12,
+            ),
             filled: true,
             fillColor: Colors.white.withValues(alpha: isBalanced ? 0.10 : 0.05),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 10,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(
@@ -1087,7 +1205,10 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
             _onSliderChanged(newValue);
           },
           onTapDown: (details) {
-            final newValue = (details.localPosition.dx / trackWidth).clamp(0.0, 1.0);
+            final newValue = (details.localPosition.dx / trackWidth).clamp(
+              0.0,
+              1.0,
+            );
             _onSliderChanged(newValue);
           },
           child: Container(

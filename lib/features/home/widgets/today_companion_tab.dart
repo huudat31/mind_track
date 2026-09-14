@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/services/supabase_clinical_service.dart';
 import '../../../core/widgets/hotline_dialog.dart';
 import '../../breathing/screens/box_breathing_screen.dart';
 
@@ -13,7 +14,24 @@ class TodayCompanionTab extends StatefulWidget {
 }
 
 class _TodayCompanionTabState extends State<TodayCompanionTab> {
-  final bool _hasLoggedToday = true;
+  bool _hasLoggedToday = false;
+  Map<String, dynamic>? _todayLog;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTodayLog();
+  }
+
+  Future<void> _loadTodayLog() async {
+    final log = await SupabaseClinicalService.getTodayLog();
+    if (mounted) {
+      setState(() {
+        _todayLog = log;
+        _hasLoggedToday = log != null;
+      });
+    }
+  }
 
   String _getGreeting() {
     final hour = DateTime.now().hour;
@@ -50,10 +68,14 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
       ),
       child: SafeArea(
         bottom: false,
-        child: ListView(
-          physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.fromLTRB(20, 10, 20, 110),
-          children: [
+        child: RefreshIndicator(
+          color: AppColors.primaryLight,
+          backgroundColor: AppColors.darkCard,
+          onRefresh: _loadTodayLog,
+          child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+            padding: const EdgeInsets.fromLTRB(20, 10, 20, 110),
+            children: [
             // Top App Bar
             _buildHeader(context),
 
@@ -84,8 +106,9 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildHeader(BuildContext context) {
     return Row(
@@ -153,6 +176,11 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
   }
 
   Widget _buildTodayStatusCard() {
+    final energy = (_todayLog?['energy_level'] as num?)?.toDouble() ?? 3.5;
+    final valence = (_todayLog?['valence'] as num?)?.toDouble() ?? 0.67;
+    final balancedThought = _todayLog?['balanced_response'] as String? ??
+        'Thời hạn gấp gáp nhưng mình đã xong 70% nội dung. Mình có thể chia nhỏ việc để xử lý nhẹ nhàng.';
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -271,9 +299,9 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Tâm trạng: Hơi Dễ Chịu (+0.67)',
-                      style: TextStyle(
+                    Text(
+                      'Tâm trạng: ${_hasLoggedToday ? (valence >= 0.5 ? "Hơi Dễ Chịu" : "Cần Chú Ý") : "Chưa ghi nhận"} (+${valence.toStringAsFixed(2)})',
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
@@ -285,7 +313,7 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
                         const Icon(Icons.bolt_rounded, size: 15, color: Color(0xFFF4A261)),
                         const SizedBox(width: 4),
                         Text(
-                          'Mức năng lượng: 3.5 / 5.0 (Ổn định)',
+                          'Mức năng lượng: ${energy.toStringAsFixed(1)} / 5.0 (${energy >= 3.0 ? "Ổn định" : "Cạn kiệt"})',
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.white.withValues(alpha: 0.7),
@@ -329,7 +357,7 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'Suy nghĩ cân bằng hôm nay: “Thời hạn gấp gáp nhưng mình đã xong 70% nội dung. Mình có thể chia nhỏ việc để xử lý nhẹ nhàng.”',
+                    'Suy nghĩ cân bằng hôm nay: “$balancedThought”',
                     style: TextStyle(
                       fontSize: 11,
                       fontStyle: FontStyle.italic,

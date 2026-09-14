@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/services/supabase_clinical_service.dart';
 import '../../logging/models/daily_log_model.dart';
 import '../models/frequency_analytics_model.dart';
 
@@ -42,6 +43,18 @@ class ClinicalDataRepository {
     ),
   ];
 
+  /// Lấy xu hướng DASS-21: ưu tiên nạp từ Supabase, nếu chưa có thì dùng dữ liệu mẫu
+  static Future<List<DassHistoryPoint>> getDynamicDassTrend(TimeframeOption timeframe) async {
+    final realData = await SupabaseClinicalService.getDassHistory();
+    if (realData.length >= 2) {
+      if (timeframe == TimeframeOption.sevenDays && realData.length > 2) {
+        return realData.sublist(realData.length - 2);
+      }
+      return realData;
+    }
+    return getDassTrend(timeframe);
+  }
+
   static List<DassHistoryPoint> getDassTrend(TimeframeOption timeframe) {
     switch (timeframe) {
       case TimeframeOption.sevenDays:
@@ -51,6 +64,21 @@ class ClinicalDataRepository {
       case TimeframeOption.twentyEightDays:
         return dassHistory; // Cả chu kỳ 28 ngày
     }
+  }
+
+  /// Lấy tần suất cờ đỏ: ưu tiên nạp từ Supabase, nếu chưa có thì dùng dữ liệu mẫu
+  static Future<List<FlagFrequencyStat>> getDynamicFlagFrequencies(
+    TimeframeOption timeframe, {
+    String? categoryFilter,
+  }) async {
+    final realFlags = await SupabaseClinicalService.getRealFlagFrequencies(
+      timeframe,
+      categoryFilter: categoryFilter,
+    );
+    if (realFlags.isNotEmpty) {
+      return realFlags;
+    }
+    return getFlagFrequencies(timeframe, categoryFilter: categoryFilter);
   }
 
   // Get ranked clinical flags based on timeframe

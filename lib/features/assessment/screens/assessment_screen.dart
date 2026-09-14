@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/widgets/hotline_dialog.dart';
 import '../models/dass21_model.dart';
+import '../../../core/services/supabase_clinical_service.dart';
 import 'assessment_result_screen.dart';
 
 class AssessmentScreen extends StatefulWidget {
@@ -55,6 +56,18 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
     }
 
     final answersCopy = Map<int, int>.from(_answers);
+    final finalDep = dep * 2;
+    final finalAnx = anx * 2;
+    final finalStr = str * 2;
+
+    // Lưu kết quả bài đánh giá lên Supabase
+    SupabaseClinicalService.saveDass21(
+      depressionScore: finalDep,
+      anxietyScore: finalAnx,
+      stressScore: finalStr,
+      answers: answersCopy,
+    );
+
     setState(() {
       _currentIndex = 0;
       _answers.clear();
@@ -64,9 +77,9 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => AssessmentResultScreen(
-          depressionScore: dep * 2,
-          anxietyScore: anx * 2,
-          stressScore: str * 2,
+          depressionScore: finalDep,
+          anxietyScore: finalAnx,
+          stressScore: finalStr,
           answers: answersCopy,
         ),
       ),
