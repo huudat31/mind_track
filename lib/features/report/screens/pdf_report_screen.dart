@@ -524,7 +524,7 @@ class _PdfReportScreenState extends State<PdfReportScreen> with SingleTickerProv
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: PdfPreview(
-          build: (format) => PreTherapyPdfBuilder.buildPdf(_config),
+          build: (format) => PreTherapyPdfBuilder.buildPdf(_config, format: format),
           allowPrinting: true,
           allowSharing: true,
           canChangeOrientation: false,
@@ -548,6 +548,76 @@ class _PdfReportScreenState extends State<PdfReportScreen> with SingleTickerProv
               ],
             ),
           ),
+          onError: (context, error) {
+            return Container(
+              color: AppColors.darkCard,
+              padding: const EdgeInsets.all(24),
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF4A261).withValues(alpha: 0.15),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.sync_problem_rounded,
+                        color: Color(0xFFF4A261),
+                        size: 40,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Cần khởi động lại ứng dụng',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Thư viện xuất PDF vừa được thêm mới cần được nạp qua việc khởi động lại ứng dụng (Stop & Run) trên thiết bị.\n\nChi tiết kỹ thuật: $error',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.7),
+                        fontSize: 12,
+                        height: 1.4,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        try {
+                          final bytes = await PreTherapyPdfBuilder.buildPdf(_config);
+                          await Printing.sharePdf(
+                            bytes: bytes,
+                            filename: 'MindTrack_Report_${_config.isAnonymous ? _config.anonymousCode : "PreTherapy"}.pdf',
+                          );
+                        } catch (e) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Không thể chia sẻ: $e')),
+                            );
+                          }
+                        }
+                      },
+                      icon: const Icon(Icons.share_rounded, size: 18),
+                      label: const Text('Thử Xuất / Chia Sẻ File PDF'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primaryLight,
+                        foregroundColor: AppColors.darkBg,
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
           actions: [
             PdfPreviewAction(
               icon: const Icon(Icons.tune_rounded),

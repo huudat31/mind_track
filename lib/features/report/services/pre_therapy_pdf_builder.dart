@@ -9,13 +9,27 @@ import '../models/report_config_model.dart';
 import '../data/sample_journals_data.dart';
 
 class PreTherapyPdfBuilder {
-  static Future<Uint8List> buildPdf(ReportPrivacyConfig config) async {
+  static Future<Uint8List> buildPdf(
+    ReportPrivacyConfig config, {
+    PdfPageFormat? format,
+  }) async {
     final pdf = pw.Document();
 
-    // Load Unicode fonts supporting Vietnamese
-    final fontRegular = await PdfGoogleFonts.robotoRegular();
-    final fontBold = await PdfGoogleFonts.robotoBold();
-    final fontItalic = await PdfGoogleFonts.robotoItalic();
+    // Load Unicode fonts supporting Vietnamese with fallback
+    pw.Font fontRegular;
+    pw.Font fontBold;
+    pw.Font fontItalic;
+
+    try {
+      fontRegular = await PdfGoogleFonts.robotoRegular();
+      fontBold = await PdfGoogleFonts.robotoBold();
+      fontItalic = await PdfGoogleFonts.robotoItalic();
+    } catch (_) {
+      // Offline fallback to standard fonts
+      fontRegular = pw.Font.helvetica();
+      fontBold = pw.Font.helveticaBold();
+      fontItalic = pw.Font.helveticaOblique();
+    }
 
     final theme = pw.ThemeData.withFont(
       base: fontRegular,
@@ -46,7 +60,7 @@ class PreTherapyPdfBuilder {
       pw.MultiPage(
         pageTheme: pw.PageTheme(
           theme: theme,
-          pageFormat: PdfPageFormat.a4,
+          pageFormat: format ?? PdfPageFormat.a4,
           margin: const pw.EdgeInsets.all(32),
           buildBackground: (context) => pw.Container(
             decoration: const pw.BoxDecoration(
