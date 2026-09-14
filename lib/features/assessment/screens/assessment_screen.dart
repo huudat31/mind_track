@@ -54,14 +54,20 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
       if (q.category == DassCategory.stress) str += score;
     }
 
-    Navigator.pushReplacement(
+    final answersCopy = Map<int, int>.from(_answers);
+    setState(() {
+      _currentIndex = 0;
+      _answers.clear();
+    });
+
+    Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => AssessmentResultScreen(
           depressionScore: dep * 2,
           anxietyScore: anx * 2,
           stressScore: str * 2,
-          answers: Map.from(_answers),
+          answers: answersCopy,
         ),
       ),
     );

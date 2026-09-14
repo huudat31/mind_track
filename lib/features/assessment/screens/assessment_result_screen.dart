@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/widgets/hotline_dialog.dart';
+import '../../home/main_navigation_screen.dart';
 import '../models/dass21_model.dart';
 
 class AssessmentResultScreen extends StatelessWidget {
@@ -17,6 +18,14 @@ class AssessmentResultScreen extends StatelessWidget {
     required this.stressScore,
     required this.answers,
   });
+
+  void _returnHome(BuildContext context) {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
+      (route) => false,
+    );
+  }
 
   bool get _hasSevereScore {
     final depSev = Dass21Data.getSeverity(DassCategory.depression, depressionScore);
@@ -216,7 +225,7 @@ class AssessmentResultScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => _returnHome(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
