@@ -214,16 +214,26 @@ class SupabaseClinicalService {
     final logs = await getDailyLogs(timeframe.days);
     if (logs.isEmpty) return [];
 
-    final Map<String, int> flagCounts = {};
+    // Gom cờ đỏ theo từng ngày để đảm bảo mỗi cờ chỉ tính tối đa 1 lần / ngày (tránh trùng khi check-in nhiều lần trong ngày)
+    final Map<String, Set<String>> dailyUniqueFlags = {};
     for (final log in logs) {
+      final createdAt = DateTime.tryParse(log['created_at']?.toString() ?? '');
+      final dateKey = createdAt != null
+          ? '${createdAt.year}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}'
+          : (log['id']?.toString() ?? 'unknown');
       final flags = (log['clinical_flags'] as List<dynamic>?)?.map((e) => e.toString()) ?? [];
-      for (final flagId in flags) {
+      dailyUniqueFlags.putIfAbsent(dateKey, () => <String>{}).addAll(flags);
+    }
+
+    final Map<String, int> flagCounts = {};
+    for (final dayFlags in dailyUniqueFlags.values) {
+      for (final flagId in dayFlags) {
         flagCounts[flagId] = (flagCounts[flagId] ?? 0) + 1;
       }
     }
 
     final totalDays = timeframe.isAll
-        ? (logs.isNotEmpty ? logs.length : 1)
+        ? (dailyUniqueFlags.isNotEmpty ? dailyUniqueFlags.length : 1)
         : timeframe.days;
 
     final List<FlagFrequencyStat> list = [];
@@ -386,13 +396,20 @@ class SupabaseClinicalService {
       }
     });
 
+    // Đếm số ngày thực tế có ghi nhận
+    final distinctDates = logs.map((l) {
+      final dt = DateTime.tryParse(l['created_at']?.toString() ?? '');
+      return dt != null ? '${dt.year}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')}' : '';
+    }).where((d) => d.isNotEmpty).toSet();
+    final totalDistinctDays = distinctDates.length;
+
     return {
       'mood': dominantMood,
-      'moodSub': '$moodPct% ($maxMoodCount/${logs.length} ngày)',
+      'moodSub': '$moodPct% ($maxMoodCount/${logs.length} lượt)',
       'energy': '$avgEnergy / 5',
-      'energySub': '${logs.length}/7 ngày ghi nhận',
+      'energySub': '$totalDistinctDays/7 ngày ghi nhận',
       'flag': topFlagName,
-      'flagSub': maxFlagCount > 0 ? '$maxFlagCount/${logs.length} ngày' : 'Không có cờ đỏ',
+      'flagSub': maxFlagCount > 0 ? '$maxFlagCount/${logs.length} lượt' : 'Không có cờ đỏ',
     };
   }
 
