@@ -1028,8 +1028,11 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
     required _MoodTier tier,
     required VoidCallback onTap,
   }) {
+    final isInsideTab = widget.onBack != null || widget.onClose != null;
+    final bottomPad = isInsideTab ? 88.0 : 20.0;
+
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 0, 24, 18),
+      padding: EdgeInsets.fromLTRB(24, 0, 24, bottomPad),
       child: SizedBox(
         width: double.infinity,
         height: 52,

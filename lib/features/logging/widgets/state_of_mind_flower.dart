@@ -16,7 +16,7 @@ class StateOfMindFlower extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      size: const Size(290, 290),
+      size: const Size(250, 250),
       painter: _AppleStateOfMindPainter(
         moodValue: moodValue.clamp(0.0, 1.0),
         accentColor: accentColor,
