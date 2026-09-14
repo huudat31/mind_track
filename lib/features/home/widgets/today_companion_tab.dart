@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/services/supabase_auth_service.dart';
 import '../../../core/services/supabase_clinical_service.dart';
 import '../../../core/widgets/hotline_dialog.dart';
+import '../../auth/widgets/auth_modal_sheet.dart';
 import '../../breathing/screens/box_breathing_screen.dart';
 
 class TodayCompanionTab extends StatefulWidget {
@@ -146,30 +148,87 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
             ),
           ],
         ),
-        GestureDetector(
-          onTap: () => HotlineDialog.show(context),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: const Color(0xFFE07A5F).withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0xFFE07A5F).withValues(alpha: 0.35)),
-            ),
-            child: const Row(
-              children: [
-                Icon(Icons.support_agent_rounded, color: Color(0xFFE07A5F), size: 18),
-                SizedBox(width: 6),
-                Text(
-                  'Hotline',
-                  style: TextStyle(
-                    color: Color(0xFFE07A5F),
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
+        Row(
+          children: [
+            // Account / Cloud Sync Button
+            GestureDetector(
+              onTap: () => AuthModalSheet.show(
+                context,
+                onAuthChanged: () {
+                  setState(() {});
+                  _loadTodayLog();
+                },
+              ),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                margin: const EdgeInsets.only(right: 8),
+                decoration: BoxDecoration(
+                  color: SupabaseAuthService.currentUser != null && !SupabaseAuthService.isAnonymous
+                      ? const Color(0xFF2E6B65).withValues(alpha: 0.25)
+                      : Colors.white.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: SupabaseAuthService.currentUser != null && !SupabaseAuthService.isAnonymous
+                        ? const Color(0xFF5DD9C1).withValues(alpha: 0.4)
+                        : Colors.white.withValues(alpha: 0.15),
                   ),
                 ),
-              ],
+                child: Row(
+                  children: [
+                    Icon(
+                      SupabaseAuthService.currentUser != null && !SupabaseAuthService.isAnonymous
+                          ? Icons.cloud_done_rounded
+                          : Icons.account_circle_outlined,
+                      color: SupabaseAuthService.currentUser != null && !SupabaseAuthService.isAnonymous
+                          ? const Color(0xFF5DD9C1)
+                          : Colors.white70,
+                      size: 18,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      SupabaseAuthService.currentUser != null && !SupabaseAuthService.isAnonymous
+                          ? 'Đã đồng bộ'
+                          : 'Tài khoản',
+                      style: TextStyle(
+                        color: SupabaseAuthService.currentUser != null && !SupabaseAuthService.isAnonymous
+                            ? const Color(0xFF5DD9C1)
+                            : Colors.white70,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
+
+            // Hotline SOS Button
+            GestureDetector(
+              onTap: () => HotlineDialog.show(context),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE07A5F).withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: const Color(0xFFE07A5F).withValues(alpha: 0.35)),
+                ),
+                child: const Row(
+                  children: [
+                    Icon(Icons.support_agent_rounded, color: Color(0xFFE07A5F), size: 18),
+                    SizedBox(width: 6),
+                    Text(
+                      'Hotline',
+                      style: TextStyle(
+                        color: Color(0xFFE07A5F),
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );
