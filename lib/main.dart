@@ -20,8 +20,18 @@ Future<void> main() async {
 
   final launchDetails = await NotificationService.getLaunchDetails();
   final didNotificationLaunch =
-      launchDetails?.didNotificationLaunchApp ?? false;
-  final initialIndex = didNotificationLaunch ? 2 : 0;
+      (launchDetails?.didNotificationLaunchApp ?? false) ||
+      (launchDetails?.notificationResponse != null) ||
+      (MainNavigationScreen.selectedTabNotifier.value != 0);
+  final initialIndex = didNotificationLaunch
+      ? (MainNavigationScreen.selectedTabNotifier.value != 0
+            ? MainNavigationScreen.selectedTabNotifier.value
+            : 2)
+      : 0;
+
+  if (initialIndex != 0) {
+    MainNavigationScreen.selectedTabNotifier.value = initialIndex;
+  }
 
   runApp(ProviderScope(child: MyApp(initialIndex: initialIndex)));
 }

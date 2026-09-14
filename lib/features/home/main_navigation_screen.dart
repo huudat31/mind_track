@@ -14,8 +14,11 @@ class MainNavigationScreen extends StatefulWidget {
   static final GlobalKey<MainNavigationScreenState> navKey =
       GlobalKey<MainNavigationScreenState>();
 
-  /// Chuyển đổi tab nhanh từ bất kỳ đâu trong app (như khi nhấn vào thông báo)
+  static final ValueNotifier<int> selectedTabNotifier = ValueNotifier<int>(0);
+
   static void switchTab(int index) {
+    debugPrint('🔄 MainNavigationScreen.switchTab($index) called');
+    selectedTabNotifier.value = index;
     navKey.currentState?._switchTab(index);
   }
 
@@ -29,11 +32,46 @@ class MainNavigationScreenState extends State<MainNavigationScreen> {
   @override
   void initState() {
     super.initState();
-    _currentIndex = widget.initialIndex;
+    if (MainNavigationScreen.selectedTabNotifier.value != 0) {
+      _currentIndex = MainNavigationScreen.selectedTabNotifier.value;
+    } else {
+      _currentIndex = widget.initialIndex;
+      MainNavigationScreen.selectedTabNotifier.value = widget.initialIndex;
+    }
+
+    MainNavigationScreen.selectedTabNotifier.addListener(_onSelectedTabChanged);
+  }
+
+  @override
+  void didUpdateWidget(covariant MainNavigationScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialIndex != widget.initialIndex &&
+        _currentIndex != widget.initialIndex) {
+      _switchTab(widget.initialIndex);
+    }
+  }
+
+  @override
+  void dispose() {
+    MainNavigationScreen.selectedTabNotifier.removeListener(
+      _onSelectedTabChanged,
+    );
+    super.dispose();
+  }
+
+  void _onSelectedTabChanged() {
+    final target = MainNavigationScreen.selectedTabNotifier.value;
+    if (mounted && _currentIndex != target) {
+      debugPrint('📲 Nhận tín hiệu đổi tab sang index: $target');
+      setState(() {
+        _currentIndex = target;
+      });
+    }
   }
 
   void _switchTab(int index) {
     if (mounted) {
+      MainNavigationScreen.selectedTabNotifier.value = index;
       setState(() {
         _currentIndex = index;
       });
@@ -47,9 +85,7 @@ class MainNavigationScreenState extends State<MainNavigationScreen> {
       onBack: () => _switchTab(0),
       onClose: () => _switchTab(0),
     ),
-    FrequencyDashboardScreen(
-      onNavigateToReport: () => _switchTab(4),
-    ),
+    FrequencyDashboardScreen(onNavigateToReport: () => _switchTab(4)),
     const PdfReportScreen(),
   ];
 
@@ -59,10 +95,7 @@ class MainNavigationScreenState extends State<MainNavigationScreen> {
       backgroundColor: AppColors.darkBg,
       body: Stack(
         children: [
-          IndexedStack(
-            index: _currentIndex,
-            children: _screens,
-          ),
+          IndexedStack(index: _currentIndex, children: _screens),
 
           // Floating Glass Bottom Navigation Bar
           Positioned(
@@ -82,7 +115,10 @@ class MainNavigationScreenState extends State<MainNavigationScreen> {
       decoration: BoxDecoration(
         color: const Color(0xFF141F25).withValues(alpha: 0.94),
         borderRadius: BorderRadius.circular(32),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.14), width: 1.2),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.14),
+          width: 1.2,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.55),
@@ -94,17 +130,44 @@ class MainNavigationScreenState extends State<MainNavigationScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavItem(0, Icons.today_outlined, Icons.today_rounded, 'Hôm nay'),
+          _buildNavItem(
+            0,
+            Icons.today_outlined,
+            Icons.today_rounded,
+            'Hôm nay',
+          ),
           _buildNavItem(1, Icons.quiz_outlined, Icons.quiz_rounded, 'DASS-21'),
-          _buildNavItem(2, Icons.spa_outlined, Icons.spa_rounded, 'Cảm xúc', isSpecial: true),
-          _buildNavItem(3, Icons.insert_chart_outlined_rounded, Icons.insert_chart_rounded, 'Tần suất'),
-          _buildNavItem(4, Icons.picture_as_pdf_outlined, Icons.picture_as_pdf_rounded, 'Báo cáo'),
+          _buildNavItem(
+            2,
+            Icons.spa_outlined,
+            Icons.spa_rounded,
+            'Cảm xúc',
+            isSpecial: true,
+          ),
+          _buildNavItem(
+            3,
+            Icons.insert_chart_outlined_rounded,
+            Icons.insert_chart_rounded,
+            'Tần suất',
+          ),
+          _buildNavItem(
+            4,
+            Icons.picture_as_pdf_outlined,
+            Icons.picture_as_pdf_rounded,
+            'Báo cáo',
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildNavItem(int index, IconData icon, IconData activeIcon, String label, {bool isSpecial = false}) {
+  Widget _buildNavItem(
+    int index,
+    IconData icon,
+    IconData activeIcon,
+    String label, {
+    bool isSpecial = false,
+  }) {
     final isSelected = _currentIndex == index;
 
     return GestureDetector(
@@ -119,8 +182,8 @@ class MainNavigationScreenState extends State<MainNavigationScreen> {
         decoration: BoxDecoration(
           color: isSelected
               ? (isSpecial
-                  ? const Color(0xFFEB6834).withValues(alpha: 0.28)
-                  : AppColors.primary.withValues(alpha: 0.35))
+                    ? const Color(0xFFEB6834).withValues(alpha: 0.28)
+                    : AppColors.primary.withValues(alpha: 0.35))
               : Colors.transparent,
           borderRadius: BorderRadius.circular(22),
           border: isSelected

@@ -42,9 +42,12 @@ class NotificationService {
         '@mipmap/ic_launcher',
       );
       const darwinSettings = DarwinInitializationSettings(
-        requestAlertPermission: false,
-        requestBadgePermission: false,
-        requestSoundPermission: false,
+        requestAlertPermission: true,
+        requestBadgePermission: true,
+        requestSoundPermission: true,
+        defaultPresentAlert: true,
+        defaultPresentBadge: true,
+        defaultPresentSound: true,
       );
 
       const initializationSettings = InitializationSettings(
@@ -80,11 +83,30 @@ class NotificationService {
   static void handleNotificationTap(NotificationResponse response) {
     debugPrint('🔔 Chạm thông báo, payload: ${response.payload}');
 
-    // Đóng bất kỳ popup / bottom sheet nào đang mở
-    navigatorKey.currentState?.popUntil((route) => route.isFirst);
+    // Xác định tab đích: mặc định là tab 2 (Cảm xúc - State of Mind)
+    const targetTab = 2;
 
-    // Chuyển thẳng sang Tab 2: "Chọn cảm giác của bạn ngay lúc này"
-    MainNavigationScreen.switchTab(2);
+    void navigate() {
+      try {
+        // Đóng bất kỳ popup / bottom sheet / route phụ nào đang mở trên Navigator
+        if (navigatorKey.currentState?.canPop() ?? false) {
+          navigatorKey.currentState?.popUntil((route) => route.isFirst);
+        }
+
+        // Chuyển thẳng sang Tab 2: "Chọn cảm giác của bạn ngay lúc này"
+        MainNavigationScreen.switchTab(targetTab);
+      } catch (e) {
+        debugPrint('Lỗi điều hướng thông báo: $e');
+      }
+    }
+
+    // Thực thi chuyển tab ngay lập tức
+    navigate();
+
+    // Thử lại sau các khoảng thời gian để đảm bảo app đã hoàn toàn resume từ background / cold-start
+    Future.delayed(const Duration(milliseconds: 150), navigate);
+    Future.delayed(const Duration(milliseconds: 400), navigate);
+    Future.delayed(const Duration(milliseconds: 800), navigate);
   }
 
   /// Yêu cầu cấp quyền gửi thông báo từ người dùng
