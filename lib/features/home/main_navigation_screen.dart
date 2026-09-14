@@ -17,12 +17,15 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = const [
-    _HomeDashboardTab(),
-    AssessmentScreen(),
-    StateOfMindScreen(),
-    FrequencyDashboardScreen(),
-    PdfReportScreen(),
+  List<Widget> get _screens => [
+    const _HomeDashboardTab(),
+    const AssessmentScreen(),
+    StateOfMindScreen(
+      onBack: () => setState(() => _currentIndex = 0),
+      onClose: () => setState(() => _currentIndex = 0),
+    ),
+    const FrequencyDashboardScreen(),
+    const PdfReportScreen(),
   ];
 
   @override

@@ -4,7 +4,14 @@ import '../widgets/state_of_mind_flower.dart';
 import 'daily_logging_screen.dart';
 
 class StateOfMindScreen extends StatefulWidget {
-  const StateOfMindScreen({super.key});
+  final VoidCallback? onBack;
+  final VoidCallback? onClose;
+
+  const StateOfMindScreen({
+    super.key,
+    this.onBack,
+    this.onClose,
+  });
 
   @override
   State<StateOfMindScreen> createState() => _StateOfMindScreenState();
@@ -15,6 +22,22 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
   double _sliderValue = 0.5; // 0.0 -> 1.0
   late AnimationController _pulseController;
   int _lastVibratedIndex = 3;
+
+  void _handleBack() {
+    if (widget.onBack != null) {
+      widget.onBack!();
+    } else if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    }
+  }
+
+  void _handleClose() {
+    if (widget.onClose != null) {
+      widget.onClose!();
+    } else if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    }
+  }
 
   final List<_MoodTier> _tiers = const [
     _MoodTier(
@@ -153,7 +176,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                   children: [
                     _buildCircleButton(
                       icon: Icons.arrow_back_ios_new_rounded,
-                      onTap: () => Navigator.maybePop(context),
+                      onTap: _handleBack,
                     ),
                     const Text(
                       'Cảm xúc',
@@ -165,7 +188,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                     ),
                     _buildCircleButton(
                       icon: Icons.close_rounded,
-                      onTap: () => Navigator.maybePop(context),
+                      onTap: _handleClose,
                     ),
                   ],
                 ),
@@ -359,17 +382,18 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
     required IconData icon,
     required VoidCallback onTap,
   }) {
-    return InkWell(
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
-      borderRadius: BorderRadius.circular(22),
       child: Container(
         width: 44,
         height: 44,
+        alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.12),
+          color: Colors.white.withValues(alpha: 0.16),
           shape: BoxShape.circle,
         ),
-        child: Icon(icon, color: Colors.white, size: 20),
+        child: Icon(icon, color: Colors.white, size: 18),
       ),
     );
   }
