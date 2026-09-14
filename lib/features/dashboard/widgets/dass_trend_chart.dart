@@ -229,10 +229,11 @@ class _DassTrendChartState extends State<DassTrendChart> {
             ),
           ),
 
-          const SizedBox(height: 16),
-
-          // Clinical Cutoff Legend & Baseline Improvement badge
-          _buildClinicalInsightBar(),
+          // Baseline Improvement badge (chỉ hiển thị khi có từ 2 mốc trở lên để so sánh)
+          if (widget.history.length >= 2) ...[
+            const SizedBox(height: 16),
+            _buildClinicalInsightBar(),
+          ],
         ],
       ),
     );
@@ -549,27 +550,8 @@ class _DassTrendChartState extends State<DassTrendChart> {
   }
 
   Widget _buildClinicalInsightBar() {
-    if (widget.history.length == 1) {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.04),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
-        ),
-        child: const Row(
-          children: [
-            Icon(Icons.info_outline_rounded, color: AppColors.primaryLight, size: 18),
-            SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                'Đã ghi nhận mốc đánh giá ban đầu (T0). Hãy làm thêm bài đánh giá sau 7 ngày để hệ thống đo lường mức độ tiến triển.',
-                style: TextStyle(fontSize: 12, color: Colors.white, height: 1.3),
-              ),
-            ),
-          ],
-        ),
-      );
+    if (widget.history.length < 2) {
+      return const SizedBox.shrink();
     }
 
     final first = widget.history.first;
