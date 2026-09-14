@@ -50,7 +50,10 @@ class _FrequencyDashboardScreenState extends State<FrequencyDashboardScreen> {
                     FutureBuilder<List<DassHistoryPoint>>(
                       future: ClinicalDataRepository.getDynamicDassTrend(_selectedTimeframe),
                       builder: (context, snapshot) {
-                        return DassTrendChart(history: snapshot.data ?? []);
+                        return DassTrendChart(
+                          history: snapshot.data ?? [],
+                          timeframe: _selectedTimeframe,
+                        );
                       },
                     ),
 

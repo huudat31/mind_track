@@ -96,27 +96,43 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
                 final isSelected = _selectedCategory == category;
                 return Padding(
                   padding: const EdgeInsets.only(right: 8.0),
-                  child: ChoiceChip(
-                    label: Text(category),
-                    selected: isSelected,
-                    onSelected: (selected) {
-                      if (selected) {
-                        setState(() => _selectedCategory = category);
-                      }
-                    },
-                    selectedColor: AppColors.primary.withValues(alpha: 0.35),
-                    backgroundColor: Colors.white.withValues(alpha: 0.05),
-                    labelStyle: TextStyle(
-                      fontSize: 12,
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                      color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.6),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      side: BorderSide(
+                  child: GestureDetector(
+                    onTap: () => setState(() => _selectedCategory = category),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+                      decoration: BoxDecoration(
                         color: isSelected
-                            ? AppColors.primaryLight.withValues(alpha: 0.7)
-                            : Colors.white.withValues(alpha: 0.1),
+                            ? AppColors.primary.withValues(alpha: 0.4)
+                            : Colors.white.withValues(alpha: 0.05),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: isSelected
+                              ? AppColors.primaryLight.withValues(alpha: 0.8)
+                              : Colors.white.withValues(alpha: 0.12),
+                          width: 1,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (isSelected) ...[
+                            const Icon(
+                              Icons.check_rounded,
+                              size: 14,
+                              color: AppColors.primaryLight,
+                            ),
+                            const SizedBox(width: 5),
+                          ],
+                          Text(
+                            category,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                              color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.65),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

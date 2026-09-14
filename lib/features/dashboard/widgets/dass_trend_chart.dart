@@ -6,10 +6,12 @@ import '../models/frequency_analytics_model.dart';
 
 class DassTrendChart extends StatefulWidget {
   final List<DassHistoryPoint> history;
+  final TimeframeOption timeframe;
 
   const DassTrendChart({
     super.key,
     required this.history,
+    this.timeframe = TimeframeOption.fourteenDays,
   });
 
   @override
@@ -19,6 +21,35 @@ class DassTrendChart extends StatefulWidget {
 class _DassTrendChartState extends State<DassTrendChart> {
   // null means show all 3, otherwise show specific category
   DassCategory? _selectedCategory;
+
+  int get _stepDays {
+    switch (widget.timeframe) {
+      case TimeframeOption.sevenDays:
+        return 1; // 7 ngày: cứ 1 ngày 1 điểm
+      case TimeframeOption.fourteenDays:
+        return 2; // 14 ngày: cách 2 ngày vẽ 1 điểm
+      case TimeframeOption.twentyEightDays:
+        return 4; // 28 ngày: cách 4 ngày hiển thị 1 lần
+    }
+  }
+
+  int get _totalPoints {
+    switch (widget.timeframe) {
+      case TimeframeOption.sevenDays:
+        return 7;
+      case TimeframeOption.fourteenDays:
+        return 8;
+      case TimeframeOption.twentyEightDays:
+        return 8;
+    }
+  }
+
+  DateTime _getDateForIndex(int index) {
+    final now = DateTime.now();
+    final todayMidnight = DateTime(now.year, now.month, now.day);
+    final daysAgo = (_totalPoints - 1 - index) * _stepDays;
+    return todayMidnight.subtract(Duration(days: daysAgo));
+  }
 
   static const Color depressionColor = Color(0xFFB388FF); // Lavender purple
   static const Color anxietyColor = Color(0xFFFF9E80);    // Warm peach/coral
@@ -247,29 +278,67 @@ class _DassTrendChartState extends State<DassTrendChart> {
     );
   }
 
+  List<FlSpot> _buildCategorySpots(int Function(DassHistoryPoint) getScore) {
+    if (widget.history.isEmpty) return [];
+
+    final now = DateTime.now();
+    final todayMidnight = DateTime(now.year, now.month, now.day);
+    final sorted = List<DassHistoryPoint>.from(widget.history)
+      ..sort((a, b) => a.date.compareTo(b.date));
+
+    final maxX = (_totalPoints - 1).toDouble();
+    final List<FlSpot> rawSpots = [];
+
+    for (final p in sorted) {
+      final pMidnight = DateTime(p.date.year, p.date.month, p.date.day);
+      final daysAgo = todayMidnight.difference(pMidnight).inDays;
+      final x = maxX - (daysAgo / _stepDays);
+      final clampedX = x.clamp(0.0, maxX);
+      rawSpots.add(FlSpot(clampedX, getScore(p).toDouble()));
+    }
+
+    if (rawSpots.isEmpty) {
+      final latest = sorted.last;
+      rawSpots.add(FlSpot(maxX, getScore(latest).toDouble()));
+    }
+
+    // Sắp xếp tăng dần theo X
+    rawSpots.sort((a, b) => a.x.compareTo(b.x));
+
+    // Loại bỏ các điểm trùng X để đảm bảo tính đơn điệu nghiêm ngặt cho fl_chart
+    final List<FlSpot> uniqueSpots = [];
+    for (final s in rawSpots) {
+      if (uniqueSpots.isNotEmpty && s.x <= uniqueSpots.last.x) {
+        uniqueSpots.removeLast();
+      }
+      uniqueSpots.add(s);
+    }
+
+    return uniqueSpots;
+  }
+
   LineChartData _buildChartData() {
-    final history = widget.history;
-    final maxX = history.length > 1 ? (history.length - 1).toDouble() : 1.0;
+    final maxX = (_totalPoints - 1).toDouble();
 
     List<LineChartBarData> lineBars = [];
 
     if (_selectedCategory == null || _selectedCategory == DassCategory.depression) {
       lineBars.add(_createLineBarData(
-        points: history.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value.depression.toDouble())).toList(),
+        points: _buildCategorySpots((p) => p.depression),
         color: depressionColor,
       ));
     }
 
     if (_selectedCategory == null || _selectedCategory == DassCategory.anxiety) {
       lineBars.add(_createLineBarData(
-        points: history.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value.anxiety.toDouble())).toList(),
+        points: _buildCategorySpots((p) => p.anxiety),
         color: anxietyColor,
       ));
     }
 
     if (_selectedCategory == null || _selectedCategory == DassCategory.stress) {
       lineBars.add(_createLineBarData(
-        points: history.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value.stress.toDouble())).toList(),
+        points: _buildCategorySpots((p) => p.stress),
         color: stressColor,
       ));
     }
@@ -278,7 +347,7 @@ class _DassTrendChartState extends State<DassTrendChart> {
       minX: 0,
       maxX: maxX,
       minY: 0,
-      maxY: 35, // DASS-21 subscale max score 42, typically 0-35
+      maxY: 35, // Thang điểm DASS-21 tối đa 42, dải chuẩn 0-35
       gridData: FlGridData(
         show: true,
         drawVerticalLine: false,
@@ -312,23 +381,33 @@ class _DassTrendChartState extends State<DassTrendChart> {
           sideTitles: SideTitles(
             showTitles: true,
             interval: 1,
-            reservedSize: 26,
+            reservedSize: 28,
             getTitlesWidget: (value, meta) {
-              final index = value.toInt();
-              if (index >= 0 && index < history.length) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Text(
-                    history[index].label.replaceAll(' (Bắt đầu)', '').replaceAll(' (Hiện tại)', ''),
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.7),
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                );
+              final index = value.round();
+              if (index < 0 || index >= _totalPoints) {
+                return const SizedBox.shrink();
               }
-              return const SizedBox.shrink();
+              if ((value - index).abs() > 0.15) {
+                return const SizedBox.shrink();
+              }
+
+              final isToday = (index == _totalPoints - 1);
+              final date = _getDateForIndex(index);
+              final label = isToday ? 'Hôm nay' : '${date.day}/${date.month}';
+
+              return Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    color: isToday
+                        ? AppColors.primaryLight
+                        : Colors.white.withValues(alpha: 0.65),
+                    fontSize: 10,
+                    fontWeight: isToday ? FontWeight.w700 : FontWeight.w500,
+                  ),
+                ),
+              );
             },
           ),
         ),
@@ -336,7 +415,7 @@ class _DassTrendChartState extends State<DassTrendChart> {
       borderData: FlBorderData(show: false),
       extraLinesData: ExtraLinesData(
         horizontalLines: [
-          // Clinical Reference Line: Ngưỡng Vừa Phải / Nặng (~21 điểm)
+          // Clinical Reference Line: Ngưỡng Vừa Phải / Nặng (~20 điểm)
           HorizontalLine(
             y: 20,
             color: const Color(0xFFE07A5F).withValues(alpha: 0.3),
@@ -384,9 +463,11 @@ class _DassTrendChartState extends State<DassTrendChart> {
           ),
           getTooltipItems: (touchedSpots) {
             return touchedSpots.map((spot) {
-              final index = spot.x.toInt();
-              final point = history[index];
               final score = spot.y.toInt();
+              final index = spot.x.round().clamp(0, _totalPoints - 1);
+              final isToday = (index == _totalPoints - 1);
+              final date = _getDateForIndex(index);
+              final dateLabel = isToday ? 'Hôm nay' : '${date.day}/${date.month}';
 
               String subscaleName = '';
               Color textColor = Colors.white;
@@ -410,7 +491,7 @@ class _DassTrendChartState extends State<DassTrendChart> {
               }
 
               return LineTooltipItem(
-                '$subscaleName: $score đ\n(${point.label})',
+                '$subscaleName: $score đ\n($dateLabel)',
                 TextStyle(
                   color: textColor,
                   fontSize: 11,
@@ -432,7 +513,7 @@ class _DassTrendChartState extends State<DassTrendChart> {
   }) {
     return LineChartBarData(
       spots: points,
-      isCurved: true,
+      isCurved: points.length > 1,
       curveSmoothness: 0.35,
       color: color,
       barWidth: 3,
@@ -449,7 +530,7 @@ class _DassTrendChartState extends State<DassTrendChart> {
         },
       ),
       belowBarData: BarAreaData(
-        show: true,
+        show: points.length > 1,
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
