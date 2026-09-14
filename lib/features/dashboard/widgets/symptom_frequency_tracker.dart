@@ -7,13 +7,11 @@ import '../data/clinical_data_repository.dart';
 class SymptomFrequencyTracker extends StatefulWidget {
   final TimeframeOption timeframe;
 
-  const SymptomFrequencyTracker({
-    super.key,
-    required this.timeframe,
-  });
+  const SymptomFrequencyTracker({super.key, required this.timeframe});
 
   @override
-  State<SymptomFrequencyTracker> createState() => _SymptomFrequencyTrackerState();
+  State<SymptomFrequencyTracker> createState() =>
+      _SymptomFrequencyTrackerState();
 }
 
 class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
@@ -31,7 +29,10 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
       decoration: BoxDecoration(
         color: AppColors.darkCard.withValues(alpha: 0.85),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.08), width: 1),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.08),
+          width: 1,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.35),
@@ -100,7 +101,10 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
                     onTap: () => setState(() => _selectedCategory = category),
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 7,
+                      ),
                       decoration: BoxDecoration(
                         color: isSelected
                             ? AppColors.primary.withValues(alpha: 0.4)
@@ -128,8 +132,12 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
                             category,
                             style: TextStyle(
                               fontSize: 12,
-                              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                              color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.65),
+                              fontWeight: isSelected
+                                  ? FontWeight.w700
+                                  : FontWeight.w500,
+                              color: isSelected
+                                  ? Colors.white
+                                  : Colors.white.withValues(alpha: 0.65),
                             ),
                           ),
                         ],
@@ -157,7 +165,10 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
                     child: SizedBox(
                       width: 24,
                       height: 24,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primaryLight),
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: AppColors.primaryLight,
+                      ),
                     ),
                   ),
                 );
@@ -184,7 +195,8 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: flagStats.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 14),
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 14),
                 itemBuilder: (context, index) {
                   final item = flagStats[index];
                   return _buildFlagRow(item, index + 1);
@@ -269,7 +281,9 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
-                  color: rank <= 3 ? barColor : Colors.white.withValues(alpha: 0.6),
+                  color: rank <= 3
+                      ? barColor
+                      : Colors.white.withValues(alpha: 0.6),
                 ),
               ),
             ),
@@ -351,10 +365,7 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
                 height: 6,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [
-                      barColor.withValues(alpha: 0.7),
-                      barColor,
-                    ],
+                    colors: [barColor.withValues(alpha: 0.7), barColor],
                   ),
                   borderRadius: BorderRadius.circular(3),
                   boxShadow: [

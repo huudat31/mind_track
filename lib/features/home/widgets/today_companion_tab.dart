@@ -57,7 +57,8 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
         _currentStreak = streak['currentStreak'] as int? ?? 0;
         _totalDaysRecorded = streak['totalDaysRecorded'] as int? ?? 0;
         _recordedDates = (streak['recordedDates'] as Set<String>?) ?? {};
-        _dateValenceMap = (streak['dateValenceMap'] as Map<String, double>?) ?? {};
+        _dateValenceMap =
+            (streak['dateValenceMap'] as Map<String, double>?) ?? {};
 
         _weeklyMood = weekly['mood'] ?? 'Chưa ghi nhận';
         _weeklyMoodSub = weekly['moodSub'] ?? '0 ngày trong tuần';
@@ -82,7 +83,15 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
 
   String _getFormattedDate() {
     final now = DateTime.now();
-    final weekdays = ['Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy', 'Chủ Nhật'];
+    final weekdays = [
+      'Thứ Hai',
+      'Thứ Ba',
+      'Thứ Tư',
+      'Thứ Năm',
+      'Thứ Sáu',
+      'Thứ Bảy',
+      'Chủ Nhật',
+    ];
     final weekday = weekdays[now.weekday - 1];
     return '$weekday, ${now.day}/${now.month}/${now.year}';
   }
@@ -94,11 +103,7 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            Color(0xFF16252C),
-            Color(0xFF0E1418),
-            Color(0xFF0A0E11),
-          ],
+          colors: [Color(0xFF16252C), Color(0xFF0E1418), Color(0xFF0A0E11)],
           stops: [0.0, 0.45, 1.0],
         ),
       ),
@@ -109,45 +114,49 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
           backgroundColor: AppColors.darkCard,
           onRefresh: _loadTodayLog,
           child: ListView(
-            physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+            physics: const AlwaysScrollableScrollPhysics(
+              parent: BouncingScrollPhysics(),
+            ),
             padding: const EdgeInsets.fromLTRB(20, 10, 20, 110),
             children: [
-            // Top App Bar
-            _buildHeader(context),
+              // Top App Bar
+              _buildHeader(context),
 
-            const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-            // 1. Hero Card: Today's Clinical Status
-            _buildTodayStatusCard(),
+              // 1. Hero Card: Today's Clinical Status
+              _buildTodayStatusCard(),
 
-            const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-            // 2. Pre-Therapy 28-Day Streak & Observation Progress
-            _buildStreakCalendarCard(),
+              // 2. Pre-Therapy 28-Day Streak & Observation Progress
+              _buildStreakCalendarCard(),
 
-            const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-            // 3. Weekly Clinical Snapshot (Bento metrics)
-            _buildWeeklySnapshotCard(),
+              // 3. Weekly Clinical Snapshot (Bento metrics)
+              _buildWeeklySnapshotCard(),
 
-            const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-            // 4. Quick Grounding Action: Box Breathing 4-4-4-4
-            _buildQuickBreathingCard(context),
+              // 4. Quick Grounding Action: Box Breathing 4-4-4-4
+              _buildQuickBreathingCard(context),
 
-            const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-            // 5. Mindful Reflection Anchor
-            _buildMindfulAnchorCard(),
-          ],
+              // 5. Mindful Reflection Anchor
+              _buildMindfulAnchorCard(),
+            ],
+          ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   Widget _buildHeader(BuildContext context) {
-    final isSynced = SupabaseAuthService.currentUser != null && !SupabaseAuthService.isAnonymous;
+    final isSynced =
+        SupabaseAuthService.currentUser != null &&
+        !SupabaseAuthService.isAnonymous;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -204,7 +213,10 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
                   },
                 ),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 7),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 9,
+                    vertical: 7,
+                  ),
                   decoration: BoxDecoration(
                     color: isSynced
                         ? const Color(0xFF2E6B65).withValues(alpha: 0.25)
@@ -252,11 +264,16 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
               child: GestureDetector(
                 onTap: () => ReminderSettingsBottomSheet.show(context),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 7),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 9,
+                    vertical: 7,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.15),
+                    ),
                   ),
                   child: const Row(
                     mainAxisSize: MainAxisSize.min,
@@ -286,16 +303,25 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
             GestureDetector(
               onTap: () => HotlineDialog.show(context),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 7,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFFE07A5F).withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: const Color(0xFFE07A5F).withValues(alpha: 0.35)),
+                  border: Border.all(
+                    color: const Color(0xFFE07A5F).withValues(alpha: 0.35),
+                  ),
                 ),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.support_agent_rounded, color: Color(0xFFE07A5F), size: 16),
+                    Icon(
+                      Icons.support_agent_rounded,
+                      color: Color(0xFFE07A5F),
+                      size: 16,
+                    ),
                     SizedBox(width: 4),
                     Text(
                       'SOS',
@@ -318,7 +344,8 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
   Widget _buildTodayStatusCard() {
     final energy = (_todayLog?['energy_level'] as num?)?.toDouble() ?? 3.5;
     final valence = (_todayLog?['valence'] as num?)?.toDouble() ?? 0.67;
-    final balancedThought = _todayLog?['balanced_response'] as String? ??
+    final balancedThought =
+        _todayLog?['balanced_response'] as String? ??
         'Thời hạn gấp gáp nhưng mình đã xong 70% nội dung. Mình có thể chia nhỏ việc để xử lý nhẹ nhàng.';
 
     return Container(
@@ -352,23 +379,32 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 5,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.primary.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.primaryLight.withValues(alpha: 0.4)),
+                  border: Border.all(
+                    color: AppColors.primaryLight.withValues(alpha: 0.4),
+                  ),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
-                      _hasLoggedToday ? Icons.check_circle_rounded : Icons.access_time_rounded,
+                      _hasLoggedToday
+                          ? Icons.check_circle_rounded
+                          : Icons.access_time_rounded,
                       color: AppColors.primaryLight,
                       size: 14,
                     ),
                     const SizedBox(width: 6),
                     Text(
-                      _hasLoggedToday ? 'ĐÃ CHECK-IN HÔM NAY' : 'CHƯA GHI NHẬN HÔM NAY',
+                      _hasLoggedToday
+                          ? 'ĐÃ CHECK-IN HÔM NAY'
+                          : 'CHƯA GHI NHẬN HÔM NAY',
                       style: const TextStyle(
                         color: AppColors.primaryLight,
                         fontSize: 10,
@@ -385,7 +421,10 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
                   widget.onSelectTab?.call(2);
                 },
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(10),
@@ -395,10 +434,18 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
                     children: [
                       Text(
                         _hasLoggedToday ? 'Ghi nhận thêm' : 'Bắt đầu ngay',
-                        style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       const SizedBox(width: 4),
-                      const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white70, size: 10),
+                      const Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        color: Colors.white70,
+                        size: 10,
+                      ),
                     ],
                   ),
                 ),
@@ -424,7 +471,10 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
                       Colors.transparent,
                     ],
                   ),
-                  border: Border.all(color: AppColors.primaryLight.withValues(alpha: 0.5), width: 1.5),
+                  border: Border.all(
+                    color: AppColors.primaryLight.withValues(alpha: 0.5),
+                    width: 1.5,
+                  ),
                 ),
                 child: const Center(
                   child: Icon(
@@ -450,7 +500,11 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        const Icon(Icons.bolt_rounded, size: 15, color: Color(0xFFF4A261)),
+                        const Icon(
+                          Icons.bolt_rounded,
+                          size: 15,
+                          color: Color(0xFFF4A261),
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           'Mức năng lượng: ${energy.toStringAsFixed(1)} / 5.0 (${energy >= 3.0 ? "Ổn định" : "Cạn kiệt"})',
@@ -474,9 +528,21 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
             spacing: 6,
             runSpacing: 6,
             children: [
-              _buildMicroPill(Icons.work_outline_rounded, 'Bối cảnh: Công việc', Colors.white38),
-              _buildMicroPill(Icons.bedtime_outlined, 'Cờ đỏ: Khó vào giấc', const Color(0xFFE07A5F)),
-              _buildMicroPill(Icons.accessibility_new_outlined, 'Cơ thể: Căng cơ vai', const Color(0xFFF4A261)),
+              _buildMicroPill(
+                Icons.work_outline_rounded,
+                'Bối cảnh: Công việc',
+                Colors.white38,
+              ),
+              _buildMicroPill(
+                Icons.bedtime_outlined,
+                'Cờ đỏ: Khó vào giấc',
+                const Color(0xFFE07A5F),
+              ),
+              _buildMicroPill(
+                Icons.accessibility_new_outlined,
+                'Cơ thể: Căng cơ vai',
+                const Color(0xFFF4A261),
+              ),
             ],
           ),
 
@@ -493,7 +559,11 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.psychology_outlined, size: 16, color: AppColors.primaryLight),
+                const Icon(
+                  Icons.psychology_outlined,
+                  size: 16,
+                  color: AppColors.primaryLight,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -529,7 +599,11 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
           const SizedBox(width: 5),
           Text(
             label,
-            style: const TextStyle(fontSize: 10, color: Colors.white70, fontWeight: FontWeight.w500),
+            style: const TextStyle(
+              fontSize: 10,
+              color: Colors.white70,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ],
       ),
@@ -554,11 +628,19 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
             children: [
               const Row(
                 children: [
-                  Icon(Icons.calendar_month_rounded, color: AppColors.primaryLight, size: 18),
+                  Icon(
+                    Icons.calendar_month_rounded,
+                    color: AppColors.primaryLight,
+                    size: 18,
+                  ),
                   SizedBox(width: 8),
                   Text(
                     'Chu kỳ 28 ngày trước trị liệu',
-                    style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ],
               ),
@@ -569,8 +651,14 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  _currentStreak > 0 ? 'Chuỗi $_currentStreak ngày 🔥' : 'Bắt đầu chuỗi 🌱',
-                  style: const TextStyle(color: AppColors.primaryLight, fontSize: 11, fontWeight: FontWeight.w700),
+                  _currentStreak > 0
+                      ? 'Chuỗi $_currentStreak ngày 🔥'
+                      : 'Bắt đầu chuỗi 🌱',
+                  style: const TextStyle(
+                    color: AppColors.primaryLight,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ],
@@ -580,7 +668,11 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
 
           Text(
             'Mỗi ngày check-in bổ sung thêm một mảnh ghép dữ liệu lâm sàng cho nhà trị liệu của bạn.',
-            style: TextStyle(color: Colors.white.withValues(alpha: 0.6), fontSize: 11, height: 1.35),
+            style: TextStyle(
+              color: Colors.white.withValues(alpha: 0.6),
+              fontSize: 11,
+              height: 1.35,
+            ),
           ),
 
           const SizedBox(height: 14),
@@ -595,11 +687,21 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
             children: [
               Text(
                 'Tiến trình: $_totalDaysRecorded / 28 ngày ($progressPct%)',
-                style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 11, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.7),
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               Text(
-                _totalDaysRecorded >= 28 ? 'Đã sẵn sàng cho phiên 1 🎉' : 'Còn ${28 - _totalDaysRecorded} ngày đến mốc phiên 1',
-                style: const TextStyle(color: AppColors.primaryLight, fontSize: 11, fontWeight: FontWeight.w600),
+                _totalDaysRecorded >= 28
+                    ? 'Đã sẵn sàng cho phiên 1 🎉'
+                    : 'Còn ${28 - _totalDaysRecorded} ngày đến mốc phiên 1',
+                style: const TextStyle(
+                  color: AppColors.primaryLight,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ],
           ),
@@ -626,7 +728,8 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
                   final dayIndex = r * columns + c + 1; // 1 to 28
                   final daysAgo = 28 - dayIndex;
                   final targetDate = now.subtract(Duration(days: daysAgo));
-                  final dateKey = '${targetDate.year}-${targetDate.month.toString().padLeft(2, '0')}-${targetDate.day.toString().padLeft(2, '0')}';
+                  final dateKey =
+                      '${targetDate.year}-${targetDate.month.toString().padLeft(2, '0')}-${targetDate.day.toString().padLeft(2, '0')}';
                   final isLogged = _recordedDates.contains(dateKey);
                   final isToday = (daysAgo == 0);
 
@@ -654,12 +757,16 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
                     decoration: BoxDecoration(
                       color: isToday
                           ? AppColors.primary.withValues(alpha: 0.45)
-                          : (isLogged ? dotColor.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.04)),
+                          : (isLogged
+                                ? dotColor.withValues(alpha: 0.2)
+                                : Colors.white.withValues(alpha: 0.04)),
                       shape: BoxShape.circle,
                       border: Border.all(
                         color: isToday
                             ? AppColors.primaryLight
-                            : (isLogged ? dotColor.withValues(alpha: 0.7) : Colors.white.withValues(alpha: 0.1)),
+                            : (isLogged
+                                  ? dotColor.withValues(alpha: 0.7)
+                                  : Colors.white.withValues(alpha: 0.1)),
                         width: isToday ? 2 : 1,
                       ),
                       boxShadow: isToday
@@ -679,8 +786,12 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
                             '$dayIndex',
                             style: TextStyle(
                               fontSize: 10,
-                              fontWeight: isToday ? FontWeight.w800 : FontWeight.w500,
-                              color: isToday ? Colors.white : Colors.white.withValues(alpha: 0.35),
+                              fontWeight: isToday
+                                  ? FontWeight.w800
+                                  : FontWeight.w500,
+                              color: isToday
+                                  ? Colors.white
+                                  : Colors.white.withValues(alpha: 0.35),
                             ),
                           ),
                   );
@@ -709,11 +820,19 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
             children: [
               const Row(
                 children: [
-                  Icon(Icons.insights_rounded, color: Color(0xFFF4A261), size: 18),
+                  Icon(
+                    Icons.insights_rounded,
+                    color: Color(0xFFF4A261),
+                    size: 18,
+                  ),
                   SizedBox(width: 8),
                   Text(
                     'Tóm Tắt Tuần Này',
-                    style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ],
               ),
@@ -789,21 +908,31 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.55)),
+            style: TextStyle(
+              fontSize: 10,
+              color: Colors.white.withValues(alpha: 0.55),
+            ),
           ),
           const SizedBox(height: 4),
           Text(
             value,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: accent),
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              color: accent,
+            ),
           ),
           const SizedBox(height: 2),
           Text(
             sub,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.5)),
+            style: TextStyle(
+              fontSize: 9,
+              color: Colors.white.withValues(alpha: 0.5),
+            ),
           ),
         ],
       ),
@@ -833,7 +962,11 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
               color: AppColors.accentTeal.withValues(alpha: 0.2),
               shape: BoxShape.circle,
             ),
-            child: const Icon(Icons.air_rounded, color: AppColors.accentTeal, size: 26),
+            child: const Icon(
+              Icons.air_rounded,
+              color: AppColors.accentTeal,
+              size: 26,
+            ),
           ),
           const SizedBox(width: 14),
           Expanded(
@@ -861,24 +994,39 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const BoxBreathingScreen()),
+                      MaterialPageRoute(
+                        builder: (context) => const BoxBreathingScreen(),
+                      ),
                     );
                   },
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.accentTeal.withValues(alpha: 0.25),
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: AppColors.accentTeal.withValues(alpha: 0.5)),
+                      border: Border.all(
+                        color: AppColors.accentTeal.withValues(alpha: 0.5),
+                      ),
                     ),
                     child: const Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.play_arrow_rounded, color: AppColors.accentTeal, size: 16),
+                        Icon(
+                          Icons.play_arrow_rounded,
+                          color: AppColors.accentTeal,
+                          size: 16,
+                        ),
                         SizedBox(width: 4),
                         Text(
                           'Bắt đầu thở 2 phút',
-                          style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ],
                     ),
@@ -903,7 +1051,11 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.format_quote_rounded, color: Colors.white30, size: 22),
+          const Icon(
+            Icons.format_quote_rounded,
+            color: Colors.white30,
+            size: 22,
+          ),
           const SizedBox(width: 10),
           Expanded(
             child: Column(

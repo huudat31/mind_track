@@ -49,7 +49,9 @@ void main() {
         eveningTime: TimeOfDay(hour: 22, minute: 30),
       );
 
-      final success = await ReminderPreferencesService.saveSettings(newSettings);
+      final success = await ReminderPreferencesService.saveSettings(
+        newSettings,
+      );
       expect(success, true);
 
       final loaded = await ReminderPreferencesService.getSettings();
@@ -60,28 +62,23 @@ void main() {
       expect(loaded.eveningTime.minute, 30);
     });
 
-    testWidgets('ReminderSettingsBottomSheet renders controls properly', (tester) async {
+    testWidgets('ReminderSettingsBottomSheet renders controls properly', (
+      tester,
+    ) async {
       SharedPreferences.setMockInitialValues({});
 
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: ReminderSettingsBottomSheet(),
-          ),
-        ),
+        const MaterialApp(home: Scaffold(body: ReminderSettingsBottomSheet())),
       );
 
       await tester.pumpAndSettle();
 
-      // Check title and description
       expect(find.text('Cài Đặt Lịch Nhắc Cảm Xúc'), findsOneWidget);
       expect(find.text('Nhắc nhở hàng ngày'), findsOneWidget);
 
-      // Check time slots
       expect(find.text('Khởi đầu ngày mới (Sáng)'), findsOneWidget);
       expect(find.text('Tổng kết cuối ngày (Tối)'), findsOneWidget);
 
-      // Check action buttons
       expect(find.text('Gửi thử thông báo ngay bây giờ'), findsOneWidget);
       expect(find.text('Lưu & Kích Hoạt Lịch Nhắc'), findsOneWidget);
     });

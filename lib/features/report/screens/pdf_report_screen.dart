@@ -43,9 +43,7 @@ class _PdfReportScreenState extends State<PdfReportScreen> {
             _buildConfigSummaryBanner(context),
 
             // Direct PDF Preview & Native Export Tools
-            Expanded(
-              child: _buildPreview(),
-            ),
+            Expanded(child: _buildPreview()),
           ],
         ),
       ),
@@ -90,7 +88,10 @@ class _PdfReportScreenState extends State<PdfReportScreen> {
                 onTap: _openPrivacySettings,
                 borderRadius: BorderRadius.circular(14),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.primaryLight.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(14),
@@ -207,7 +208,10 @@ class _PdfReportScreenState extends State<PdfReportScreen> {
                           ),
                           const SizedBox(width: 6),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6,
+                              vertical: 2,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.white.withValues(alpha: 0.08),
                               borderRadius: BorderRadius.circular(8),
@@ -253,14 +257,16 @@ class _PdfReportScreenState extends State<PdfReportScreen> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: PdfPreview(
-          build: (format) => PreTherapyPdfBuilder.buildPdf(_config, format: format),
+          build: (format) =>
+              PreTherapyPdfBuilder.buildPdf(_config, format: format),
           allowPrinting: true,
           allowSharing: true,
           canChangeOrientation: false,
           canChangePageFormat: false,
           canDebug: false,
           maxPageWidth: 700,
-          pdfFileName: 'MindTrack_PreTherapy_${_config.isAnonymous ? _config.anonymousCode : "Report"}.pdf',
+          pdfFileName:
+              'MindTrack_PreTherapy_${_config.isAnonymous ? _config.anonymousCode : "Report"}.pdf',
           loadingWidget: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -320,10 +326,13 @@ class _PdfReportScreenState extends State<PdfReportScreen> {
                     ElevatedButton.icon(
                       onPressed: () async {
                         try {
-                          final bytes = await PreTherapyPdfBuilder.buildPdf(_config);
+                          final bytes = await PreTherapyPdfBuilder.buildPdf(
+                            _config,
+                          );
                           await Printing.sharePdf(
                             bytes: bytes,
-                            filename: 'MindTrack_Report_${_config.isAnonymous ? _config.anonymousCode : "PreTherapy"}.pdf',
+                            filename:
+                                'MindTrack_Report_${_config.isAnonymous ? _config.anonymousCode : "PreTherapy"}.pdf',
                           );
                         } catch (e) {
                           if (context.mounted) {
@@ -338,8 +347,13 @@ class _PdfReportScreenState extends State<PdfReportScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primaryLight,
                         foregroundColor: AppColors.darkBg,
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 12,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
                       ),
                     ),
                   ],

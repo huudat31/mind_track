@@ -20,7 +20,9 @@ class NotificationService {
   static bool _isInitialized = false;
 
   /// Khởi tạo Notification Plugin và thiết lập timezone
-  static Future<void> init({Function(NotificationResponse)? onNotificationTap}) async {
+  static Future<void> init({
+    Function(NotificationResponse)? onNotificationTap,
+  }) async {
     if (_isInitialized) return;
 
     try {
@@ -32,7 +34,9 @@ class NotificationService {
         // Fallback sang local timezone nếu không tìm thấy chuỗi
       }
 
-      const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+      const androidSettings = AndroidInitializationSettings(
+        '@mipmap/ic_launcher',
+      );
       const darwinSettings = DarwinInitializationSettings(
         requestAlertPermission: false,
         requestBadgePermission: false,
@@ -61,12 +65,18 @@ class NotificationService {
   static Future<bool> requestPermissions() async {
     try {
       final androidImplementation = _notificationsPlugin
-          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
-      final androidGranted = await androidImplementation?.requestNotificationsPermission() ?? true;
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
+      final androidGranted =
+          await androidImplementation?.requestNotificationsPermission() ?? true;
 
       final iosImplementation = _notificationsPlugin
-          .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
-      final iosGranted = await iosImplementation?.requestPermissions(
+          .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin
+          >();
+      final iosGranted =
+          await iosImplementation?.requestPermissions(
             alert: true,
             badge: true,
             sound: true,
@@ -128,7 +138,8 @@ class NotificationService {
       id: morningReminderId,
       time: settings.morningTime,
       title: 'Khởi đầu ngày mới cùng MindTrack ☀️',
-      body: 'Dành 1 phút lắng nghe năng lượng và cảm xúc đầu ngày của bạn nhé 🌱',
+      body:
+          'Dành 1 phút lắng nghe năng lượng và cảm xúc đầu ngày của bạn nhé 🌱',
     );
 
     // 2. Hẹn giờ buổi tối
@@ -136,10 +147,13 @@ class NotificationService {
       id: eveningReminderId,
       time: settings.eveningTime,
       title: 'Nhìn lại một ngày trôi qua 🌙',
-      body: 'Ghi lại cảm xúc và giải tỏa những băn khoăn trước khi đi ngủ nhé ✨',
+      body:
+          'Ghi lại cảm xúc và giải tỏa những băn khoăn trước khi đi ngủ nhé ✨',
     );
 
-    debugPrint('🔔 Đã lên lịch nhắc nhở: Sáng ${settings.morningTime.formatLocal()} - Tối ${settings.eveningTime.formatLocal()}');
+    debugPrint(
+      '🔔 Đã lên lịch nhắc nhở: Sáng ${settings.morningTime.formatLocal()} - Tối ${settings.eveningTime.formatLocal()}',
+    );
   }
 
   /// Lên lịch thông báo lặp lại hàng ngày theo giờ chỉ định

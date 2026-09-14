@@ -31,11 +31,7 @@ void main() {
         icon: ClinicalFlagsCatalog.allFlags.first.icon,
       );
 
-      final stat = FlagFrequencyStat(
-        flag: flagItem,
-        count: 7,
-        totalDays: 14,
-      );
+      final stat = FlagFrequencyStat(flag: flagItem, count: 7, totalDays: 14);
 
       expect(stat.count, 7);
       expect(stat.totalDays, 14);

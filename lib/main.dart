@@ -9,22 +9,16 @@ import 'features/home/main_navigation_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Supabase Cloud Sync
   await Supabase.initialize(
     url: 'https://wcgjdpxgajidhcqnaium.supabase.co',
     publishableKey: 'sb_publishable_zQyMCUny3P2l39Iqvg5pjw_OePYBFqq',
   );
 
-  // Local Notifications & Daily Check-in Schedule
   await NotificationService.init();
   final reminderSettings = await ReminderPreferencesService.getSettings();
   await NotificationService.applySchedule(reminderSettings);
 
-  runApp(
-    const ProviderScope(
-      child: MyApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
