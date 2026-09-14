@@ -3,13 +3,15 @@ import '../../logging/models/daily_log_model.dart';
 import '../../assessment/models/dass21_model.dart';
 
 enum TimeframeOption {
-  sevenDays('7 ngày qua', 7),
-  fourteenDays('14 ngày qua', 14),
-  twentyEightDays('28 ngày (Toàn kỳ)', 28);
+  fourteenDays('14 ngày', 14),
+  twoMonths('2 tháng', 60),
+  all('Tất cả', 3650);
 
   final String label;
   final int days;
   const TimeframeOption(this.label, this.days);
+
+  bool get isAll => this == TimeframeOption.all;
 }
 
 class DassHistoryPoint {

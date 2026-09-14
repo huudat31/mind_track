@@ -54,9 +54,10 @@ void main() {
     });
 
     test('TimeframeOption days calculation', () {
-      expect(TimeframeOption.sevenDays.days, 7);
       expect(TimeframeOption.fourteenDays.days, 14);
-      expect(TimeframeOption.twentyEightDays.days, 28);
+      expect(TimeframeOption.twoMonths.days, 60);
+      expect(TimeframeOption.all.days, 3650);
+      expect(TimeframeOption.all.isAll, isTrue);
     });
   });
 }

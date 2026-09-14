@@ -24,22 +24,27 @@ class _DassTrendChartState extends State<DassTrendChart> {
 
   int get _stepDays {
     switch (widget.timeframe) {
-      case TimeframeOption.sevenDays:
-        return 1; // 7 ngày: cứ 1 ngày 1 điểm
       case TimeframeOption.fourteenDays:
-        return 2; // 14 ngày: cách 2 ngày vẽ 1 điểm
-      case TimeframeOption.twentyEightDays:
-        return 4; // 28 ngày: cách 4 ngày hiển thị 1 lần
+        return 2; // 14 ngày: cách 2 ngày vẽ 1 điểm (8 điểm)
+      case TimeframeOption.twoMonths:
+        return 10; // 2 tháng (60 ngày): cách 10 ngày 1 điểm (7 điểm)
+      case TimeframeOption.all:
+        if (widget.history.isNotEmpty) {
+          final firstDate = widget.history.first.date;
+          final spanDays = DateTime.now().difference(firstDate).inDays;
+          return (spanDays / 7).ceil().clamp(2, 60);
+        }
+        return 14;
     }
   }
 
   int get _totalPoints {
     switch (widget.timeframe) {
-      case TimeframeOption.sevenDays:
-        return 7;
       case TimeframeOption.fourteenDays:
-        return 8;
-      case TimeframeOption.twentyEightDays:
+        return 8; // -14, -12, -10, -8, -6, -4, -2, Hôm nay
+      case TimeframeOption.twoMonths:
+        return 7; // -60, -50, -40, -30, -20, -10, Hôm nay
+      case TimeframeOption.all:
         return 8;
     }
   }

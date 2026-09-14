@@ -179,21 +179,25 @@ class SupabaseClinicalService {
     }
   }
 
-  /// Lấy danh sách Daily Logs theo số ngày (7, 14, 28)
+  /// Lấy danh sách Daily Logs theo số ngày (14, 60 hoặc all)
   static Future<List<Map<String, dynamic>>> getDailyLogs(int days) async {
     try {
       final client = _client;
       if (client == null) return [];
 
       final userId = await getUserId();
-      final cutoff = DateTime.now().subtract(Duration(days: days)).toIso8601String();
-
-      final response = await client
+      final query = client
           .from('daily_logs')
           .select()
-          .eq('user_id', userId)
-          .gte('created_at', cutoff)
-          .order('created_at', ascending: true);
+          .eq('user_id', userId);
+
+      final dynamic response;
+      if (days < 1000) {
+        final cutoff = DateTime.now().subtract(Duration(days: days)).toIso8601String();
+        response = await query.gte('created_at', cutoff).order('created_at', ascending: true);
+      } else {
+        response = await query.order('created_at', ascending: true);
+      }
 
       return (response as List<dynamic>).map((e) => e as Map<String, dynamic>).toList();
     } catch (e) {
@@ -218,6 +222,10 @@ class SupabaseClinicalService {
       }
     }
 
+    final totalDays = timeframe.isAll
+        ? (logs.isNotEmpty ? logs.length : 1)
+        : timeframe.days;
+
     final List<FlagFrequencyStat> list = [];
     for (final item in ClinicalFlagsCatalog.allFlags) {
       if (categoryFilter != null && categoryFilter != 'Tất cả' && item.category != categoryFilter) {
@@ -228,8 +236,8 @@ class SupabaseClinicalService {
         list.add(FlagFrequencyStat(
           flag: item,
           count: count,
-          totalDays: timeframe.days,
-          trend: count / timeframe.days >= 0.5 ? 'up' : 'stable',
+          totalDays: totalDays,
+          trend: count / totalDays >= 0.5 ? 'up' : 'stable',
         ));
       }
     }

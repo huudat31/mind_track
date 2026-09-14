@@ -31,7 +31,7 @@ void main() {
       expect(find.byIcon(Icons.check_rounded), findsOneWidget);
     });
 
-    testWidgets('DassTrendChart renders with 7 days timeframe timeline', (tester) async {
+    testWidgets('DassTrendChart renders with 14 days timeframe timeline', (tester) async {
       final sampleHistory = [
         DassHistoryPoint(
           date: DateTime.now().subtract(const Duration(days: 3)),
@@ -55,7 +55,7 @@ void main() {
             body: SingleChildScrollView(
               child: DassTrendChart(
                 history: sampleHistory,
-                timeframe: TimeframeOption.sevenDays,
+                timeframe: TimeframeOption.fourteenDays,
               ),
             ),
           ),

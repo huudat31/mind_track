@@ -211,7 +211,7 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
                               ),
                               alignment: Alignment.center,
                               child: Text(
-                                opt.days == 28 ? '28 ngày' : '${opt.days} ngày',
+                                opt.label,
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: isSel ? FontWeight.w700 : FontWeight.w500,

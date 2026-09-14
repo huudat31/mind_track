@@ -9,12 +9,16 @@ class ClinicalDataRepository {
       return [];
     }
 
-    if (timeframe == TimeframeOption.sevenDays && realData.length > 2) {
-      return realData.sublist(realData.length - 2);
-    } else if (timeframe == TimeframeOption.fourteenDays && realData.length > 3) {
-      return realData.sublist(realData.length - 3);
+    if (timeframe.isAll) {
+      return realData;
     }
-    return realData;
+
+    final cutoff = DateTime.now().subtract(Duration(days: timeframe.days));
+    final filtered = realData.where((p) => p.date.isAfter(cutoff) || p.date.isAtSameMomentAs(cutoff)).toList();
+    if (filtered.isEmpty) {
+      return [realData.last];
+    }
+    return filtered;
   }
 
   /// Lấy tần suất cờ đỏ lâm sàng thật từ Supabase
