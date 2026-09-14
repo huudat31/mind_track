@@ -207,11 +207,11 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
     }
   }
 
-  void _saveFinalLog() {
+  void _saveFinalLog() async {
     HapticFeedback.mediumImpact();
 
     final moodScore = (_sliderValue * 4).round() + 1;
-    SupabaseClinicalService.saveDailyLog(
+    final success = await SupabaseClinicalService.saveDailyLog(
       moodScore: moodScore,
       valence: _sliderValue,
       energyLevel: _energyLevel,
@@ -227,6 +227,18 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
           ? _balancedController.text.trim()
           : null,
     );
+
+    if (!mounted) return;
+
+    if (!success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Lưu ý: Dữ liệu chưa thể đồng bộ lên Supabase do bạn chưa kích hoạt Anonymous Auth hoặc chưa đăng nhập.'),
+          backgroundColor: Color(0xFFE07A5F),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
 
     showDialog(
       context: context,

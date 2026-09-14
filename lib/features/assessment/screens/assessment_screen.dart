@@ -66,7 +66,17 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
       anxietyScore: finalAnx,
       stressScore: finalStr,
       answers: answersCopy,
-    );
+    ).then((success) {
+      if (!success && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Lưu ý: Chưa thể đồng bộ DASS-21 lên Supabase do chưa kích hoạt Anonymous Auth hoặc chưa đăng nhập.'),
+            backgroundColor: Color(0xFFE07A5F),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    });
 
     setState(() {
       _currentIndex = 0;
