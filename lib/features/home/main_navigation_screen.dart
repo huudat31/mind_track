@@ -30,7 +30,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       onBack: () => _switchTab(0),
       onClose: () => _switchTab(0),
     ),
-    const FrequencyDashboardScreen(),
+    FrequencyDashboardScreen(
+      onNavigateToReport: () => _switchTab(4),
+    ),
     const PdfReportScreen(),
   ];
 

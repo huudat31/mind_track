@@ -1,30 +1,51 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:mind_track/main.dart';
+import 'package:mind_track/features/dashboard/data/clinical_data_repository.dart';
+import 'package:mind_track/features/dashboard/models/frequency_analytics_model.dart';
+import 'package:mind_track/features/assessment/models/dass21_model.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  group('Module 3: Frequency Dashboard Analytics Tests', () {
+    test('DASS-21 longitudinal trend data is consistent', () {
+      final trend7 = ClinicalDataRepository.getDassTrend(TimeframeOption.sevenDays);
+      final trend14 = ClinicalDataRepository.getDassTrend(TimeframeOption.fourteenDays);
+      final trend28 = ClinicalDataRepository.getDassTrend(TimeframeOption.twentyEightDays);
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+      expect(trend7.length, 2);
+      expect(trend14.length, 3);
+      expect(trend28.length, 5);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+      for (final pt in trend28) {
+        expect(pt.depression, inInclusiveRange(0, 42));
+        expect(pt.anxiety, inInclusiveRange(0, 42));
+        expect(pt.stress, inInclusiveRange(0, 42));
+        expect(pt.getSeverity(DassCategory.depression), isNotEmpty);
+      }
+    });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    test('Clinical flag frequencies sort descending and calculate percentages correctly', () {
+      final flags14 = ClinicalDataRepository.getFlagFrequencies(TimeframeOption.fourteenDays);
+
+      expect(flags14.isNotEmpty, true);
+      // Verify descending sort
+      for (int i = 0; i < flags14.length - 1; i++) {
+        expect(flags14[i].count >= flags14[i + 1].count, true);
+      }
+
+      // Check percentage calculation
+      final topFlag = flags14.first;
+      expect(topFlag.percentage, closeTo((topFlag.count / 14) * 100, 0.01));
+    });
+
+    test('Co-occurrence insights comply with non-causal requirements', () {
+      final insights = ClinicalDataRepository.getCoOccurrenceInsights(TimeframeOption.fourteenDays);
+
+      expect(insights.length, greaterThanOrEqualTo(3));
+      for (final item in insights) {
+        expect(item.percentage, inInclusiveRange(1, 100));
+        expect(item.observation.isNotEmpty, true);
+        expect(item.factorA.isNotEmpty, true);
+        expect(item.factorB.isNotEmpty, true);
+      }
+    });
   });
 }
