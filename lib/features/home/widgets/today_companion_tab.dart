@@ -5,6 +5,7 @@ import '../../../core/services/supabase_clinical_service.dart';
 import '../../../core/widgets/hotline_dialog.dart';
 import '../../auth/widgets/auth_modal_sheet.dart';
 import '../../breathing/screens/box_breathing_screen.dart';
+import 'reminder_settings_bottom_sheet.dart';
 
 class TodayCompanionTab extends StatefulWidget {
   final Function(int)? onSelectTab;
@@ -234,6 +235,42 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
                           color: isSynced
                               ? const Color(0xFF5DD9C1)
                               : Colors.white70,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 6),
+
+            // Notification Reminder Button
+            Tooltip(
+              message: 'Cài đặt lịch nhắc',
+              child: GestureDetector(
+                onTap: () => ReminderSettingsBottomSheet.show(context),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 7),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.alarm_rounded,
+                        color: AppColors.primaryLight,
+                        size: 16,
+                      ),
+                      SizedBox(width: 4),
+                      Text(
+                        'Lịch nhắc',
+                        style: TextStyle(
+                          color: Colors.white70,
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
                         ),

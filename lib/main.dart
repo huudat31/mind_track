@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'core/services/notification_service.dart';
+import 'core/services/reminder_preferences_service.dart';
 import 'core/theme/app_theme.dart';
 import 'features/home/main_navigation_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Supabase Cloud Sync
   await Supabase.initialize(
     url: 'https://wcgjdpxgajidhcqnaium.supabase.co',
     publishableKey: 'sb_publishable_zQyMCUny3P2l39Iqvg5pjw_OePYBFqq',
   );
+
+  // Local Notifications & Daily Check-in Schedule
+  await NotificationService.init();
+  final reminderSettings = await ReminderPreferencesService.getSettings();
+  await NotificationService.applySchedule(reminderSettings);
 
   runApp(
     const ProviderScope(
