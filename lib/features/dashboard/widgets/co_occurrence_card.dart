@@ -13,8 +13,6 @@ class CoOccurrenceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final insights = ClinicalDataRepository.getCoOccurrenceInsights(timeframe);
-
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -131,15 +129,51 @@ class CoOccurrenceCard extends StatelessWidget {
 
           const SizedBox(height: 18),
 
-          // Co-occurrence Cards List
-          ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: insights.length,
-            separatorBuilder: (context, index) => const SizedBox(height: 12),
-            itemBuilder: (context, index) {
-              final insight = insights[index];
-              return _buildInsightCard(insight);
+          // Co-occurrence Cards List from Supabase
+          FutureBuilder<List<CoOccurrenceInsight>>(
+            future: ClinicalDataRepository.getDynamicCoOccurrenceInsights(timeframe),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20.0),
+                  child: Center(
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.accentTeal),
+                    ),
+                  ),
+                );
+              }
+
+              final insights = snapshot.data ?? [];
+              if (insights.isEmpty) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Center(
+                    child: Text(
+                      'Cần tối thiểu 3 ngày ghi nhận cảm xúc và cờ đỏ để hệ thống phân tích các quy luật đồng xuất hiện lâm sàng của bạn.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.5),
+                        fontSize: 12,
+                        height: 1.4,
+                      ),
+                    ),
+                  ),
+                );
+              }
+
+              return ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: insights.length,
+                separatorBuilder: (context, index) => const SizedBox(height: 12),
+                itemBuilder: (context, index) {
+                  final insight = insights[index];
+                  return _buildInsightCard(insight);
+                },
+              );
             },
           ),
         ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../features/dashboard/models/frequency_analytics_model.dart';
 import '../../features/logging/models/daily_log_model.dart';
+import '../../features/report/models/report_config_model.dart';
 
 class SupabaseClinicalService {
   static final SupabaseClient _client = Supabase.instance.client;
@@ -210,6 +211,256 @@ class SupabaseClinicalService {
     }
 
     list.sort((a, b) => b.count.compareTo(a.count));
+    return list;
+  }
+
+  /// Tính toán timeline Nhịp điệu Cảm xúc & Năng lượng từ dữ liệu thật
+  static Future<List<DailyMoodEnergyPoint>> getRealDailyMoodEnergyTimeline(TimeframeOption timeframe) async {
+    final logs = await getDailyLogs(timeframe.days);
+    if (logs.isEmpty) return [];
+
+    final weekdayNames = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
+    final List<DailyMoodEnergyPoint> list = [];
+
+    for (final log in logs) {
+      final createdAt = DateTime.tryParse(log['created_at']?.toString() ?? '') ?? DateTime.now();
+      final weekdayStr = weekdayNames[createdAt.weekday - 1];
+      final moodScore = (log['mood_score'] as num?)?.toInt() ?? 3;
+      final energyLevel = (log['energy_level'] as num?)?.round() ?? 3;
+      final flags = (log['clinical_flags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [];
+
+      list.add(DailyMoodEnergyPoint(
+        date: createdAt,
+        dayLabel: '$weekdayStr ${createdAt.day}',
+        moodScore: moodScore,
+        energyLevel: energyLevel,
+        flagIds: flags,
+      ));
+    }
+    return list;
+  }
+
+  /// Thống kê chuỗi ngày check-in (streak) và tiến trình 28 ngày từ Supabase
+  static Future<Map<String, dynamic>> getStreakStats() async {
+    final logs = await getDailyLogs(28);
+    if (logs.isEmpty) {
+      return {
+        'totalDaysRecorded': 0,
+        'currentStreak': 0,
+        'recordedDates': <String>{},
+        'dateValenceMap': <String, double>{},
+      };
+    }
+
+    final Set<String> recordedDates = {};
+    final Map<String, double> dateValenceMap = {};
+
+    for (final log in logs) {
+      final createdAt = DateTime.tryParse(log['created_at']?.toString() ?? '');
+      if (createdAt != null) {
+        final dateKey = '${createdAt.year}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}';
+        recordedDates.add(dateKey);
+        final val = (log['valence'] as num?)?.toDouble() ?? 0.5;
+        dateValenceMap[dateKey] = val;
+      }
+    }
+
+    // Tính toán chuỗi ngày liên tiếp (streak)
+    int streak = 0;
+    final now = DateTime.now();
+    for (int i = 0; i < 28; i++) {
+      final d = now.subtract(Duration(days: i));
+      final key = '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+      if (recordedDates.contains(key)) {
+        streak++;
+      } else {
+        if (i == 0) {
+          // Chưa check-in hôm nay thì vẫn xét chuỗi từ hôm qua
+          continue;
+        }
+        break;
+      }
+    }
+
+    return {
+      'totalDaysRecorded': recordedDates.length,
+      'currentStreak': streak,
+      'recordedDates': recordedDates,
+      'dateValenceMap': dateValenceMap,
+    };
+  }
+
+  /// Tóm tắt lâm sàng tuần này (7 ngày gần nhất) từ Supabase
+  static Future<Map<String, String>> getRealWeeklySnapshot() async {
+    final logs = await getDailyLogs(7);
+    if (logs.isEmpty) {
+      return {
+        'mood': 'Chưa ghi nhận',
+        'moodSub': '0 ngày trong tuần',
+        'energy': '-- / 5',
+        'energySub': 'Chưa có dữ liệu',
+        'flag': 'Chưa có',
+        'flagSub': '0 cờ đỏ ghi nhận',
+      };
+    }
+
+    // Năng lượng trung bình
+    double totalEnergy = 0;
+    for (final l in logs) {
+      totalEnergy += (l['energy_level'] as num?)?.toDouble() ?? 0;
+    }
+    final avgEnergy = (totalEnergy / logs.length).toStringAsFixed(1);
+
+    // Cảm xúc chủ đạo
+    final Map<int, int> moodCounts = {};
+    for (final l in logs) {
+      final m = (l['mood_score'] as num?)?.toInt() ?? 3;
+      moodCounts[m] = (moodCounts[m] ?? 0) + 1;
+    }
+    int topMood = 3;
+    int maxMoodCount = 0;
+    moodCounts.forEach((m, c) {
+      if (c > maxMoodCount) {
+        maxMoodCount = c;
+        topMood = m;
+      }
+    });
+    final moodLabels = {
+      1: 'Kiệt quệ',
+      2: 'Lo âu',
+      3: 'Tạm ổn',
+      4: 'Bình yên',
+      5: 'Hào hứng',
+    };
+    final dominantMood = moodLabels[topMood] ?? 'Tạm ổn';
+    final moodPct = ((maxMoodCount / logs.length) * 100).toInt();
+
+    // Cờ đỏ xuất hiện nhiều nhất
+    final Map<String, int> flagCounts = {};
+    for (final l in logs) {
+      final flags = (l['clinical_flags'] as List<dynamic>?) ?? [];
+      for (final f in flags) {
+        final fid = f.toString();
+        flagCounts[fid] = (flagCounts[fid] ?? 0) + 1;
+      }
+    }
+    String topFlagName = 'Không có';
+    int maxFlagCount = 0;
+    flagCounts.forEach((fid, count) {
+      if (count > maxFlagCount) {
+        maxFlagCount = count;
+        final item = ClinicalFlagsCatalog.getFlagById(fid);
+        if (item != null) topFlagName = item.name;
+      }
+    });
+
+    return {
+      'mood': dominantMood,
+      'moodSub': '$moodPct% ($maxMoodCount/${logs.length} ngày)',
+      'energy': '$avgEnergy / 5',
+      'energySub': '${logs.length}/7 ngày ghi nhận',
+      'flag': topFlagName,
+      'flagSub': maxFlagCount > 0 ? '$maxFlagCount/${logs.length} ngày' : 'Không có cờ đỏ',
+    };
+  }
+
+  /// Phát hiện các cặp triệu chứng đồng xuất hiện thật từ Supabase
+  static Future<List<CoOccurrenceInsight>> getRealCoOccurrences(TimeframeOption timeframe) async {
+    final logs = await getDailyLogs(timeframe.days);
+    if (logs.length < 3) return [];
+
+    final List<CoOccurrenceInsight> insights = [];
+
+    // Tương quan Năng lượng thấp (<= 2) và Khó ngủ
+    int lowEnergyCount = 0;
+    int lowEnergyAndInsomnia = 0;
+    for (final l in logs) {
+      final energy = (l['energy_level'] as num?)?.toDouble() ?? 3.0;
+      final flags = (l['clinical_flags'] as List<dynamic>?)?.map((e) => e.toString()).toSet() ?? {};
+      if (energy <= 2.5) {
+        lowEnergyCount++;
+        if (flags.contains('insomnia') || flags.contains('mid_wake')) {
+          lowEnergyAndInsomnia++;
+        }
+      }
+    }
+
+    if (lowEnergyCount >= 2) {
+      final pct = ((lowEnergyAndInsomnia / lowEnergyCount) * 100).toInt();
+      if (pct >= 40) {
+        insights.add(CoOccurrenceInsight(
+          title: 'Năng lượng thấp & Khó ngủ',
+          observation: 'Trong các ngày năng lượng ghi nhận mức 1–2/5, cờ đỏ "Khó ngủ / Chập chờn" đồng xuất hiện ở $pct% trường hợp.',
+          factorA: 'Năng lượng thấp (1–2)',
+          factorB: 'Khó ngủ / Chập chờn',
+          percentage: pct,
+          icon: Icons.nights_stay_rounded,
+          accentColor: const Color(0xFFE07A5F),
+        ));
+      }
+    }
+
+    // Tương quan Công việc và Triệu chứng thể chất
+    int workCount = 0;
+    int workAndSomatic = 0;
+    for (final l in logs) {
+      final tags = (l['context_tags'] as List<dynamic>?)?.map((e) => e.toString()).toSet() ?? {};
+      final flags = (l['clinical_flags'] as List<dynamic>?)?.map((e) => e.toString()).toSet() ?? {};
+      if (tags.contains('work') || tags.contains('Công việc')) {
+        workCount++;
+        if (flags.contains('muscle_tension') || flags.contains('headache') || flags.contains('chest_tightness')) {
+          workAndSomatic++;
+        }
+      }
+    }
+
+    if (workCount >= 2) {
+      final pct = ((workAndSomatic / workCount) * 100).toInt();
+      if (pct >= 40) {
+        insights.add(CoOccurrenceInsight(
+          title: 'Bối cảnh Công việc & Căng thẳng thể chất',
+          observation: 'Vào các ngày gắn thẻ bối cảnh "Công việc", các triệu chứng căng cơ / đau đầu / tức ngực đồng xuất hiện ở $pct% số lần.',
+          factorA: 'Bối cảnh Công việc',
+          factorB: 'Triệu chứng thể chất',
+          percentage: pct,
+          icon: Icons.work_outline_rounded,
+          accentColor: const Color(0xFFF4A261),
+        ));
+      }
+    }
+
+    return insights;
+  }
+
+  /// Lấy danh sách trích đoạn nhật ký CBT thật của người dùng từ Supabase
+  static Future<List<CbtJournalExcerpt>> getRealCbtJournals() async {
+    final logs = await getDailyLogs(28);
+    final List<CbtJournalExcerpt> list = [];
+
+    for (final log in logs) {
+      final autoThought = log['automatic_thought'] as String?;
+      final balanced = log['balanced_response'] as String?;
+      final trigger = log['trigger_event'] as String?;
+      final id = log['id']?.toString() ?? UniqueKey().toString();
+      final createdAt = DateTime.tryParse(log['created_at']?.toString() ?? '') ?? DateTime.now();
+
+      if ((autoThought != null && autoThought.trim().isNotEmpty) ||
+          (balanced != null && balanced.trim().isNotEmpty)) {
+        final tags = (log['context_tags'] as List<dynamic>?) ?? [];
+        final tagStr = tags.isNotEmpty ? tags.first.toString() : 'Hàng ngày';
+
+        list.add(CbtJournalExcerpt(
+          id: id,
+          date: createdAt,
+          dateLabel: '${createdAt.day}/${createdAt.month}/${createdAt.year}',
+          contextTag: tagStr,
+          situation: trigger?.isNotEmpty == true ? trigger! : 'Nhật ký cảm xúc ngày ${createdAt.day}/${createdAt.month}',
+          automaticThought: autoThought ?? 'Chưa ghi nhận',
+          balancedResponse: balanced ?? 'Chưa ghi nhận',
+        ));
+      }
+    }
+
     return list;
   }
 }

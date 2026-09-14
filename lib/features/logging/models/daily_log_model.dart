@@ -63,4 +63,12 @@ class ClinicalFlagsCatalog {
     'Hành vi',
     'Thể chất',
   ];
+
+  static ClinicalFlagItem? getFlagById(String id) {
+    try {
+      return allFlags.firstWhere((f) => f.id == id);
+    } catch (_) {
+      return null;
+    }
+  }
 }

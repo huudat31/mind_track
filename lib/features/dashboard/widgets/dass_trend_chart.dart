@@ -27,7 +27,62 @@ class _DassTrendChartState extends State<DassTrendChart> {
   @override
   Widget build(BuildContext context) {
     if (widget.history.isEmpty) {
-      return const SizedBox.shrink();
+      return Container(
+        padding: const EdgeInsets.all(22),
+        decoration: BoxDecoration(
+          color: AppColors.darkCard.withValues(alpha: 0.85),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.08), width: 1),
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(Icons.quiz_outlined, color: AppColors.primaryLight, size: 20),
+                ),
+                const SizedBox(width: 12),
+                const Expanded(
+                  child: Text(
+                    'Tiến Trình Đánh Giá DASS-21',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 18),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.03),
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+              ),
+              child: Column(
+                children: [
+                  const Icon(Icons.history_edu_rounded, color: AppColors.primaryLight, size: 32),
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Chưa có dữ liệu DASS-21',
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 14),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'Bạn chưa lưu bài đánh giá DASS-21 nào trên tài khoản này. Hãy làm bài test ở tab "DASS-21" để bắt đầu theo dõi biểu đồ tiến triển lâm sàng.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white.withValues(alpha: 0.6), fontSize: 12, height: 1.4),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
     }
 
     return Container(
@@ -194,7 +249,7 @@ class _DassTrendChartState extends State<DassTrendChart> {
 
   LineChartData _buildChartData() {
     final history = widget.history;
-    final maxX = (history.length - 1).toDouble();
+    final maxX = history.length > 1 ? (history.length - 1).toDouble() : 1.0;
 
     List<LineChartBarData> lineBars = [];
 
@@ -408,6 +463,29 @@ class _DassTrendChartState extends State<DassTrendChart> {
   }
 
   Widget _buildClinicalInsightBar() {
+    if (widget.history.length == 1) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.04),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
+        ),
+        child: const Row(
+          children: [
+            Icon(Icons.info_outline_rounded, color: AppColors.primaryLight, size: 18),
+            SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                'Đã ghi nhận mốc đánh giá ban đầu (T0). Hãy làm thêm bài đánh giá sau 7 ngày để hệ thống đo lường mức độ tiến triển.',
+                style: TextStyle(fontSize: 12, color: Colors.white, height: 1.3),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     final first = widget.history.first;
     final latest = widget.history.last;
 

@@ -19,6 +19,18 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
   bool _hasLoggedToday = false;
   Map<String, dynamic>? _todayLog;
 
+  int _currentStreak = 0;
+  int _totalDaysRecorded = 0;
+  Set<String> _recordedDates = {};
+  Map<String, double> _dateValenceMap = {};
+
+  String _weeklyMood = 'Chưa ghi nhận';
+  String _weeklyMoodSub = '0 ngày trong tuần';
+  String _weeklyEnergy = '-- / 5';
+  String _weeklyEnergySub = 'Chưa có dữ liệu';
+  String _weeklyFlag = 'Chưa có';
+  String _weeklyFlagSub = '0 cờ đỏ ghi nhận';
+
   @override
   void initState() {
     super.initState();
@@ -26,11 +38,32 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
   }
 
   Future<void> _loadTodayLog() async {
-    final log = await SupabaseClinicalService.getTodayLog();
+    final results = await Future.wait([
+      SupabaseClinicalService.getTodayLog(),
+      SupabaseClinicalService.getStreakStats(),
+      SupabaseClinicalService.getRealWeeklySnapshot(),
+    ]);
+
+    final log = results[0];
+    final streak = results[1] as Map<String, dynamic>;
+    final weekly = results[2] as Map<String, String>;
+
     if (mounted) {
       setState(() {
         _todayLog = log;
         _hasLoggedToday = log != null;
+
+        _currentStreak = streak['currentStreak'] as int? ?? 0;
+        _totalDaysRecorded = streak['totalDaysRecorded'] as int? ?? 0;
+        _recordedDates = (streak['recordedDates'] as Set<String>?) ?? {};
+        _dateValenceMap = (streak['dateValenceMap'] as Map<String, double>?) ?? {};
+
+        _weeklyMood = weekly['mood'] ?? 'Chưa ghi nhận';
+        _weeklyMoodSub = weekly['moodSub'] ?? '0 ngày trong tuần';
+        _weeklyEnergy = weekly['energy'] ?? '-- / 5';
+        _weeklyEnergySub = weekly['energySub'] ?? 'Chưa có dữ liệu';
+        _weeklyFlag = weekly['flag'] ?? 'Chưa có';
+        _weeklyFlagSub = weekly['flagSub'] ?? '0 cờ đỏ ghi nhận';
       });
     }
   }
@@ -467,6 +500,8 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
   }
 
   Widget _buildStreakCalendarCard() {
+    final progressPct = ((_totalDaysRecorded / 28) * 100).toInt();
+
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
@@ -496,9 +531,9 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
                   color: AppColors.primary.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Text(
-                  'Chuỗi 8 ngày 🔥',
-                  style: TextStyle(color: AppColors.primaryLight, fontSize: 11, fontWeight: FontWeight.w700),
+                child: Text(
+                  _currentStreak > 0 ? 'Chuỗi $_currentStreak ngày 🔥' : 'Bắt đầu chuỗi 🌱',
+                  style: const TextStyle(color: AppColors.primaryLight, fontSize: 11, fontWeight: FontWeight.w700),
                 ),
               ),
             ],
@@ -513,7 +548,7 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
 
           const SizedBox(height: 14),
 
-          // 28-Day interactive dots track
+          // 28-Day interactive dots track from Supabase
           _build28DayGrid(),
 
           const SizedBox(height: 12),
@@ -522,12 +557,12 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Tiến trình: 8 / 28 ngày (28%)',
+                'Tiến trình: $_totalDaysRecorded / 28 ngày ($progressPct%)',
                 style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 11, fontWeight: FontWeight.w600),
               ),
               Text(
-                'Còn 20 ngày đến mốc phiên 1',
-                style: TextStyle(color: AppColors.primaryLight.withValues(alpha: 0.9), fontSize: 11, fontWeight: FontWeight.w600),
+                _totalDaysRecorded >= 28 ? 'Đã sẵn sàng cho phiên 1 🎉' : 'Còn ${28 - _totalDaysRecorded} ngày đến mốc phiên 1',
+                style: const TextStyle(color: AppColors.primaryLight, fontSize: 11, fontWeight: FontWeight.w600),
               ),
             ],
           ),
@@ -539,36 +574,37 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
   Widget _build28DayGrid() {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final totalDays = 28;
-        final currentDay = 8;
-        final columns = 7;
-        final rows = (totalDays / columns).ceil();
+        const totalDays = 28;
+        const columns = 7;
+        const rows = (totalDays / columns);
+        final now = DateTime.now();
 
         return Column(
-          children: List.generate(rows, (r) {
+          children: List.generate(rows.toInt(), (r) {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 3.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: List.generate(columns, (c) {
-                  final dayIndex = r * columns + c + 1;
-                  final isPast = dayIndex < currentDay;
-                  final isToday = dayIndex == currentDay;
-
-                  // Color sequence for past days to show emotional trajectory
-                  final pastMoodColors = [
-                    const Color(0xFFF4A261), // day 1 (bad)
-                    const Color(0xFFE07A5F), // day 2 (very bad)
-                    const Color(0xFFF4A261), // day 3 (bad)
-                    const Color(0xFF818AA3), // day 4 (neutral)
-                    const Color(0xFF7E9F9B), // day 5 (good)
-                    const Color(0xFF7E9F9B), // day 6 (good)
-                    const Color(0xFF2A9D8F), // day 7 (very good)
-                  ];
+                  final dayIndex = r * columns + c + 1; // 1 to 28
+                  final daysAgo = 28 - dayIndex;
+                  final targetDate = now.subtract(Duration(days: daysAgo));
+                  final dateKey = '${targetDate.year}-${targetDate.month.toString().padLeft(2, '0')}-${targetDate.day.toString().padLeft(2, '0')}';
+                  final isLogged = _recordedDates.contains(dateKey);
+                  final isToday = (daysAgo == 0);
 
                   Color dotColor;
-                  if (isPast) {
-                    dotColor = pastMoodColors[(dayIndex - 1) % pastMoodColors.length];
+                  if (isLogged) {
+                    final valence = _dateValenceMap[dateKey] ?? 0.5;
+                    if (valence >= 0.6) {
+                      dotColor = const Color(0xFF2A9D8F); // Positive
+                    } else if (valence >= 0.4) {
+                      dotColor = const Color(0xFF7E9F9B); // Neutral
+                    } else if (valence >= 0.25) {
+                      dotColor = const Color(0xFFF4A261); // Stress
+                    } else {
+                      dotColor = const Color(0xFFE07A5F); // Critical
+                    }
                   } else if (isToday) {
                     dotColor = AppColors.primaryLight;
                   } else {
@@ -581,18 +617,18 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
                     decoration: BoxDecoration(
                       color: isToday
                           ? AppColors.primary.withValues(alpha: 0.45)
-                          : (isPast ? dotColor.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.04)),
+                          : (isLogged ? dotColor.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.04)),
                       shape: BoxShape.circle,
                       border: Border.all(
                         color: isToday
                             ? AppColors.primaryLight
-                            : (isPast ? dotColor.withValues(alpha: 0.7) : Colors.white.withValues(alpha: 0.1)),
+                            : (isLogged ? dotColor.withValues(alpha: 0.7) : Colors.white.withValues(alpha: 0.1)),
                         width: isToday ? 2 : 1,
                       ),
                       boxShadow: isToday
                           ? [
-                              BoxShadow(
-                                color: AppColors.primaryLight.withValues(alpha: 0.5),
+                              const BoxShadow(
+                                color: AppColors.primaryLight,
                                 blurRadius: 10,
                                 spreadRadius: 1,
                               ),
@@ -600,14 +636,14 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
                           : null,
                     ),
                     alignment: Alignment.center,
-                    child: isPast
+                    child: isLogged
                         ? Icon(Icons.check, size: 14, color: dotColor)
                         : Text(
                             '$dayIndex',
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: isToday ? FontWeight.w800 : FontWeight.w500,
-                              color: isToday ? Colors.white : Colors.white.withValues(alpha: 0.4),
+                              color: isToday ? Colors.white : Colors.white.withValues(alpha: 0.35),
                             ),
                           ),
                   );
@@ -668,8 +704,8 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
               Expanded(
                 child: _buildBentoMetric(
                   label: 'Tâm trạng tuần',
-                  value: 'Tạm ổn',
-                  sub: '62% thời gian',
+                  value: _weeklyMood,
+                  sub: _weeklyMoodSub,
                   accent: const Color(0xFF7E9F9B),
                 ),
               ),
@@ -677,8 +713,8 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
               Expanded(
                 child: _buildBentoMetric(
                   label: 'Năng lượng TB',
-                  value: '2.9 / 5',
-                  sub: 'Tụt nhẹ thứ 4-5',
+                  value: _weeklyEnergy,
+                  sub: _weeklyEnergySub,
                   accent: const Color(0xFFF4A261),
                 ),
               ),
@@ -686,8 +722,8 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
               Expanded(
                 child: _buildBentoMetric(
                   label: 'Cờ đỏ lặp lại',
-                  value: 'Khó ngủ',
-                  sub: '5/7 ngày ghi nhận',
+                  value: _weeklyFlag,
+                  sub: _weeklyFlagSub,
                   accent: const Color(0xFFE07A5F),
                 ),
               ),

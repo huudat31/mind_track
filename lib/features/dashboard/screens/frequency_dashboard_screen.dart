@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/services/supabase_clinical_service.dart';
 import '../../../core/widgets/hotline_dialog.dart';
 import '../../report/screens/pdf_report_screen.dart';
 import '../models/frequency_analytics_model.dart';
@@ -26,8 +27,6 @@ class _FrequencyDashboardScreenState extends State<FrequencyDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final dassTrend = ClinicalDataRepository.getDassTrend(_selectedTimeframe);
-
     return Scaffold(
       backgroundColor: AppColors.darkBg,
       body: SafeArea(
@@ -44,17 +43,22 @@ class _FrequencyDashboardScreenState extends State<FrequencyDashboardScreen> {
             Expanded(
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 110), // extra padding for bottom floating dock
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 110),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Cycle progress status card
+                    // Cycle progress status card from Supabase
                     _buildCycleStatusCard(),
 
                     const SizedBox(height: 18),
 
-                    // 1. DASS-21 Longitudinal Trend Chart
-                    DassTrendChart(history: dassTrend),
+                    // 1. DASS-21 Longitudinal Trend Chart from Supabase
+                    FutureBuilder<List<DassHistoryPoint>>(
+                      future: ClinicalDataRepository.getDynamicDassTrend(_selectedTimeframe),
+                      builder: (context, snapshot) {
+                        return DassTrendChart(history: snapshot.data ?? []);
+                      },
+                    ),
 
                     const SizedBox(height: 18),
 
@@ -190,83 +194,94 @@ class _FrequencyDashboardScreenState extends State<FrequencyDashboardScreen> {
   }
 
   Widget _buildCycleStatusCard() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            const Color(0xFF1B3B36).withValues(alpha: 0.6),
-            AppColors.darkCard.withValues(alpha: 0.8),
-          ],
-        ),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.primaryLight.withValues(alpha: 0.25), width: 1),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.25),
-              shape: BoxShape.circle,
+    return FutureBuilder<Map<String, dynamic>>(
+      future: SupabaseClinicalService.getStreakStats(),
+      builder: (context, snapshot) {
+        final totalDays = (snapshot.data?['totalDaysRecorded'] as int?) ?? 0;
+        final progress = (totalDays / 28).clamp(0.0, 1.0);
+        final pct = (progress * 100).toInt();
+
+        return Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                const Color(0xFF1B3B36).withValues(alpha: 0.6),
+                AppColors.darkCard.withValues(alpha: 0.8),
+              ],
             ),
-            child: const Icon(
-              Icons.hourglass_top_rounded,
-              color: AppColors.primaryLight,
-              size: 22,
-            ),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppColors.primaryLight.withValues(alpha: 0.25), width: 1),
           ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.25),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.hourglass_top_rounded,
+                  color: AppColors.primaryLight,
+                  size: 22,
+                ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Chu kỳ quan sát',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.primaryLight,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Chu kỳ quan sát',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.primaryLight,
+                          ),
+                        ),
+                        Text(
+                          'Ngày $totalDays / 28',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white.withValues(alpha: 0.9),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      child: LinearProgressIndicator(
+                        value: progress,
+                        minHeight: 6,
+                        backgroundColor: Colors.white.withValues(alpha: 0.08),
+                        valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primaryLight),
                       ),
                     ),
+                    const SizedBox(height: 6),
                     Text(
-                      'Ngày 14 / 28',
+                      totalDays == 0
+                          ? 'Bắt đầu check-in hôm nay để tích lũy dữ liệu lâm sàng cho phiên tham vấn.'
+                          : 'Đã hoàn thành $pct% chu kỳ. Dữ liệu đang được đồng bộ bảo mật cho buổi trị liệu.',
                       style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white.withValues(alpha: 0.9),
+                        fontSize: 11,
+                        color: Colors.white.withValues(alpha: 0.65),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 6),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
-                  child: LinearProgressIndicator(
-                    value: 14 / 28,
-                    minHeight: 6,
-                    backgroundColor: Colors.white.withValues(alpha: 0.08),
-                    valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primaryLight),
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Đã thu thập đủ 50% dữ liệu để hình thành bức tranh lâm sàng đáng tin cậy.',
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: Colors.white.withValues(alpha: 0.65),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 

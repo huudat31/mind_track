@@ -2,11 +2,11 @@ import 'dart:typed_data';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import '../../../core/services/supabase_clinical_service.dart';
 import '../../assessment/models/dass21_model.dart';
 import '../../dashboard/data/clinical_data_repository.dart';
 import '../../dashboard/models/frequency_analytics_model.dart';
 import '../models/report_config_model.dart';
-import '../data/sample_journals_data.dart';
 
 class PreTherapyPdfBuilder {
   static Future<Uint8List> buildPdf(
@@ -38,15 +38,16 @@ class PreTherapyPdfBuilder {
       fontFallback: [fontRegular],
     );
 
-    // Get clinical data based on timeframe
-    final dassTrend = ClinicalDataRepository.getDassTrend(config.timeframe);
-    final flagFrequencies = ClinicalDataRepository.getFlagFrequencies(config.timeframe);
-    final coOccurrences = ClinicalDataRepository.getCoOccurrenceInsights(config.timeframe);
+    // Get clinical data based on timeframe from Supabase
+    final dassTrend = await ClinicalDataRepository.getDynamicDassTrend(config.timeframe);
+    final flagFrequencies = await ClinicalDataRepository.getDynamicFlagFrequencies(config.timeframe);
+    final coOccurrences = await ClinicalDataRepository.getDynamicCoOccurrenceInsights(config.timeframe);
 
-    // Filter selected journals
-    final selectedJournals = SampleJournalsData.allEntries
-        .where((j) => config.selectedJournalIds.contains(j.id))
-        .toList();
+    // Filter selected journals from Supabase
+    final realJournals = await SupabaseClinicalService.getRealCbtJournals();
+    final selectedJournals = realJournals.isNotEmpty
+        ? realJournals.where((j) => config.selectedJournalIds.contains(j.id) || config.selectedJournalIds.isEmpty).toList()
+        : <CbtJournalExcerpt>[];
 
     // Palette
     const primaryColor = PdfColor.fromInt(0xFF1B3B36);     // Dark Sage
@@ -116,7 +117,7 @@ class PreTherapyPdfBuilder {
           // Section 5: Therapist Discussion Anchors
           _buildSectionTitle('5. GỢI Ý CHỦ ĐỀ KHAI THÁC MỞ ĐẦU CHO CHUYÊN GIA', primaryColor),
           pw.SizedBox(height: 8),
-          _buildDiscussionAnchors(lightBg, borderSubtle, primaryColor),
+          _buildDiscussionAnchors(lightBg, borderSubtle, primaryColor, flagFrequencies, dassTrend, selectedJournals),
           pw.SizedBox(height: 16),
 
           // Section 6: Personal Client Note (Optional)
@@ -529,12 +530,25 @@ class PreTherapyPdfBuilder {
     PdfColor lightBg,
     PdfColor borderColor,
     PdfColor primaryColor,
+    List<FlagFrequencyStat> flagFrequencies,
+    List<DassHistoryPoint> dassTrend,
+    List<CbtJournalExcerpt> selectedJournals,
   ) {
-    final prompts = [
-      'Cơ chế chuyển di thể chất (Somatization): Tần suất căng cơ vai gáy và đau đầu đạt mức cao (>70%) gắn liền với bối cảnh công việc. Khuyến nghị thăm dò kỹ thuật thả lỏng cơ tiến triển (PMR).',
-      'Vòng xoáy mất ngủ và tư duy lúc nửa đêm: Khó vào giấc chiếm 78% số ngày, liên quan trực tiếp đến suy nghĩ lo âu trước giờ ngủ. Khuyến nghị đánh giá quy trình vệ sinh giấc ngủ (Sleep Hygiene).',
-      'Mô thức tự phán xét và tiêu chuẩn khắt khe: Trích đoạn nhật ký cho thấy các suy nghĩ tự động dạng "tất cả hoặc không" (all-or-nothing thinking). Khuyến nghị thảo luận về lòng trắc ẩn với bản thân (Self-compassion).',
-    ];
+    final List<String> prompts = [];
+    if (flagFrequencies.isNotEmpty) {
+      final topFlag = flagFrequencies.first;
+      prompts.add('Triệu chứng thể chất & hành vi nổi bật: Cờ đỏ "${topFlag.flag.name}" xuất hiện ${topFlag.count}/${topFlag.totalDays} ngày theo dõi (${topFlag.percentage.toInt()}%). Đề xuất cùng nhà tham vấn tìm hiểu bối cảnh kích hoạt.');
+    }
+    if (dassTrend.isNotEmpty) {
+      final latest = dassTrend.last;
+      prompts.add('Mức độ ảnh hưởng tâm lý (DASS-21): Kết quả gần nhất ghi nhận Trầm cảm: ${latest.depression}đ (${latest.getSeverity(DassCategory.depression)}), Lo âu: ${latest.anxiety}đ (${latest.getSeverity(DassCategory.anxiety)}), Căng thẳng: ${latest.stress}đ (${latest.getSeverity(DassCategory.stress)}).');
+    }
+    if (selectedJournals.isNotEmpty) {
+      prompts.add('Tái cấu trúc nhận thức (CBT): Người dùng đã ghi nhận ${selectedJournals.length} tình huống có suy nghĩ tự động và phản hồi cân bằng. Khuyến nghị cùng nhà tham vấn rà soát mô thức nhận thức.');
+    }
+    if (prompts.isEmpty) {
+      prompts.add('Dữ liệu lâm sàng đang trong giai đoạn tích lũy ban đầu. Hãy tiếp tục check-in đều đặn trước phiên tham vấn đầu tiên.');
+    }
 
     return pw.Column(
       children: prompts.asMap().entries.map((entry) {

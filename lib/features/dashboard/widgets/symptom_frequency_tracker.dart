@@ -26,11 +26,6 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
 
   @override
   Widget build(BuildContext context) {
-    final flagStats = ClinicalDataRepository.getFlagFrequencies(
-      widget.timeframe,
-      categoryFilter: _selectedCategory,
-    );
-
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -132,31 +127,55 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
 
           const SizedBox(height: 20),
 
-          // Flag Stats List
-          if (flagStats.isEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24.0),
-              child: Center(
-                child: Text(
-                  'Không có cờ đỏ nào trong danh mục này',
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.5),
-                    fontSize: 13,
-                  ),
-                ),
-              ),
-            )
-          else
-            ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: flagStats.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 14),
-              itemBuilder: (context, index) {
-                final item = flagStats[index];
-                return _buildFlagRow(item, index + 1);
-              },
+          // Flag Stats List from Supabase
+          FutureBuilder<List<FlagFrequencyStat>>(
+            future: ClinicalDataRepository.getDynamicFlagFrequencies(
+              widget.timeframe,
+              categoryFilter: _selectedCategory,
             ),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 24.0),
+                  child: Center(
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primaryLight),
+                    ),
+                  ),
+                );
+              }
+
+              final flagStats = snapshot.data ?? [];
+              if (flagStats.isEmpty) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 24.0),
+                  child: Center(
+                    child: Text(
+                      'Chưa có cờ đỏ nào được ghi nhận trong ${_selectedCategory == 'Tất cả' ? 'thời gian này' : 'danh mục "$_selectedCategory"'}',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.5),
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                );
+              }
+
+              return ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: flagStats.length,
+                separatorBuilder: (context, index) => const SizedBox(height: 14),
+                itemBuilder: (context, index) {
+                  final item = flagStats[index];
+                  return _buildFlagRow(item, index + 1);
+                },
+              );
+            },
+          ),
 
           const SizedBox(height: 16),
 

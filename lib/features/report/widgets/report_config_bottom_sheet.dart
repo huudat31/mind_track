@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/services/supabase_clinical_service.dart';
 import '../../dashboard/models/frequency_analytics_model.dart';
 import '../models/report_config_model.dart';
-import '../data/sample_journals_data.dart';
 
 class ReportConfigBottomSheet extends StatefulWidget {
   final ReportPrivacyConfig initialConfig;
@@ -232,80 +232,116 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
                   _buildSectionCard(
                     title: 'Chọn lọc Trích đoạn Nhật ký CBT',
                     subtitle: 'Chỉ chia sẻ những dòng suy nghĩ bạn cảm thấy thoải mái',
-                    child: Column(
-                      children: SampleJournalsData.allEntries.map((journal) {
-                        final isChecked = _selectedJournals.contains(journal.id);
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 8),
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.03),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: isChecked ? AppColors.primaryLight.withValues(alpha: 0.5) : Colors.white.withValues(alpha: 0.08),
-                            ),
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Checkbox(
-                                value: isChecked,
-                                activeColor: AppColors.primaryLight,
-                                checkColor: AppColors.darkBg,
-                                onChanged: (val) {
-                                  setState(() {
-                                    if (val == true) {
-                                      _selectedJournals.add(journal.id);
-                                    } else {
-                                      _selectedJournals.remove(journal.id);
-                                    }
-                                  });
-                                },
+                    child: FutureBuilder<List<CbtJournalExcerpt>>(
+                      future: SupabaseClinicalService.getRealCbtJournals(),
+                      builder: (context, snapshot) {
+                        final journals = snapshot.data ?? [];
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16.0),
+                            child: Center(
+                              child: SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primaryLight),
                               ),
-                              const SizedBox(width: 6),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
+                            ),
+                          );
+                        }
+
+                        if (journals.isEmpty) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 12.0),
+                            child: Center(
+                              child: Text(
+                                'Chưa có trích đoạn nhật ký CBT nào được ghi nhận.\nBạn có thể hoàn thành form CBT 3 bước ở màn hình "Cảm xúc".',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white.withValues(alpha: 0.5),
+                                  fontSize: 12,
+                                  height: 1.4,
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+
+                        return Column(
+                          children: journals.map((journal) {
+                            final isChecked = _selectedJournals.contains(journal.id);
+                            return Container(
+                              margin: const EdgeInsets.only(bottom: 8),
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.03),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: isChecked ? AppColors.primaryLight.withValues(alpha: 0.5) : Colors.white.withValues(alpha: 0.08),
+                                ),
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Checkbox(
+                                    value: isChecked,
+                                    activeColor: AppColors.primaryLight,
+                                    checkColor: AppColors.darkBg,
+                                    onChanged: (val) {
+                                      setState(() {
+                                        if (val == true) {
+                                          _selectedJournals.add(journal.id);
+                                        } else {
+                                          _selectedJournals.remove(journal.id);
+                                        }
+                                      });
+                                    },
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white.withValues(alpha: 0.08),
-                                            borderRadius: BorderRadius.circular(6),
-                                          ),
-                                          child: Text(
-                                            journal.contextTag,
-                                            style: const TextStyle(fontSize: 10, color: Colors.white70),
-                                          ),
+                                        Row(
+                                          children: [
+                                            Container(
+                                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                              decoration: BoxDecoration(
+                                                color: Colors.white.withValues(alpha: 0.08),
+                                                borderRadius: BorderRadius.circular(6),
+                                              ),
+                                              child: Text(
+                                                journal.contextTag,
+                                                style: const TextStyle(fontSize: 10, color: Colors.white70),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 6),
+                                            Text(
+                                              journal.dateLabel,
+                                              style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.5)),
+                                            ),
+                                          ],
                                         ),
-                                        const SizedBox(width: 6),
+                                        const SizedBox(height: 4),
                                         Text(
-                                          journal.dateLabel,
-                                          style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.5)),
+                                          journal.situation,
+                                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.white),
+                                        ),
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          'Suy nghĩ: ${journal.automaticThought}',
+                                          style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.7)),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      journal.situation,
-                                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.white),
-                                    ),
-                                    const SizedBox(height: 2),
-                                    Text(
-                                      '“ ${journal.automaticThought} ”',
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(fontSize: 11, fontStyle: FontStyle.italic, color: Colors.white.withValues(alpha: 0.65)),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            );
+                          }).toList(),
                         );
-                      }).toList(),
+                      },
                     ),
                   ),
 
