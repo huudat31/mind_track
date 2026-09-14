@@ -113,114 +113,125 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
 }
 
   Widget _buildHeader(BuildContext context) {
+    final isSynced = SupabaseAuthService.currentUser != null && !SupabaseAuthService.isAnonymous;
+
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              _getGreeting(),
-              style: TextStyle(
-                fontSize: 13,
-                color: Colors.white.withValues(alpha: 0.65),
-                fontWeight: FontWeight.w500,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                _getGreeting(),
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.white.withValues(alpha: 0.65),
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-            const SizedBox(height: 3),
-            const Text(
-              'Hôm Nay Của Bạn',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w800,
-                color: Colors.white,
-                letterSpacing: -0.5,
+              const SizedBox(height: 2),
+              const Text(
+                'Hôm Nay Của Bạn',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white,
+                  letterSpacing: -0.5,
+                ),
               ),
-            ),
-            const SizedBox(height: 2),
-            Text(
-              _getFormattedDate(),
-              style: TextStyle(
-                fontSize: 11,
-                color: AppColors.primaryLight.withValues(alpha: 0.85),
-                fontWeight: FontWeight.w600,
+              const SizedBox(height: 2),
+              Text(
+                _getFormattedDate(),
+                style: TextStyle(
+                  fontSize: 11,
+                  color: AppColors.primaryLight.withValues(alpha: 0.85),
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+        const SizedBox(width: 8),
         Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             // Account / Cloud Sync Button
-            GestureDetector(
-              onTap: () => AuthModalSheet.show(
-                context,
-                onAuthChanged: () {
-                  setState(() {});
-                  _loadTodayLog();
-                },
-              ),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                margin: const EdgeInsets.only(right: 8),
-                decoration: BoxDecoration(
-                  color: SupabaseAuthService.currentUser != null && !SupabaseAuthService.isAnonymous
-                      ? const Color(0xFF2E6B65).withValues(alpha: 0.25)
-                      : Colors.white.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: SupabaseAuthService.currentUser != null && !SupabaseAuthService.isAnonymous
-                        ? const Color(0xFF5DD9C1).withValues(alpha: 0.4)
-                        : Colors.white.withValues(alpha: 0.15),
-                  ),
+            Tooltip(
+              message: isSynced ? 'Đã đồng bộ đám mây' : 'Tài khoản khách',
+              child: GestureDetector(
+                onTap: () => AuthModalSheet.show(
+                  context,
+                  onAuthChanged: () {
+                    setState(() {});
+                    _loadTodayLog();
+                  },
                 ),
-                child: Row(
-                  children: [
-                    Icon(
-                      SupabaseAuthService.currentUser != null && !SupabaseAuthService.isAnonymous
-                          ? Icons.cloud_done_rounded
-                          : Icons.account_circle_outlined,
-                      color: SupabaseAuthService.currentUser != null && !SupabaseAuthService.isAnonymous
-                          ? const Color(0xFF5DD9C1)
-                          : Colors.white70,
-                      size: 18,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 7),
+                  decoration: BoxDecoration(
+                    color: isSynced
+                        ? const Color(0xFF2E6B65).withValues(alpha: 0.25)
+                        : Colors.white.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: isSynced
+                          ? const Color(0xFF5DD9C1).withValues(alpha: 0.45)
+                          : Colors.white.withValues(alpha: 0.15),
                     ),
-                    const SizedBox(width: 4),
-                    Text(
-                      SupabaseAuthService.currentUser != null && !SupabaseAuthService.isAnonymous
-                          ? 'Đã đồng bộ'
-                          : 'Tài khoản',
-                      style: TextStyle(
-                        color: SupabaseAuthService.currentUser != null && !SupabaseAuthService.isAnonymous
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        isSynced
+                            ? Icons.cloud_done_rounded
+                            : Icons.account_circle_outlined,
+                        color: isSynced
                             ? const Color(0xFF5DD9C1)
                             : Colors.white70,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
+                        size: 16,
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 4),
+                      Text(
+                        isSynced ? 'Đồng bộ' : 'Tài khoản',
+                        style: TextStyle(
+                          color: isSynced
+                              ? const Color(0xFF5DD9C1)
+                              : Colors.white70,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
+            const SizedBox(width: 6),
 
             // Hotline SOS Button
             GestureDetector(
               onTap: () => HotlineDialog.show(context),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
                 decoration: BoxDecoration(
                   color: const Color(0xFFE07A5F).withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: const Color(0xFFE07A5F).withValues(alpha: 0.35)),
                 ),
                 child: const Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.support_agent_rounded, color: Color(0xFFE07A5F), size: 18),
-                    SizedBox(width: 6),
+                    Icon(Icons.support_agent_rounded, color: Color(0xFFE07A5F), size: 16),
+                    SizedBox(width: 4),
                     Text(
-                      'Hotline',
+                      'SOS',
                       style: TextStyle(
                         color: Color(0xFFE07A5F),
-                        fontSize: 12,
+                        fontSize: 11,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
