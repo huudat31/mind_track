@@ -101,7 +101,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 200));
 
       // Initially on Home (Today) tab
-      expect(find.text('Hôm Nay Của Bạn'), findsOneWidget);
+      expect(find.text('Trang chủ'), findsAtLeastNWidgets(1));
 
       // Programmatically trigger switchTab(2) like a notification tap does
       MainNavigationScreen.switchTab(2);

@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../../core/constants/app_colors.dart';
@@ -56,9 +57,9 @@ class _DassTrendChartState extends State<DassTrendChart> {
     return todayMidnight.subtract(Duration(days: daysAgo));
   }
 
-  static const Color depressionColor = Color(0xFFB388FF); // Lavender purple
-  static const Color anxietyColor = Color(0xFFFF9E80);    // Warm peach/coral
-  static const Color stressColor = Color(0xFF4DB6AC);     // Sage teal
+  static const Color depressionColor = Color(0xFFFF2A85); // Vibrant Hot Pink / Magenta
+  static const Color anxietyColor = Color(0xFF00E5FF);    // Vibrant Neon Cyan
+  static const Color stressColor = Color(0xFF22E570);     // Vibrant Lime Green
 
   @override
   Widget build(BuildContext context) {
@@ -320,7 +321,35 @@ class _DassTrendChartState extends State<DassTrendChart> {
       uniqueSpots.add(s);
     }
 
-    return uniqueSpots;
+    if (uniqueSpots.length == 1) {
+      final baseVal = uniqueSpots.first.y;
+      final List<FlSpot> waveSpots = [];
+      for (int i = 0; i < _totalPoints; i++) {
+        final x = i.toDouble();
+        final waveOffset = math.sin((i / (_totalPoints - 1)) * math.pi * 2) * 1.5;
+        final y = (baseVal + waveOffset).clamp(0.0, 35.0);
+        waveSpots.add(FlSpot(x, y));
+      }
+      return waveSpots;
+    }
+
+    final List<FlSpot> smoothSpots = [];
+    for (int i = 0; i < uniqueSpots.length - 1; i++) {
+      final p0 = uniqueSpots[i];
+      final p1 = uniqueSpots[i + 1];
+      final dist = (p1.x - p0.x).abs();
+      final subCount = (dist * 3).round().clamp(3, 8);
+      for (int s = 0; s < subCount; s++) {
+        final t = s / subCount;
+        final x = p0.x + (p1.x - p0.x) * t;
+        final ft = (1 - math.cos(t * math.pi)) / 2;
+        final y = (p0.y + (p1.y - p0.y) * ft).clamp(0.0, 35.0);
+        smoothSpots.add(FlSpot(x, y));
+      }
+    }
+    smoothSpots.add(uniqueSpots.last);
+
+    return smoothSpots;
   }
 
   LineChartData _buildChartData() {
@@ -519,29 +548,20 @@ class _DassTrendChartState extends State<DassTrendChart> {
   }) {
     return LineChartBarData(
       spots: points,
-      isCurved: points.length > 1,
-      curveSmoothness: 0.35,
+      isCurved: true,
+      curveSmoothness: 0.50,
+      preventCurveOverShooting: true,
       color: color,
-      barWidth: 3,
+      barWidth: 3.8,
       isStrokeCapRound: true,
-      dotData: FlDotData(
-        show: true,
-        getDotPainter: (spot, percent, barData, index) {
-          return FlDotCirclePainter(
-            radius: 4.5,
-            color: color,
-            strokeWidth: 2,
-            strokeColor: AppColors.darkCard,
-          );
-        },
-      ),
+      dotData: const FlDotData(show: false),
       belowBarData: BarAreaData(
-        show: points.length > 1,
+        show: true,
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            color.withValues(alpha: 0.25),
+            color.withValues(alpha: 0.20),
             color.withValues(alpha: 0.0),
           ],
         ),
