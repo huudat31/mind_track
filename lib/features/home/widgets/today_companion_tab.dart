@@ -305,6 +305,344 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
     );
   }
 
+  void _showRelaxationOptionsSheet() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (ctx) {
+        return Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE07A5F).withValues(alpha: 0.15),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.spa_rounded,
+                      color: Color(0xFFE07A5F),
+                      size: 22,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Phương án giúp bạn...',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      Text(
+                        'Chọn bài tập xoa dịu phù hợp với bạn lúc này',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 18),
+
+              // Phương án 1: Thở 4-4-4-4
+              _buildRelaxationOptionTile(
+                icon: Icons.air_rounded,
+                iconColor: const Color(0xFFE07A5F),
+                title: 'Luyện thở vuông 4-4-4-4 (Box Breathing)',
+                tag: '2 - 4 phút',
+                tagColor: const Color(0xFFE07A5F),
+                subtitle: 'Hạ nhịp tim & xoa dịu hệ thần kinh giao cảm tức thì',
+                onTap: () {
+                  Navigator.pop(ctx);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const BoxBreathingScreen(),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 10),
+
+              // Phương án 2: Kỹ thuật tiếp đất 5-4-3-2-1
+              _buildRelaxationOptionTile(
+                icon: Icons.nature_people_rounded,
+                iconColor: const Color(0xFF2A9D8F),
+                title: 'Kỹ thuật tiếp đất 5-4-3-2-1 (Grounding)',
+                tag: 'Chánh niệm',
+                tagColor: const Color(0xFF2A9D8F),
+                subtitle: 'Thoát khỏi dòng suy nghĩ dồn dập qua 5 giác quan',
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _showGroundingDialog();
+                },
+              ),
+              const SizedBox(height: 10),
+
+              // Phương án 3: Thư giãn cơ bắp sâu PMR
+              _buildRelaxationOptionTile(
+                icon: Icons.accessibility_new_rounded,
+                iconColor: const Color(0xFFF4A261),
+                title: 'Thư giãn cơ bắp tiến triển (PMR)',
+                tag: 'Thân tâm',
+                tagColor: const Color(0xFFF4A261),
+                subtitle: 'Giải phóng căng cứng ở vai, cổ, hàm và cơ bắp do stress',
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _showPmrDialog();
+                },
+              ),
+              const SizedBox(height: 10),
+
+              // Phương án 4: Thở 4-7-8 dễ ngủ
+              _buildRelaxationOptionTile(
+                icon: Icons.bedtime_rounded,
+                iconColor: const Color(0xFF7C6FA0),
+                title: 'Kỹ thuật thở sâu 4-7-8 dễ ngủ',
+                tag: 'Giấc ngủ',
+                tagColor: const Color(0xFF7C6FA0),
+                subtitle: 'Hạ hưng phấn thần kinh, chuẩn bị cho giấc ngủ an lành',
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _show478Dialog();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildRelaxationOptionTile({
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required String tag,
+    required Color tagColor,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return ListTile(
+      onTap: onTap,
+      contentPadding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: const BorderSide(color: AppColors.border),
+      ),
+      leading: Container(
+        width: 44,
+        height: 44,
+        decoration: BoxDecoration(
+          color: iconColor.withValues(alpha: 0.14),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Icon(icon, color: iconColor, size: 24),
+      ),
+      title: Row(
+        children: [
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 13.5,
+                fontWeight: FontWeight.bold,
+                color: AppColors.textPrimary,
+              ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+            decoration: BoxDecoration(
+              color: tagColor.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              tag,
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w700,
+                color: tagColor,
+              ),
+            ),
+          ),
+        ],
+      ),
+      subtitle: Padding(
+        padding: const EdgeInsets.only(top: 3.0),
+        child: Text(
+          subtitle,
+          style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
+        ),
+      ),
+      trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 13, color: AppColors.textMuted),
+    );
+  }
+
+  void _showGroundingDialog() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+        title: const Row(
+          children: [
+            Icon(Icons.nature_people_rounded, color: Color(0xFF2A9D8F)),
+            SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                'Kỹ thuật Tiếp Đất 5-4-3-2-1',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+        content: const SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Khi cảm thấy lo âu hoặc suy nghĩ dồn dập, hãy hít thở chậm và nhận diện lần lượt:',
+                style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+              ),
+              SizedBox(height: 12),
+              Text('👀  5 vật bạn có thể nhìn thấy xung quanh', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+              SizedBox(height: 6),
+              Text('✋  4 bề mặt bạn có thể chạm thấy (áo, bàn, tay)', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+              SizedBox(height: 6),
+              Text('👂  3 âm thanh bạn đang nghe được lúc này', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+              SizedBox(height: 6),
+              Text('👃  2 mùi hương bạn ngửi thấy', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+              SizedBox(height: 6),
+              Text('👅  1 vị giác hoặc 1 điều bạn trân trọng', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Đã hiểu', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF2A9D8F))),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showPmrDialog() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+        title: const Row(
+          children: [
+            Icon(Icons.accessibility_new_rounded, color: Color(0xFFF4A261)),
+            SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                'Thư Giãn Cơ Bắp Sâu (PMR)',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+        content: const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Nguyên lý: Khi bạn gồng một nhóm cơ trong 5 giây rồi thả lỏng đột ngột, cơ bắp sẽ rơi vào trạng thái thư giãn sâu hơn ban đầu.',
+              style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+            ),
+            SizedBox(height: 12),
+            Text('1. Nhún vai cao lên gần tai trong 5 giây, rồi thở ra và thả rơi vai hoàn toàn.', style: TextStyle(fontSize: 12.5)),
+            SizedBox(height: 6),
+            Text('2. Siết chặt hai nắm tay 5 giây, rồi buông lỏng các ngón tay tự nhiên.', style: TextStyle(fontSize: 12.5)),
+            SizedBox(height: 6),
+            Text('3. Cắn nhẹ hai hàm răng 5 giây rồi mở hé môi, để quai hàm thả lỏng.', style: TextStyle(fontSize: 12.5)),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Hoàn tất', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFF4A261))),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _show478Dialog() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+        title: const Row(
+          children: [
+            Icon(Icons.bedtime_rounded, color: Color(0xFF7C6FA0)),
+            SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                'Kỹ Thuật Thở Sâu 4-7-8',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+        content: const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Bài tập giúp kích hoạt hệ thần kinh đối giao cảm, hạ nhịp tim và hỗ trợ dễ ngủ:',
+              style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+            ),
+            SizedBox(height: 12),
+            Text('🌬️ Hít vào êm dịu bằng mũi trong 4 giây', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+            SizedBox(height: 6),
+            Text('⏸️ Nín giữ hơi thở thư thái trong 7 giây', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+            SizedBox(height: 6),
+            Text('💨 Thở ra từ từ bằng miệng trong 8 giây', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+            SizedBox(height: 10),
+            Text('Lặp lại chu kỳ từ 4 đến 6 lần trước khi ngủ.', style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic, color: AppColors.textSecondary)),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Bắt đầu ngủ ngon', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF7C6FA0))),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -525,24 +863,17 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
 
     final row2 = Row(
       children: [
-        // Thẻ 3 (Góc dưới - Trái): Thở 4-4-4-4 (Coral / Peach)
+        // Thẻ 3 (Góc dưới - Trái): Phương án giúp bạn... (Coral / Peach)
         Expanded(
           child: _buildMenuCard(
             backgroundColor: const Color(0xFFFEF3EC),
             borderColor: const Color(0xFFFBD7C4),
             accentColor: const Color(0xFFE07A5F),
-            icon: Icons.self_improvement_rounded,
-            title: 'Luyện thở 4-4-4-4',
-            description: 'Điều hòa nhịp tim\nvà xoa dịu thần kinh',
+            icon: Icons.spa_rounded,
+            title: 'Phương án giúp bạn...',
+            description: 'Các bài tập xoa dịu\nvà điều hòa thân tâm',
             isExpanded: isExpanded,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const BoxBreathingScreen(),
-                ),
-              );
-            },
+            onTap: _showRelaxationOptionsSheet,
           ),
         ),
         const SizedBox(width: 14),
