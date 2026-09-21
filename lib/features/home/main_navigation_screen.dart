@@ -80,7 +80,7 @@ class MainNavigationScreenState extends State<MainNavigationScreen> {
 
   List<Widget> get _screens => [
     TodayCompanionTab(onSelectTab: _switchTab),
-    const AssessmentScreen(),
+    AssessmentScreen(onBack: () => _switchTab(0)),
     StateOfMindScreen(
       onBack: () => _switchTab(0),
       onClose: () => _switchTab(0),

@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/widgets/hotline_dialog.dart';
+import '../../home/main_navigation_screen.dart';
 import '../models/dass21_model.dart';
 import '../../../core/services/supabase_clinical_service.dart';
 import 'assessment_result_screen.dart';
 
 class AssessmentScreen extends StatefulWidget {
-  const AssessmentScreen({super.key});
+  final VoidCallback? onBack;
+
+  const AssessmentScreen({super.key, this.onBack});
 
   @override
   State<AssessmentScreen> createState() => _AssessmentScreenState();
@@ -42,6 +45,76 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
       setState(() {
         _currentIndex--;
       });
+    }
+  }
+
+  void _handleBack() {
+    if (_currentIndex > 0) {
+      _previousQuestion();
+    } else {
+      _exitAssessment();
+    }
+  }
+
+  void _exitAssessment() {
+    HapticFeedback.lightImpact();
+    setState(() {
+      _currentIndex = 0;
+      _answers.clear();
+    });
+    if (widget.onBack != null) {
+      widget.onBack!();
+    } else if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    } else {
+      MainNavigationScreen.switchTab(0);
+    }
+  }
+
+  Future<void> _confirmExit() async {
+    if (_answers.isEmpty && _currentIndex == 0) {
+      _exitAssessment();
+      return;
+    }
+
+    final shouldExit = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: const Color(0xFF16252C),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text(
+          'Dừng làm bài đánh giá?',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: const Text(
+          'Tiến trình làm bài hiện tại sẽ không được lưu nếu bạn quay lại trang chủ.',
+          style: TextStyle(color: Colors.white70, fontSize: 14),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text(
+              'Tiếp tục làm',
+              style: TextStyle(color: AppColors.primaryLight),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text(
+              'Thoát về trang chủ',
+              style: TextStyle(color: AppColors.accentCoral),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldExit == true) {
+      _exitAssessment();
     }
   }
 
@@ -127,51 +200,52 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
     final catColor = _getCategoryColor(question.category);
     final catLabel = _getCategoryLabel(question.category);
 
-    return Scaffold(
-      backgroundColor: AppColors.darkBg,
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF16252C), Color(0xFF0E1418), Color(0xFF0A0E11)],
-            stops: [0.0, 0.45, 1.0],
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        _handleBack();
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.darkBg,
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0xFF16252C), Color(0xFF0E1418), Color(0xFF0A0E11)],
+              stops: [0.0, 0.45, 1.0],
+            ),
           ),
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Top Navigation Bar
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () {
-                        if (Navigator.canPop(context)) {
-                          Navigator.pop(context);
-                        } else if (_currentIndex > 0) {
-                          _previousQuestion();
-                        }
-                      },
-                      child: Container(
-                        width: 44,
-                        height: 44,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.1),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.arrow_back_ios_new_rounded,
-                          color: Colors.white,
-                          size: 18,
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Top Navigation Bar
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: _handleBack,
+                        onLongPress: _confirmExit,
+                        child: Container(
+                          width: 44,
+                          height: 44,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.1),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            color: Colors.white,
+                            size: 18,
+                          ),
                         ),
                       ),
-                    ),
                     Column(
                       children: [
                         const Text(
@@ -441,6 +515,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
