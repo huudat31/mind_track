@@ -1226,12 +1226,20 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
     return LayoutBuilder(
       builder: (context, constraints) {
         final trackWidth = constraints.maxWidth;
-        const trackHeight = 40.0;
-        const thumbDiameter = 34.0;
-        final thumbLeft = (_sliderValue * (trackWidth - thumbDiameter - 6)) + 3;
-        final activeWidth = (thumbLeft + thumbDiameter / 2).clamp(0.0, trackWidth);
+        const totalHeight = 44.0;
+        const trackHeight = 10.0;
+        const thumbDiameter = 28.0;
+        final thumbLeft = (_sliderValue * (trackWidth - thumbDiameter)).clamp(
+          0.0,
+          trackWidth - thumbDiameter,
+        );
+        final activeWidth = (thumbLeft + thumbDiameter / 2).clamp(
+          0.0,
+          trackWidth,
+        );
 
         return GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onHorizontalDragUpdate: (details) {
             final RenderBox box = context.findRenderObject() as RenderBox;
             final localPos = box.globalToLocal(details.globalPosition);
@@ -1245,53 +1253,65 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
             );
             _onSliderChanged(newValue);
           },
-          child: Container(
-            height: trackHeight,
+          child: SizedBox(
+            height: totalHeight,
             width: trackWidth,
-            decoration: BoxDecoration(
-              color: accentColor.withValues(alpha: 0.16),
-              borderRadius: BorderRadius.circular(trackHeight / 2),
-              border: Border.all(
-                color: accentColor.withValues(alpha: 0.38),
-                width: 1.8,
-              ),
-            ),
             child: Stack(
               alignment: Alignment.centerLeft,
               children: [
-                // Active progress fill - exact same color as the button
-                Positioned(
-                  left: 0,
-                  top: 0,
-                  bottom: 0,
-                  width: activeWidth,
+                // Inactive base track
+                Center(
                   child: Container(
+                    height: trackHeight,
+                    width: trackWidth,
                     decoration: BoxDecoration(
-                      color: accentColor,
+                      color: accentColor.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(trackHeight / 2),
                     ),
                   ),
                 ),
 
-                // Center neutral marker (Bình thường - 0.5)
+                // Active progress track (Exact same vibrant color as the button)
                 Positioned(
-                  left: (trackWidth / 2) - 1.5,
-                  top: (trackHeight - 14) / 2,
+                  left: 0,
+                  top: (totalHeight - trackHeight) / 2,
                   child: Container(
-                    width: 3.5,
-                    height: 14,
+                    height: trackHeight,
+                    width: activeWidth,
                     decoration: BoxDecoration(
-                      color: _sliderValue >= 0.5
-                          ? Colors.white.withValues(alpha: 0.7)
-                          : accentColor.withValues(alpha: 0.55),
-                      borderRadius: BorderRadius.circular(2),
+                      color: accentColor,
+                      borderRadius: BorderRadius.circular(trackHeight / 2),
+                      boxShadow: [
+                        BoxShadow(
+                          color: accentColor.withValues(alpha: 0.35),
+                          blurRadius: 6,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
                     ),
                   ),
                 ),
 
-                // Interactive thumb with accent ring and center dot
+                // Center neutral notch (0.5 - Bình thường)
+                Positioned(
+                  left: (trackWidth / 2) - 1.25,
+                  top: (totalHeight - 14) / 2,
+                  child: Container(
+                    width: 2.5,
+                    height: 14,
+                    decoration: BoxDecoration(
+                      color: _sliderValue >= 0.5
+                          ? Colors.white.withValues(alpha: 0.75)
+                          : accentColor.withValues(alpha: 0.45),
+                      borderRadius: BorderRadius.circular(1.5),
+                    ),
+                  ),
+                ),
+
+                // Tactile floating Apple-style knob
                 Positioned(
                   left: thumbLeft,
+                  top: (totalHeight - thumbDiameter) / 2,
                   child: Container(
                     width: thumbDiameter,
                     height: thumbDiameter,
@@ -1299,18 +1319,18 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                       color: Colors.white,
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: accentColor,
-                        width: 3.5,
+                        color: Colors.black.withValues(alpha: 0.06),
+                        width: 0.5,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: accentColor.withValues(alpha: 0.45),
-                          blurRadius: 10,
+                          color: Colors.black.withValues(alpha: 0.15),
+                          blurRadius: 8,
                           offset: const Offset(0, 3),
                         ),
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.15),
-                          blurRadius: 5,
+                          color: accentColor.withValues(alpha: 0.35),
+                          blurRadius: 10,
                           offset: const Offset(0, 2),
                         ),
                       ],
