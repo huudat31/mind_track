@@ -1,0 +1,235 @@
+[
+  {
+    "id": "scenario_hoc_tap_01",
+    "contextTag": "hoc_tap",
+    "negativeThought": "Mình làm hỏng bài thuyết trình rồi, mọi người trong lớp đều nghĩ mình kém cỏi.",
+    "evidenceCards": [
+      {
+        "id": "c1",
+        "text": "Mình bị vấp một câu trong phần mở đầu và phải dừng lại 3 giây.",
+        "side": "support"
+      },
+      {
+        "id": "c2",
+        "text": "Các slide sau mình trình bày trôi chảy và đầy đủ nội dung bài tập.",
+        "side": "against"
+      },
+      {
+        "id": "c3",
+        "text": "Thầy giáo gật đầu và nhận xét phần số liệu tổng hợp rất chi tiết.",
+        "side": "against"
+      },
+      {
+        "id": "c4",
+        "text": "Hai bạn cùng bàn sau giờ học đã mượn file thuyết trình để tham khảo.",
+        "side": "against"
+      },
+      {
+        "id": "c5",
+        "text": "Hôm nay trời mưa to nên phòng học hơi ẩm ướt.",
+        "side": "neutral"
+      },
+      {
+        "id": "c6",
+        "text": "Thuyết trình trước 50 người luôn tạo ra cảm giác hồi hộp tự nhiên cho bất kỳ ai.",
+        "side": "against"
+      },
+      {
+        "id": "c7",
+        "text": "Lúc nói xong tim mình đập nhanh và tay hơi run.",
+        "side": "support"
+      }
+    ],
+    "balancedThought": "Dù có vấp một chút lúc đầu do hồi hộp, mình đã hoàn thành tốt bài thuyết trình và nhận được phản hồi tích cực từ thầy và bạn bè."
+  },
+  {
+    "id": "scenario_hoc_tap_02",
+    "contextTag": "hoc_tap",
+    "negativeThought": "Mình không thể hiểu nổi môn Toán cao cấp này, mình sinh ra không dành cho việc học.",
+    "evidenceCards": [
+      {
+        "id": "c8",
+        "text": "Bài kiểm tra đầu tiên mình chỉ đạt điểm dưới trung bình.",
+        "side": "support"
+      },
+      {
+        "id": "c9",
+        "text": "Đây là môn học mới với độ khó cao mà hầu hết sinh viên đều gặp khó khăn.",
+        "side": "against"
+      },
+      {
+        "id": "c10",
+        "text": "Mình mới học tuần thứ 3 và chưa dành đủ thời gian làm bài tập mẫu.",
+        "side": "against"
+      },
+      {
+        "id": "c11",
+        "text": "Các môn xã hội và kỹ năng mềm kỳ trước mình đều đạt điểm khá giỏi.",
+        "side": "against"
+      },
+      {
+        "id": "c12",
+        "text": "Phòng tự học thư viện mở cửa từ 7h sáng đến 9h tối.",
+        "side": "neutral"
+      },
+      {
+        "id": "c13",
+        "text": "Khi nhờ bạn cùng phòng giảng lại phần lý thuyết cơ bản, mình đã hiểu được 2 dạng bài.",
+        "side": "against"
+      }
+    ],
+    "balancedThought": "Môn học này khó và mình cần thêm thời gian rèn luyện phương pháp học tập, điều đó không có nghĩa là mình không có khả năng học."
+  },
+  {
+    "id": "scenario_gia_dinh_01",
+    "contextTag": "gia_dinh",
+    "negativeThought": "Bố mẹ không bao giờ lắng nghe hay tôn trọng bất kỳ quyết định nào của mình.",
+    "evidenceCards": [
+      {
+        "id": "c14",
+        "text": "Tối qua bố phản đối khi mình muốn tham gia câu lạc bộ tình nguyện xa nhà.",
+        "side": "support"
+      },
+      {
+        "id": "c15",
+        "text": "Bố mẹ đã ủng hộ và đóng học phí cho ngành học mà mình tự nguyện đăng ký.",
+        "side": "against"
+      },
+      {
+        "id": "c16",
+        "text": "Mẹ thường xuyên nấu những món ăn mình thích khi mình về thăm nhà.",
+        "side": "against"
+      },
+      {
+        "id": "c17",
+        "text": "Bố mẹ lo lắng cho sự an toàn của mình nên có xu hướng bảo bọc quá mức.",
+        "side": "against"
+      },
+      {
+        "id": "c18",
+        "text": "Nhà mình cách trường học 15 cây số.",
+        "side": "neutral"
+      },
+      {
+        "id": "c19",
+        "text": "Có những lúc bố mẹ nói lời gắt gỏng khi đang mệt mỏi vì công việc.",
+        "side": "support"
+      }
+    ],
+    "balancedThought": "Khoảng cách thế hệ khiến bố mẹ đôi khi chưa hiểu hết mong muốn của mình, nhưng sự bảo bọc xuất phát từ tình thương chứ không phải thiếu tôn trọng."
+  },
+  {
+    "id": "scenario_gia_dinh_02",
+    "contextTag": "gia_dinh",
+    "negativeThought": "Mình là gánh nặng tài chính lớn nhất của gia đình.",
+    "evidenceCards": [
+      {
+        "id": "c20",
+        "text": "Học phí và tiền trọ mỗi tháng là một khoản chi đáng kể của cả nhà.",
+        "side": "support"
+      },
+      {
+        "id": "c21",
+        "text": "Bố mẹ luôn vui vẻ nói rằng đầu tư cho việc học của con cái là niềm tự hào.",
+        "side": "against"
+      },
+      {
+        "id": "c22",
+        "text": "Mình đã cố gắng chi tiêu tiết kiệm và tìm được công việc làm thêm gia sư.",
+        "side": "against"
+      },
+      {
+        "id": "c23",
+        "text": "Nuôi dạy con cái học đại học là trách nhiệm và lựa chọn tự nguyện của cha mẹ.",
+        "side": "against"
+      },
+      {
+        "id": "c24",
+        "text": "Bảng giá sinh hoạt phí trung bình tại thành phố có xu hướng tăng.",
+        "side": "neutral"
+      },
+      {
+        "id": "c25",
+        "text": "Tháng này mình phải xin thêm tiền mua giáo trình chuyên ngành.",
+        "side": "support"
+      }
+    ],
+    "balancedThought": "Chi phí học tập là thực tế cần trang trải, nhưng bố mẹ coi việc học của mình là tương lai chung chứ không phải gánh nặng tiêu cực."
+  },
+  {
+    "id": "scenario_tinh_cam_01",
+    "contextTag": "tinh_cam",
+    "negativeThought": "Người ấy không còn quan tâm đến mình nữa vì trả lời tin nhắn cộc lốc.",
+    "evidenceCards": [
+      {
+        "id": "c26",
+        "text": "Tin nhắn gần nhất bạn ấy chỉ gửi một chữ 'ừ' và không kèm icon.",
+        "side": "support"
+      },
+      {
+        "id": "c27",
+        "text": "Tuần này bạn ấy đang thi học kỳ và phải trực ca làm thêm buổi tối.",
+        "side": "against"
+      },
+      {
+        "id": "c28",
+        "text": "Hôm kia bạn ấy đã chủ động mua trà sữa và đồ ăn vặt gửi sang cho mình.",
+        "side": "against"
+      },
+      {
+        "id": "c29",
+        "text": "Khi rảnh rỗi, bạn ấy vẫn dành thời gian trò chuyện tâm sự cùng mình.",
+        "side": "against"
+      },
+      {
+        "id": "c30",
+        "text": "Thời tiết hôm nay chuyển gió mùa se lạnh.",
+        "side": "neutral"
+      },
+      {
+        "id": "c31",
+        "text": "Cách nhắn tin đôi khi phụ thuộc vào mức năng lượng và công việc lúc đó.",
+        "side": "against"
+      }
+    ],
+    "balancedThought": "Một tin nhắn ngắn trong lúc bận rộn không đại diện cho tình cảm, sự quan tâm được thể hiện qua nhiều hành động cụ thể khác."
+  },
+  {
+    "id": "scenario_mang_xa_hoi_01",
+    "contextTag": "mang_xa_hoi",
+    "negativeThought": "Mọi người trên mạng xã hội ai cũng có cuộc sống hoàn hảo và hạnh phúc hơn mình.",
+    "evidenceCards": [
+      {
+        "id": "c32",
+        "text": "Bạn bè hay đăng ảnh đi cà phê đẹp, đi du lịch và nhận học bổng.",
+        "side": "support"
+      },
+      {
+        "id": "c33",
+        "text": "Người ta thường chỉ chọn lọc những khoảnh khắc rạng rỡ nhất để chia sẻ lên mạng.",
+        "side": "against"
+      },
+      {
+        "id": "c34",
+        "text": "Một người bạn từng tâm sự với mình rằng bức ảnh cười tươi được chụp vào ngày bạn ấy rất buồn.",
+        "side": "against"
+      },
+      {
+        "id": "c35",
+        "text": "Ai cũng có những nỗi lo, áp lực gia đình và học tập mà mạng xã hội không nhìn thấy được.",
+        "side": "against"
+      },
+      {
+        "id": "c36",
+        "text": "Ứng dụng mạng xã hội vừa cập nhật giao diện mới.",
+        "side": "neutral"
+      },
+      {
+        "id": "c37",
+        "text": "Cuộc sống thật của mình có những niềm vui bình dị không cần phải khoe lên mạng.",
+        "side": "against"
+      }
+    ],
+    "balancedThought": "Mạng xã hội chỉ là cuộn phim điểm sáng của người khác, so sánh bản thân với hình ảnh trên mạng là không công bằng với chính mình."
+  }
+]
