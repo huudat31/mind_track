@@ -115,10 +115,7 @@ class MainNavigationScreenState extends State<MainNavigationScreen> {
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.96),
         borderRadius: BorderRadius.circular(32),
-        border: Border.all(
-          color: AppColors.border,
-          width: 1.2,
-        ),
+        border: Border.all(color: AppColors.border, width: 1.2),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.08),
@@ -136,18 +133,8 @@ class MainNavigationScreenState extends State<MainNavigationScreen> {
             Icons.today_rounded,
             'Trang chủ',
           ),
-          _buildNavItem(
-            1,
-            Icons.quiz_outlined,
-            Icons.quiz_rounded,
-            'DASS-21',
-          ),
-          _buildNavItem(
-            2,
-            Icons.spa_outlined,
-            Icons.spa_rounded,
-            'Cảm xúc',
-          ),
+          _buildNavItem(1, Icons.quiz_outlined, Icons.quiz_rounded, 'DASS-21'),
+          _buildNavItem(2, Icons.spa_outlined, Icons.spa_rounded, 'Cảm xúc'),
           _buildNavItem(
             3,
             Icons.insert_chart_outlined_rounded,
