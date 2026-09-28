@@ -1,194 +1,255 @@
 [
   {
-    "id": "q_hoc_tap_01",
-    "contextTag": "hoc_tap",
-    "thought": "Bài kiểm tra giữa kỳ này mà trượt là coi như tương lai của mình chấm dứt.",
-    "correctType": "catastrophizing",
-    "explanation": "Tâm trí đang phóng đại một kỳ thi thành sự sụp đổ của toàn bộ tương lai.",
-    "reframeSuggestion": "Một bài thi chỉ phản ánh kết quả của một đợt học, không quyết định cả chặng đường dài phía trước."
+    "id": "diem_thap_hon_ban_1",
+    "context_tag": "hoc_tap",
+    "mock_ui": {
+      "type": "chat",
+      "messages": [
+        {"sender": "me", "text": "Cậu được mấy điểm bài Toán?", "timestamp": "10:05"},
+        {"sender": "friend", "text": "Tớ được 9.5. Còn cậu?", "timestamp": "10:06"},
+        {"sender": "me", "text": "Tớ được 7.5...", "timestamp": "10:07"},
+        {"sender": "friend", "text": "Cũng khá mà, lần sau cùng ôn nhé!", "timestamp": "10:08"}
+      ]
+    },
+    "thought": "Mình đúng là đứa kém cỏi, chẳng bao giờ làm được trò trống gì.",
+    "distortion_type": "labeling",
+    "choices": ["catastrophizing", "labeling", "mind_reading", "emotional_reasoning"],
+    "hint_key": "hint_labeling",
+    "reframe": "Điểm 7.5 có thể chưa như mình kỳ vọng, nhưng nó chỉ là kết quả của một bài thi cụ thể. Một điểm số không thể định nghĩa toàn bộ con người hay năng lực của mình.",
+    "companion_intro": {
+      "chill": "Nhìn điểm người khác cao hơn dễ làm mình chùng xuống thật. Bạn soi thử xem suy nghĩ vừa rồi thuộc dạng nào nhé.",
+      "friendly": "Cảm giác hụt hẫng khi thấy điểm thấp hơn bạn là rất tự nhiên. Cùng mình xem suy nghĩ trong đầu lúc này là gì nhé.",
+      "calm": "Sự so sánh điểm số thường tạo ra phản xạ tự phán xét. Bạn thử nhận diện dạng suy nghĩ vừa xuất hiện xem."
+    }
   },
   {
-    "id": "q_hoc_tap_02",
-    "contextTag": "hoc_tap",
-    "thought": "Nếu không đạt điểm A môn này thì mọi nỗ lực cả học kỳ đều vô nghĩa.",
-    "correctType": "black_and_white",
-    "explanation": "Đang nhìn nhận kết quả chỉ ở hai cực: hoặc điểm tuyệt đối hoặc thất bại hoàn toàn.",
-    "reframeSuggestion": "Dù không đạt điểm tối đa, quá trình ôn tập và kiến thức mình tích lũy được vẫn rất giá trị."
+    "id": "diem_thap_hon_ban_2",
+    "context_tag": "hoc_tap",
+    "mock_ui": {
+      "type": "note",
+      "content": "Trả bài Lý:\n- Lan: 9.0\n- Hùng: 8.5\n- Mình: 6.0\n\nMọi người đều qua điểm giỏi.",
+      "date": "28/09/2026"
+    },
+    "thought": "Mình đúng là một kẻ thất bại hoàn toàn.",
+    "distortion_type": "labeling",
+    "choices": ["personalization", "mind_reading", "labeling", "all_or_nothing"],
+    "hint_key": "hint_labeling",
+    "reframe": "Điểm 6 môn Lý khiến mình thất vọng, nhưng mình là một con người với nhiều mặt khác nhau, không phải là một 'kẻ thất bại'. Mình có thể xem lại những câu làm sai để cải thiện.",
+    "companion_intro": {
+      "chill": "Mở sổ điểm thấy cách biệt thế này thì cay thật. Thử nhìn lại dòng suy nghĩ trong đầu xem nào.",
+      "friendly": "Nhìn thấy điểm số chênh lệch như vậy ai cũng sẽ buồn. Mình cùng nhận diện xem tâm trí đang dẫn mình vào bẫy nào nhé.",
+      "calm": "Cảm xúc thất vọng là có cơ sở. Bạn thử quan sát xem cách mình vừa tự gọi bản thân thuộc dạng suy nghĩ nào."
+    }
   },
   {
-    "id": "q_hoc_tap_03",
-    "contextTag": "hoc_tap",
-    "thought": "Mình quên mất một công thức khi thuyết trình, mình đúng là kẻ thất bại bất tài.",
-    "correctType": "labeling",
-    "explanation": "Đang dùng một sự cố nhỏ để chụp một cái nhãn tiêu cực lên toàn bộ năng lực bản thân.",
-    "reframeSuggestion": "Quên công thức là chuyện bình thường khi hồi hộp, điều đó không khiến mình trở thành kẻ bất tài."
+    "id": "quen_y_thuyet_trinh_1",
+    "context_tag": "hoc_tap",
+    "mock_ui": {
+      "type": "notification",
+      "title": "Nhắc nhở lịch học",
+      "body": "Thuyết trình môn Kỹ năng mềm - 14:00 chiều nay",
+      "time": "13:30"
+    },
+    "thought": "Nếu lúc lên thuyết trình mình run và quên mất nội dung, cả buổi sẽ sụp đổ và mình sẽ không bao giờ ngẩng đầu lên được nữa.",
+    "distortion_type": "catastrophizing",
+    "choices": ["emotional_reasoning", "catastrophizing", "labeling", "personalization"],
+    "hint_key": "hint_catastrophizing",
+    "reframe": "Lo lắng trước giờ thuyết trình là rất bình thường. Kể cả khi quên ý, mình hoàn toàn có thể dừng lại vài giây nhìn ghi chú rồi nói tiếp, tình huống không đến mức sụp đổ hoàn toàn.",
+    "companion_intro": {
+      "chill": "Sắp đến giờ lên thớt thì tim đập chân run là chuyện bình thường. Xem thử đầu mình đang vẽ ra kịch bản gì nhé.",
+      "friendly": "Đứng trước buổi thuyết trình ai cũng có chút hồi hộp. Bạn thử nhìn lại xem suy nghĩ vừa rồi thuộc dạng nào nhé.",
+      "calm": "Áp lực trước khi nói trước đám đông dễ kích hoạt sự phóng đại rủi ro. Bạn thử nhận diện dạng suy nghĩ này xem."
+    }
   },
   {
-    "id": "q_hoc_tap_04",
-    "contextTag": "hoc_tap",
-    "thought": "Thầy giáo nhìn mình nhíu mày, chắc chắn thầy đang nghĩ bài tập của mình quá tệ.",
-    "correctType": "arbitrary_inference",
-    "explanation": "Đang tự đọc suy nghĩ của người khác mà không có bằng chứng xác thực.",
-    "reframeSuggestion": "Thầy nhíu mày có thể vì đang tập trung đọc kỹ hoặc mỏi mắt, mình không thể biết chắc nếu chưa hỏi."
+    "id": "quen_y_thuyet_trinh_2",
+    "context_tag": "hoc_tap",
+    "mock_ui": {
+      "type": "chat",
+      "messages": [
+        {"sender": "me", "text": "Tớ lo quá, slide nhiều chữ sợ lúc nói bị vấp.", "timestamp": "08:15"},
+        {"sender": "friend", "text": "Cậu có thẻ ghi chú cầm tay mà, cứ nói từ từ thôi.", "timestamp": "08:16"},
+        {"sender": "me", "text": "Nhưng nếu tớ đứng hình 5 giây thì sao...", "timestamp": "08:17"}
+      ]
+    },
+    "thought": "Chỉ cần mình khựng lại một cái là mọi người sẽ cười ồ lên, điểm số sẽ về 0 và cả học kỳ coi như bỏ đi.",
+    "distortion_type": "catastrophizing",
+    "choices": ["all_or_nothing", "mind_reading", "catastrophizing", "labeling"],
+    "hint_key": "hint_catastrophizing",
+    "reframe": "Một quãng dừng vài giây không làm hỏng cả bài thuyết trình, càng không hủy hoại cả học kỳ. Người nghe thường kiên nhẫn hơn những gì mình đang hình dung trong lúc lo sợ.",
+    "companion_intro": {
+      "chill": "Càng nghĩ càng thấy kịch bản đen tối dồn dập. Soi xem tâm trí mình đang chơi trò gì nào.",
+      "friendly": "Nỗi lo làm hỏng việc trước mặt người khác rất dễ leo thang. Mình cùng xem dạng suy nghĩ này là gì nhé.",
+      "calm": "Tâm trí có xu hướng đẩy sự cố nhỏ thành hậu quả nghiêm trọng nhất. Bạn thử nhận diện xem đây là bẫy gì."
+    }
   },
   {
-    "id": "q_hoc_tap_05",
-    "contextTag": "hoc_tap",
-    "thought": "Nhóm bị điểm trừ vì nộp muộn, tất cả là do mình không nhắc nhở mọi người liên tục.",
-    "correctType": "over_personalization",
-    "explanation": "Đang tự gánh toàn bộ trách nhiệm về sự việc tập thể nằm ngoài tầm kiểm soát cá nhân.",
-    "reframeSuggestion": "Bài tập nhóm là trách nhiệm chung của cả đội, ai cũng có phần nỗ lực và quản lý thời gian."
+    "id": "me_nhac_chuyen_hoc_1",
+    "context_tag": "gia_dinh",
+    "mock_ui": {
+      "type": "chat",
+      "messages": [
+        {"sender": "mom", "text": "Con ôn bài thi giữa kỳ đến đâu rồi?", "timestamp": "19:00"},
+        {"sender": "me", "text": "Dạ con đang làm đề cương ạ.", "timestamp": "19:01"},
+        {"sender": "mom", "text": "Học cẩn thận nhé, đừng có lơ là môn nào.", "timestamp": "19:02"}
+      ]
+    },
+    "thought": "Mẹ lúc nào cũng chỉ biết có mỗi chuyện học, chưa từng bao giờ để ý xem mình thích gì.",
+    "distortion_type": "all_or_nothing",
+    "choices": ["personalization", "all_or_nothing", "mind_reading", "emotional_reasoning"],
+    "hint_key": "hint_all_or_nothing",
+    "reframe": "Mẹ thường xuyên nhắc nhở chuyện học khiến mình ngột ngạt và cảm thấy mẹ chỉ tập trung vào điểm số. Nhưng từ 'lúc nào cũng' và 'chưa từng bao giờ' có thể chưa chính xác, có những lúc mẹ vẫn quan tâm đến sức khỏe hay bữa ăn của mình.",
+    "companion_intro": {
+      "chill": "Cứ hễ mở miệng là nhắc học thì bực thật. Nhưng khoan, xem thử suy nghĩ vừa rồi có từ khóa quen thuộc nào nhé.",
+      "friendly": "Cảm giác bị nhắc nhở liên tục làm mình thấy áp lực và cô đơn. Mình cùng xem suy nghĩ trên thuộc dạng nào nhé.",
+      "calm": "Khi thấy bị kiểm soát, tâm trí rất dễ dùng các từ tuyệt đối hóa. Bạn thử quan sát xem suy nghĩ này là bẫy gì."
+    }
   },
   {
-    "id": "q_hoc_tap_06",
-    "contextTag": "hoc_tap",
-    "thought": "Là sinh viên giỏi thì lúc nào mình cũng phải hiểu bài ngay lập tức, không được phép hỏi câu ngớ ngẩn.",
-    "correctType": "rigid_shoulds",
-    "explanation": "Đang tự đặt ra nguyên tắc cứng nhắc 'phải' khiến bản thân căng thẳng và sợ sai.",
-    "reframeSuggestion": "Học tập là một quá trình tìm tòi, đặt câu hỏi khi chưa hiểu là cách nhanh nhất để tiến bộ."
+    "id": "me_nhac_chuyen_hoc_2",
+    "context_tag": "gia_dinh",
+    "mock_ui": {
+      "type": "notification",
+      "title": "Tin nhắn gia đình",
+      "body": "Mẹ: Tuần này thi cử thế nào con? Nhớ ôn bài kỹ nhé.",
+      "time": "07:30"
+    },
+    "thought": "Một là điểm phải đứng đầu, hai là coi như công sức cả tháng vứt đi hết.",
+    "distortion_type": "all_or_nothing",
+    "choices": ["all_or_nothing", "labeling", "catastrophizing", "mind_reading"],
+    "hint_key": "hint_all_or_nothing",
+    "reframe": "Không đứng đầu không có nghĩa là công sức bỏ ra vô nghĩa. Quá trình học tập và kiến thức mình tích lũy được vẫn tồn tại, bất kể thứ hạng có tuyệt đối hay không.",
+    "companion_intro": {
+      "chill": "Áp lực phải hoàn hảo nghe mệt mỏi thật đấy. Soi xem tâm trí có đang ép mình vào thế hai thái cực không nhé.",
+      "friendly": "Tự đặt ra tiêu chuẩn 'tất cả hoặc không gì cả' khiến bạn rất căng thẳng. Cùng mình nhận diện bẫy tư duy này nhé.",
+      "calm": "Tư duy chia mọi thứ thành hai cực đối lập thường xóa bỏ mọi giá trị ở giữa. Bạn nhận diện xem đây là bẫy nào."
+    }
   },
   {
-    "id": "q_gia_dinh_01",
-    "contextTag": "gia_dinh",
-    "thought": "Bố mẹ không cười lúc ăn cơm chắc chắn là đang giận và thất vọng về mình.",
-    "correctType": "arbitrary_inference",
-    "explanation": "Đang suy đoán cảm xúc và suy nghĩ của bố mẹ mà không dựa trên lời nói hay chứng cứ thực tế.",
-    "reframeSuggestion": "Người lớn cũng có những mệt mỏi trong công việc hàng ngày, chưa chắc sự trầm lặng đó liên quan đến mình."
+    "id": "bua_com_im_lang_1",
+    "context_tag": "gia_dinh",
+    "mock_ui": {
+      "type": "note",
+      "content": "Bữa cơm tối nay cả nhà gần như không nói chuyện gì với nhau suốt 30 phút.",
+      "date": "28/09/2026"
+    },
+    "thought": "Không khí căng thẳng thế này chắc chắn là vì mình báo điểm kém hồi chiều. Toàn bộ lỗi là do mình.",
+    "distortion_type": "personalization",
+    "choices": ["catastrophizing", "mind_reading", "personalization", "labeling"],
+    "hint_key": "hint_personalization",
+    "reframe": "Không khí im lặng trong bữa ăn làm mình thấy ngột ngạt và bất an. Tuy nhiên, sự im lặng có thể đến từ công việc mệt mỏi của bố mẹ, chuyện tài chính, hoặc đơn giản là ai cũng đang kiệt sức sau một ngày dài.",
+    "companion_intro": {
+      "chill": "Ngồi ăn cơm mà không ai nói gì thì nặng nề thật. Xem thử đầu mình có đang tự ôm hết trách nhiệm không nhé.",
+      "friendly": "Không khí gia đình trầm lắng dễ khiến bạn thấy có lỗi. Cùng mình nhận diện xem suy nghĩ vừa rồi thuộc dạng nào nhé.",
+      "calm": "Khi thấy người khác buồn hoặc im lặng, ta rất dễ tự quy kết nguyên nhân về bản thân. Bạn thử xem đây là bẫy gì."
+    }
   },
   {
-    "id": "q_gia_dinh_02",
-    "contextTag": "gia_dinh",
-    "thought": "Hôm nay bố mẹ cãi nhau, nếu mình ngoan ngoãn hơn thì gia đình đã không căng thẳng thế này.",
-    "correctType": "over_personalization",
-    "explanation": "Tự ôm lấy lỗi lầm về mối quan hệ giữa người lớn vốn không nằm trong quyền quyết định của mình.",
-    "reframeSuggestion": "Mâu thuẫn giữa bố mẹ là chuyện của người lớn, mình không phải là nguyên nhân gây ra điều đó."
+    "id": "bua_com_im_lang_2",
+    "context_tag": "gia_dinh",
+    "mock_ui": {
+      "type": "chat",
+      "messages": [
+        {"sender": "me", "text": "Hôm nay bố mẹ có chuyện gì thế em?", "timestamp": "18:30"},
+        {"sender": "sibling", "text": "Em không rõ, lúc đi làm về đã thấy bố mặt khó chịu rồi.", "timestamp": "18:31"},
+        {"sender": "me", "text": "...", "timestamp": "18:32"}
+      ]
+    },
+    "thought": "Mình là nguyên nhân duy nhất khiến gia đình lúc nào cũng ngột ngạt.",
+    "distortion_type": "personalization",
+    "choices": ["personalization", "all_or_nothing", "catastrophizing", "labeling"],
+    "hint_key": "hint_personalization",
+    "reframe": "Cảm giác có lỗi rất nặng nề, nhưng tâm trạng của bố có thể xuất phát từ áp lực công việc riêng. Một mình mình không thể là nguyên nhân duy nhất quyết định toàn bộ bầu không khí của gia đình.",
+    "companion_intro": {
+      "chill": "Chưa biết chuyện gì đã vội nhận hết đạn về mình rồi. Soi thử xem tâm trí đang lái mình đi đâu nào.",
+      "friendly": "Gia đình có chuyện không vui khiến bạn rất bận lòng. Nhưng hãy thử cùng mình xem bạn có đang tự trách quá đà không nhé.",
+      "calm": "Tự coi mình là trung tâm của mọi sự cố xung quanh là phản xạ quen thuộc khi lo lắng. Bạn thử nhận diện bẫy này xem."
+    }
   },
   {
-    "id": "q_gia_dinh_03",
-    "contextTag": "gia_dinh",
-    "thought": "Mình đã làm vỡ chiếc bình mẹ thích, mình chẳng bao giờ làm được việc gì nên hồn cả.",
-    "correctType": "labeling",
-    "explanation": "Đang quy chụp một sơ suất vô ý thành bản chất vụng về, vô dụng của bản thân.",
-    "reframeSuggestion": "Ai cũng có lúc lỡ tay làm vỡ đồ, mình xin lỗi và dọn dẹp cẩn thận là được."
+    "id": "nhan_tin_da_xem_chua_tra_loi_1",
+    "context_tag": "tinh_cam",
+    "mock_ui": {
+      "type": "chat",
+      "messages": [
+        {"sender": "me", "text": "Cậu ơi, tối nay rảnh đi uống trà sữa không?", "timestamp": "15:20"},
+        {"sender": "me", "text": "Alo cậu?", "timestamp": "15:45"}
+      ]
+    },
+    "thought": "Bạn ấy im lặng thế này chứng tỏ đang thấy mình thật phiền phức và không hề muốn chơi với mình nữa.",
+    "distortion_type": "mind_reading",
+    "choices": ["mind_reading", "personalization", "emotional_reasoning", "all_or_nothing"],
+    "hint_key": "hint_mind_reading",
+    "reframe": "Chờ tin nhắn mà không thấy hồi đáp rất khó chịu và dễ sinh cảm giác bất an. Nhưng mình không thể khẳng định người khác đang nghĩ gì khi họ chưa nói ra. Bạn ấy có thể đang học, lái xe, hoặc chưa kịp cầm máy.",
+    "companion_intro": {
+      "chill": "Nhắn tin mà bị bơ thì nóng ruột thật đấy. Xem thử đầu mình có đang tự biên tự diễn suy nghĩ của người ta không nhé.",
+      "friendly": "Cảm giác thấp thỏm chờ tin nhắn rất dễ khiến mình nghĩ ngợi lung tung. Cùng mình soi xem dạng suy nghĩ này là gì nhé.",
+      "calm": "Sự im lặng của người khác thường kích hoạt trí tưởng tượng phỏng đoán ý đồ. Bạn thử nhận diện bẫy tư duy này xem."
+    }
   },
   {
-    "id": "q_gia_dinh_04",
-    "contextTag": "gia_dinh",
-    "thought": "Gia đình mình không hoàn hảo như nhà người ta, cuộc sống coi như bế tắc.",
-    "correctType": "catastrophizing",
-    "explanation": "So sánh và đẩy khó khăn hiện tại thành bế tắc tuyệt đối.",
-    "reframeSuggestion": "Mỗi gia đình đều có những khó khăn riêng mà người ngoài không thấy, mình có thể trân trọng những điều tốt đẹp đang có."
+    "id": "nhan_tin_da_xem_chua_tra_loi_2",
+    "context_tag": "tinh_cam",
+    "mock_ui": {
+      "type": "notification",
+      "title": "Ứng dụng nhắn tin",
+      "body": "Thông báo: Tin nhắn gửi lúc 15:00 đã được xem",
+      "time": "16:10"
+    },
+    "thought": "Người ta xem rồi mà không thèm trả lời là trong bụng đang khó chịu và ghét bỏ mình rồi.",
+    "distortion_type": "mind_reading",
+    "choices": ["catastrophizing", "labeling", "mind_reading", "personalization"],
+    "hint_key": "hint_mind_reading",
+    "reframe": "Xem xong chưa rep có thể làm mình chạnh lòng. Nhưng mình đang khẳng định suy nghĩ bên trong của họ mà không hề có bằng chứng xác thực. Có nhiều lý do thực tế khiến họ chưa phản hồi ngay được.",
+    "companion_intro": {
+      "chill": "Hiện chữ 'Đã xem' mà không thấy chữ nào rep lại cay phết. Nhưng khoan đoán ý người ta, soi xem đây là bẫy gì đã.",
+      "friendly": "Cảm giác bị ngó lơ khiến bạn thấy hụt hẫng đúng không? Mình cùng xem suy nghĩ vừa rồi thuộc dạng nào nhé.",
+      "calm": "Ta thường gán những suy nghĩ tiêu cực nhất cho sự im lặng của đối phương. Bạn thử nhận diện xem đây là bẫy gì."
+    }
   },
   {
-    "id": "q_gia_dinh_05",
-    "contextTag": "gia_dinh",
-    "thought": "Đã là con cả trong nhà thì mình phải luôn gương mẫu và không bao giờ được tỏ ra yếu lòng.",
-    "correctType": "rigid_shoulds",
-    "explanation": "Quy tắc 'phải luôn luôn' ngăn cản bạn bộc lộ cảm xúc tự nhiên của con người.",
-    "reframeSuggestion": "Là con cả hay con thứ thì mình cũng có quyền được mệt mỏi và cần sự chia sẻ từ gia đình."
+    "id": "nhom_ban_di_choi_khong_ru_1",
+    "context_tag": "tinh_cam",
+    "mock_ui": {
+      "type": "social_post",
+      "author": "Nhóm bạn lớp",
+      "content": "Một buổi chiều cà phê bất ngờ siêu vui cùng cả nhóm!",
+      "image": "cafe_group_photo",
+      "likes": 24,
+      "comments": 6,
+      "time": "1 giờ trước"
+    },
+    "thought": "Mình cảm thấy cô độc và lạc lõng đến mức này, điều đó chứng minh mình thực sự là kẻ thừa thãi trong nhóm.",
+    "distortion_type": "emotional_reasoning",
+    "choices": ["emotional_reasoning", "mind_reading", "labeling", "all_or_nothing"],
+    "hint_key": "hint_emotional_reasoning",
+    "reframe": "Cảm xúc tủi thân và cô độc lúc này là rất thật. Nhưng một cảm xúc dù mạnh mẽ đến đâu cũng không phải là bằng chứng khách quan chứng minh mình là 'kẻ thừa thãi'. Cảm xúc chỉ là phản ứng tạm thời của tâm trí.",
+    "companion_intro": {
+      "chill": "Lướt thấy ảnh nhóm đi chơi mà không có mình thì chạnh lòng thật. Xem thử đầu mình vừa phát ra suy nghĩ gì nhé.",
+      "friendly": "Bị bỏ lỡ một cuộc vui dễ làm bạn thấy tổn thương. Cùng mình xem suy nghĩ vừa xuất hiện thuộc dạng nào nhé.",
+      "calm": "Cảm giác bị tách biệt rất dễ khiến ta đánh đồng cảm xúc với sự thật. Bạn thử nhận diện xem đây là dạng bẫy nào."
+    }
   },
   {
-    "id": "q_gia_dinh_06",
-    "contextTag": "gia_dinh",
-    "thought": "Mẹ chỉ trích kiểu tóc mới của mình, mẹ ghét bỏ tất cả những gì thuộc về mình rồi.",
-    "correctType": "black_and_white",
-    "explanation": "Phóng chiếu từ một bất đồng ý kiến nhỏ thành sự phủ định toàn bộ tình yêu thương.",
-    "reframeSuggestion": "Bố mẹ có gu thẩm mỹ khác thế hệ mình, không đồng tình một điểm không có nghĩa là ghét bỏ con cái."
-  },
-  {
-    "id": "q_tinh_cam_01",
-    "contextTag": "tinh_cam",
-    "thought": "Người ấy không trả lời tin nhắn sau 30 phút, chắc chắn họ đã chán và sắp chia tay mình.",
-    "correctType": "catastrophizing",
-    "explanation": "Từ một khoảng lặng tạm thời nhảy cóc ngay tới kết cục tồi tệ nhất là chia tay.",
-    "reframeSuggestion": "Họ có thể đang bận học, làm việc hoặc để điện thoại ở chế độ im lặng, mình nên kiên nhẫn chờ."
-  },
-  {
-    "id": "q_tinh_cam_02",
-    "contextTag": "tinh_cam",
-    "thought": "Hôm nay bạn ấy có vẻ ít nói, chắc mình đã lỡ lời nói điều gì xúc phạm rồi.",
-    "correctType": "over_personalization",
-    "explanation": "Tự gán tâm trạng ít nói của người khác vào trách nhiệm của bản thân.",
-    "reframeSuggestion": "Người ấy có thể đang có chuyện bận tâm riêng hoặc đơn giản là muốn nghỉ ngơi."
-  },
-  {
-    "id": "q_tinh_cam_03",
-    "contextTag": "tinh_cam",
-    "thought": "Nếu họ thực sự yêu mình, họ phải tự hiểu mình đang buồn mà không cần mình phải nói ra.",
-    "correctType": "arbitrary_inference",
-    "explanation": "Đang kỳ vọng người khác đọc được suy nghĩ của mình và đặt ra tiêu chuẩn phi thực tế.",
-    "reframeSuggestion": "Giao tiếp cởi mở là chìa khóa, chia sẻ trực tiếp cảm xúc sẽ giúp cả hai hiểu nhau hơn."
-  },
-  {
-    "id": "q_tinh_cam_04",
-    "contextTag": "tinh_cam",
-    "thought": "Trong tình yêu, nếu không có cảm xúc nồng nhiệt mỗi ngày thì mối quan hệ này coi như thất bại.",
-    "correctType": "black_and_white",
-    "explanation": "Coi tình cảm chỉ có hai thái cực: lúc nào cũng nồng nhiệt hoặc là hoàn toàn nguội lạnh.",
-    "reframeSuggestion": "Tình cảm lâu dài có những giai đoạn êm đềm, bình lặng để cả hai cùng phát triển cuộc sống riêng."
-  },
-  {
-    "id": "q_tinh_cam_05",
-    "contextTag": "tinh_cam",
-    "thought": "Mình bị từ chối lời tỏ tình, mình là một kẻ kém cỏi và không xứng đáng được ai yêu thương.",
-    "correctType": "labeling",
-    "explanation": "Lấy việc không phù hợp với một người để hạ thấp toàn bộ giá trị bản thân.",
-    "reframeSuggestion": "Bị từ chối chỉ đơn giản là hai người chưa phù hợp về thời điểm hoặc định hướng, không giảm đi giá trị của mình."
-  },
-  {
-    "id": "q_tinh_cam_06",
-    "contextTag": "tinh_cam",
-    "thought": "Mình nên là một người hoàn hảo thì người ta mới không rời bỏ mình.",
-    "correctType": "rigid_shoulds",
-    "explanation": "Ép bản thân vào tiêu chuẩn 'nên hoàn hảo' tạo ra áp lực tâm lý vô hình.",
-    "reframeSuggestion": "Không ai là hoàn hảo, sự chân thành và biết thấu hiểu mới là nền tảng bền vững."
-  },
-  {
-    "id": "q_mang_xa_hoi_01",
-    "contextTag": "mang_xa_hoi",
-    "thought": "Bài đăng của mình chỉ có vài lượt thích, chắc chắn bạn bè thấy mình mờ nhạt và đáng cười chê.",
-    "correctType": "arbitrary_inference",
-    "explanation": "Đoán mò suy nghĩ của người khác chỉ dựa trên số lượt tương tác thuật toán.",
-    "reframeSuggestion": "Lượt thích phụ thuộc vào thuật toán hiển thị của mạng xã hội, không phản ánh sự yêu mến của bạn bè ngoài đời."
-  },
-  {
-    "id": "q_mang_xa_hoi_02",
-    "contextTag": "mang_xa_hoi",
-    "thought": "Lỡ viết một bình luận hơi ngô nghê, mọi người trên mạng sẽ nhớ mãi và coi thường mình suốt đời.",
-    "correctType": "catastrophizing",
-    "explanation": "Thổi phồng sự chú ý của cộng đồng mạng thành sự phán xét vĩnh viễn.",
-    "reframeSuggestion": "Thông tin trên mạng trôi qua rất nhanh, mọi người hầu như chỉ tập trung vào việc của chính họ."
-  },
-  {
-    "id": "q_mang_xa_hoi_03",
-    "contextTag": "mang_xa_hoi",
-    "thought": "Thấy bạn bè cùng trang lứa trên mạng ai cũng thành công, đi du lịch khắp nơi, còn mình thì dậm chân tại chỗ.",
-    "correctType": "black_and_white",
-    "explanation": "Đánh giá cuộc sống theo kiểu họ có tất cả còn mình không có gì.",
-    "reframeSuggestion": "Mạng xã hội là nơi người ta trưng bày những khoảnh khắc đẹp nhất, không phải toàn bộ bức tranh cuộc sống."
-  },
-  {
-    "id": "q_mang_xa_hoi_04",
-    "contextTag": "mang_xa_hoi",
-    "thought": "Mình không theo kịp các trào lưu mới, mình đúng là kẻ lạc hậu và thất bại.",
-    "correctType": "labeling",
-    "explanation": "Gán cho bản thân nhãn 'lạc hậu, thất bại' chỉ vì không quan tâm đến xu hướng mạng.",
-    "reframeSuggestion": "Mỗi người có sở thích và nhịp sống riêng, tập trung vào điều mình thích mới là điều quan trọng."
-  },
-  {
-    "id": "q_mang_xa_hoi_05",
-    "contextTag": "mang_xa_hoi",
-    "thought": "Bạn mình đăng story tâm trạng buồn, chắc chắn là do mình hôm trước chưa trả lời tin nhắn.",
-    "correctType": "over_personalization",
-    "explanation": "Tự nhận cảm xúc buồn của người khác là do lỗi của bản thân.",
-    "reframeSuggestion": "Họ có thể có những chuyện cá nhân khác, nếu lo lắng mình có thể chủ động nhắn tin hỏi thăm."
-  },
-  {
-    "id": "q_mang_xa_hoi_06",
-    "contextTag": "mang_xa_hoi",
-    "thought": "Mỗi bài đăng trên trang cá nhân của mình phải thật lộng lẫy và thu hút nhiều bình luận tán thưởng.",
-    "correctType": "rigid_shoulds",
-    "explanation": "Áp lực 'phải thật lộng lẫy' biến mạng xã hội từ nơi kết nối thành gánh nặng phán xét.",
-    "reframeSuggestion": "Trang cá nhân là nơi lưu giữ kỷ niệm chân thật của bản thân, không cần phải chạy theo sự tán thưởng của số đông."
+    "id": "nhom_ban_di_choi_khong_ru_2",
+    "context_tag": "tinh_cam",
+    "mock_ui": {
+      "type": "chat",
+      "messages": [
+        {"sender": "friend", "text": "Tụi tớ vừa đi ăn lẩu xong, vui lắm!", "timestamp": "20:30"},
+        {"sender": "me", "text": "Ơ, đi lúc nào vậy? Sao không rủ tớ?", "timestamp": "20:31"},
+        {"sender": "friend", "text": "À, tự nhiên đi thôi, với lại tớ nghĩ cậu đang bận học.", "timestamp": "20:32"}
+      ]
+    },
+    "thought": "Mình thấy bị gạt ra ngoài thật sự, mà cảm giác đã rõ ràng thế này thì chắc chắn là đúng rồi.",
+    "distortion_type": "emotional_reasoning",
+    "choices": ["catastrophizing", "emotional_reasoning", "all_or_nothing", "labeling"],
+    "hint_key": "hint_emotional_reasoning",
+    "reframe": "Cảm giác bị bỏ lại là thật và đáng được lắng nghe. Nhưng cảm giác mạnh chưa chắc là bằng chứng về điều đã xảy ra. Mình có thể tách hai thứ: 'mình thấy tủi' và 'thực sự đã có chuyện gì', rồi nói chuyện với bạn để hiểu thêm.",
+    "companion_intro": {
+      "chill": "Nghe tin tụi nó đi ăn mà không có mình thì tủi thật. Mình soi thử xem đầu mình vừa nghĩ gì nhé.",
+      "friendly": "Nghe tin bạn bè đi chơi mà không có mình, ai cũng thấy chạnh lòng. Mình cùng xem suy nghĩ vừa rồi thuộc dạng nào nhé.",
+      "calm": "Chuyện này dễ khiến mình buồn. Bạn thử xem suy nghĩ trên thuộc dạng nào nhé."
+    }
   }
 ]
