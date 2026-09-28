@@ -457,18 +457,18 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                     'RẤT KHÓ CHỊU',
                     style: TextStyle(
                       color: AppColors.textSecondary,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.5,
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.6,
                     ),
                   ),
                   Text(
                     'RẤT DỄ CHỊU',
                     style: TextStyle(
                       color: AppColors.textSecondary,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.5,
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.6,
                     ),
                   ),
                 ],
@@ -1226,8 +1226,8 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
     return LayoutBuilder(
       builder: (context, constraints) {
         final trackWidth = constraints.maxWidth;
-        const trackHeight = 38.0;
-        const thumbDiameter = 32.0;
+        const trackHeight = 40.0;
+        const thumbDiameter = 34.0;
         final thumbLeft = (_sliderValue * (trackWidth - thumbDiameter - 6)) + 3;
         final activeWidth = (thumbLeft + thumbDiameter / 2).clamp(0.0, trackWidth);
 
@@ -1249,11 +1249,11 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
             height: trackHeight,
             width: trackWidth,
             decoration: BoxDecoration(
-              color: const Color(0xFFE8ECE9),
+              color: const Color(0xFFD8DFDA),
               borderRadius: BorderRadius.circular(trackHeight / 2),
               border: Border.all(
-                color: const Color(0xFFCFD6D2),
-                width: 1.5,
+                color: const Color(0xFFAEBDB5),
+                width: 1.8,
               ),
             ),
             child: Stack(
@@ -1267,7 +1267,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                   width: activeWidth,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: accentColor.withValues(alpha: 0.22),
+                      color: accentColor.withValues(alpha: 0.38),
                       borderRadius: BorderRadius.circular(trackHeight / 2),
                     ),
                   ),
@@ -1276,13 +1276,13 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                 // Center neutral marker (Bình thường - 0.5)
                 Positioned(
                   left: (trackWidth / 2) - 1.5,
-                  top: (trackHeight - 12) / 2,
+                  top: (trackHeight - 14) / 2,
                   child: Container(
-                    width: 3,
-                    height: 12,
+                    width: 3.5,
+                    height: 14,
                     decoration: BoxDecoration(
-                      color: AppColors.textMuted.withValues(alpha: 0.4),
-                      borderRadius: BorderRadius.circular(1.5),
+                      color: AppColors.textPrimary.withValues(alpha: 0.35),
+                      borderRadius: BorderRadius.circular(2),
                     ),
                   ),
                 ),
@@ -1298,25 +1298,25 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                       shape: BoxShape.circle,
                       border: Border.all(
                         color: accentColor,
-                        width: 3.5,
+                        width: 4.0,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: accentColor.withValues(alpha: 0.35),
-                          blurRadius: 10,
+                          color: accentColor.withValues(alpha: 0.45),
+                          blurRadius: 12,
                           offset: const Offset(0, 3),
                         ),
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.12),
-                          blurRadius: 4,
-                          offset: const Offset(0, 1),
+                          color: Colors.black.withValues(alpha: 0.16),
+                          blurRadius: 6,
+                          offset: const Offset(0, 2),
                         ),
                       ],
                     ),
                     child: Center(
                       child: Container(
-                        width: 8,
-                        height: 8,
+                        width: 10,
+                        height: 10,
                         decoration: BoxDecoration(
                           color: accentColor,
                           shape: BoxShape.circle,
