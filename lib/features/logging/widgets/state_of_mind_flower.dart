@@ -192,34 +192,43 @@ class _AppleStateOfMindPainter extends CustomPainter {
   double _getTierRadius(int tier, double theta) {
     switch (tier) {
       case 0:
-        // Tier 0: "Rất khó chịu" (10 sharp pointed petals, like Image 1)
-        // Uses cos(10*theta) and cos(20*theta) for sharp faceted petals
-        return 0.82 + (0.28 * math.cos(10 * theta)) - (0.06 * math.cos(20 * theta));
+        // Tier 0: "Rất khó chịu" (5 cánh nhọn góc cạnh, thể hiện sự căng thẳng)
+        return 0.80 +
+            (0.32 * math.cos(5 * theta)) +
+            (0.08 * math.cos(15 * theta));
 
       case 1:
-        // Tier 1: "Khó chịu" (8 pointed lobes)
-        return 0.86 + (0.22 * math.cos(8 * theta)) - (0.04 * math.cos(16 * theta));
+        // Tier 1: "Khó chịu" (5 cánh sắc bén, góc nhọn)
+        return 0.83 +
+            (0.28 * math.cos(5 * theta)) +
+            (0.04 * math.cos(10 * theta));
 
       case 2:
-        // Tier 2: "Hơi khó chịu" (8 soft rippling waves, exactly Image 2)
-        return 0.90 + (0.16 * math.cos(8 * theta));
+        // Tier 2: "Hơi khó chịu" (5 cánh thu hẹp nhẹ)
+        return 0.86 + (0.24 * math.cos(5 * theta));
 
       case 3:
-        // Tier 3: "Bình thường" (6 soft lobes)
-        return 0.92 + (0.13 * math.cos(6 * theta));
+        // Tier 3: "Bình thường" (5 cánh tròn đều đặn, cân bằng, thư thái)
+        return 0.89 + (0.20 * math.cos(5 * theta));
 
       case 4:
-        // Tier 4: "Hơi dễ chịu" (5 rounded pentagon curves, exactly Image 4)
-        return 0.93 + (0.15 * math.cos(5 * theta)) - (0.03 * math.cos(10 * theta));
+        // Tier 4: "Hơi dễ chịu" (5 cánh mở rộng, mềm mại)
+        return 0.88 +
+            (0.23 * math.cos(5 * theta)) -
+            (0.04 * math.cos(10 * theta));
 
       case 5:
-        // Tier 5: "Dễ chịu" (5 soft golden star curves, exactly Image 3)
-        return 0.88 + (0.24 * math.cos(5 * theta)) + (0.05 * math.cos(10 * theta));
+        // Tier 5: "Dễ chịu" (5 cánh nở rộ, uốn lượn uyển chuyển)
+        return 0.85 +
+            (0.26 * math.cos(5 * theta)) -
+            (0.07 * math.cos(10 * theta));
 
       case 6:
       default:
-        // Tier 6: "Rất dễ chịu" (5 blooming rounded cherry blossom petals, exactly Image 5)
-        return 0.84 + (0.28 * math.cos(5 * theta)) - (0.10 * math.cos(10 * theta));
+        // Tier 6: "Rất dễ chịu" (5 cánh hoa anh đào nở bung tròn đầy rực rỡ)
+        return 0.82 +
+            (0.30 * math.cos(5 * theta)) -
+            (0.10 * math.cos(10 * theta));
     }
   }
 
