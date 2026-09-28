@@ -4,6 +4,7 @@ import '../../../core/services/supabase_auth_service.dart';
 import '../../../core/widgets/hotline_dialog.dart';
 import '../../auth/widgets/auth_modal_sheet.dart';
 import '../../breathing/screens/box_breathing_screen.dart';
+import '../../game/screens/game_hub_screen.dart';
 import 'mind_track_mascot.dart';
 import 'reminder_settings_bottom_sheet.dart';
 
@@ -368,6 +369,26 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
               ),
               const SizedBox(height: 18),
 
+              // Tùy chọn 0: Hành trình Tâm Cảnh cùng Muội Đen
+              _buildRelaxationOptionTile(
+                icon: Icons.sports_esports_rounded,
+                iconColor: AppColors.primary,
+                title: 'Hành trình Tâm Cảnh cùng Muội Đen',
+                tag: 'Mini-game CBT',
+                tagColor: AppColors.primary,
+                subtitle: 'Vừa học vừa chơi: Thở sâu, bắt bẫy tư duy và cán cân bằng chứng',
+                onTap: () {
+                  Navigator.pop(ctx);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const GameHubScreen(),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 10),
+
               // Phương án 1: Thở 4-4-4-4
               _buildRelaxationOptionTile(
                 icon: Icons.air_rounded,
@@ -695,8 +716,25 @@ class _TodayCompanionTabState extends State<TodayCompanionTab> {
       width: double.infinity,
       child: Row(
         children: [
-          // Khoảng trống cân bằng bên trái (bằng đúng kích thước icon bên phải)
-          const SizedBox(width: 48),
+          // Nút hành trình mini-game Tâm Cảnh cùng Muội Đen
+          SizedBox(
+            width: 48,
+            height: 48,
+            child: IconButton(
+              icon: const Icon(
+                Icons.sports_esports_outlined,
+                color: AppColors.primary,
+                size: 24,
+              ),
+              tooltip: 'Hành trình Tâm Cảnh',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const GameHubScreen()),
+                );
+              },
+            ),
+          ),
 
           // Tiêu đề Trang chủ căn chính giữa
           const Expanded(
