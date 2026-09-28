@@ -1,0 +1,236 @@
+{
+  "story_id": "exam_01",
+  "title": "Vượt Qua Áp Lực Mùa Thi",
+  "context_tag": "hoc_tap",
+  "start_node_id": "node_01_start",
+  "nodes": [
+    {
+      "id": "node_01_start",
+      "speaker": "muoi_den",
+      "text": "Chào bạn! Mình thấy bạn đang thở gấp và tay hơi run... Sắp đến kỳ thi rồi đúng không?",
+      "mood": "worried",
+      "choices": [
+        {
+          "text": "Ừ, mình đang căng thẳng lắm...",
+          "next_node_id": "node_02_stress"
+        },
+        {
+          "text": "Mình vẫn ổn, chỉ hơi mệt và hồi hộp thôi.",
+          "next_node_id": "node_02_tired"
+        }
+      ]
+    },
+    {
+      "id": "node_02_stress",
+      "speaker": "muoi_den",
+      "text": "Căng thẳng trước kỳ thi là phản ứng rất bình thường của cơ thể. Nhưng nếu tim đập nhanh quá, bạn sẽ khó tập trung. Hãy dừng lại 1 phút để hạ nhiệt cơ thể nhé?",
+      "mood": "thinking",
+      "choices": [
+        {
+          "text": "Được, hướng dẫn mình hít thở đi.",
+          "next_node_id": "node_03_breathing_trigger"
+        }
+      ]
+    },
+    {
+      "id": "node_02_tired",
+      "speaker": "muoi_den",
+      "text": "Đôi khi cơ thể mệt mỏi vì tâm trí đang gồng gánh quá nhiều áp lực. Dành một vài nhịp thở chậm rãi sẽ giúp bạn nạp lại năng lượng đấy!",
+      "mood": "thinking",
+      "choices": [
+        {
+          "text": "Ừ, cùng thở một chút nào.",
+          "next_node_id": "node_03_breathing_trigger"
+        }
+      ]
+    },
+    {
+      "id": "node_03_breathing_trigger",
+      "speaker": "muoi_den",
+      "text": "Hãy cùng mình thực hiện kỹ thuật thở 4-4-6 để điều hòa nhịp tim và thả lỏng các cơ bắp nào!",
+      "mood": "determined",
+      "choices": [
+        {
+          "text": "Bắt đầu bài tập thở 4-4-6",
+          "next_node_id": "node_04_after_breathing",
+          "action": "start_minigame:breathing"
+        }
+      ]
+    },
+    {
+      "id": "node_04_after_breathing",
+      "speaker": "muoi_den",
+      "text": "Bạn thấy lồng ngực nhẹ nhõm hơn chưa? Bây giờ tâm trí đã dịu lại một chút rồi. Hãy chia sẻ với mình điều gì trong kỳ thi khiến bạn lo lắng nhất?",
+      "mood": "happy",
+      "choices": [
+        {
+          "text": "Mình sợ mình sẽ làm hỏng bét tất cả và thi trượt.",
+          "next_node_id": "node_05_distortion_thought_1"
+        },
+        {
+          "text": "Mọi người đều ôn tập tốt hơn mình, mình là kẻ thất bại.",
+          "next_node_id": "node_05_distortion_thought_2"
+        }
+      ]
+    },
+    {
+      "id": "node_05_distortion_thought_1",
+      "speaker": "muoi_den",
+      "text": "Cụm từ 'hỏng bét tất cả' nghe quen quá nhỉ... Bạn có nhận thấy suy nghĩ này đang phóng đại hậu quả tồi tệ nhất không?",
+      "mood": "thinking",
+      "choices": [
+        {
+          "text": "Có thể là vậy... Làm sao để mình nhận ra nó?",
+          "next_node_id": "node_06_distortion_intro"
+        }
+      ]
+    },
+    {
+      "id": "node_05_distortion_thought_2",
+      "speaker": "muoi_den",
+      "text": "'Kẻ thất bại' là một cái nhãn rất nặng nề mà bạn đang tự dán cho mình. Bộ não khi căng thẳng rất hay phóng đại và đánh lừa chúng ta!",
+      "mood": "thinking",
+      "choices": [
+        {
+          "text": "Thật sao? Não bộ đánh lừa mình thế nào?",
+          "next_node_id": "node_06_distortion_intro"
+        }
+      ]
+    },
+    {
+      "id": "node_06_distortion_intro",
+      "speaker": "muoi_den",
+      "text": "Trong tâm lý học CBT, đây gọi là các 'Bẫy suy nghĩ'. Khi lo lắng, não ta nhảy ngay vào kết luận tiêu cực. Hãy cùng mình tháo gỡ các bẫy này nhé!",
+      "mood": "determined",
+      "choices": [
+        {
+          "text": "Cùng nhận diện bẫy suy nghĩ",
+          "next_node_id": "node_07_after_distortion",
+          "action": "start_minigame:distortion"
+        }
+      ]
+    },
+    {
+      "id": "node_07_after_distortion",
+      "speaker": "muoi_den",
+      "text": "Bạn tinh mắt thật đấy! Đã chỉ mặt đặt tên được các bẫy nhận thức rồi. Nhưng đôi khi suy nghĩ lo âu vẫn rất dai dẳng bám lấy mình...",
+      "mood": "happy",
+      "choices": [
+        {
+          "text": "Đúng vậy, mình vẫn sợ lỡ như mình thật sự thi kém thì sao?",
+          "next_node_id": "node_08_evidence_intro"
+        },
+        {
+          "text": "Làm sao để biết nỗi sợ đó có thật hay chỉ là tưởng tượng?",
+          "next_node_id": "node_08_evidence_intro"
+        }
+      ]
+    },
+    {
+      "id": "node_08_evidence_intro",
+      "speaker": "muoi_den",
+      "text": "Đừng vội tin ngay mọi điều bạn nghĩ! Hãy đưa suy nghĩ đó ra 'Tòa án tâm trí' và cân đo bằng chứng thực tế nhé.",
+      "mood": "thinking",
+      "choices": [
+        {
+          "text": "Cân đo bằng chứng thế nào hả Muội Đen?",
+          "next_node_id": "node_09_evidence_trigger"
+        }
+      ]
+    },
+    {
+      "id": "node_09_evidence_trigger",
+      "speaker": "muoi_den",
+      "text": "Một bên là những lo lắng của bạn, bên kia là sự thật về năng lực và nỗ lực của bạn. Cùng mình đặt tất cả lên cán cân bằng chứng nào!",
+      "mood": "determined",
+      "choices": [
+        {
+          "text": "Lên bàn cân bằng chứng",
+          "next_node_id": "node_10_after_evidence",
+          "action": "start_minigame:evidence"
+        }
+      ]
+    },
+    {
+      "id": "node_10_after_evidence",
+      "speaker": "muoi_den",
+      "text": "Bạn thấy chưa! Bằng chứng thực tế cho thấy bạn đã nỗ lực ôn tập và kỳ thi chỉ là một bài kiểm tra, không hề định nghĩa toàn bộ giá trị của bạn.",
+      "mood": "happy",
+      "choices": [
+        {
+          "text": "Mình thấy nhẹ nhõm và tự tin hơn nhiều rồi.",
+          "next_node_id": "node_11_balanced_plan"
+        },
+        {
+          "text": "Mình nhận ra lo lắng quá mức không giúp ích gì cả.",
+          "next_node_id": "node_11_balanced_plan"
+        }
+      ]
+    },
+    {
+      "id": "node_11_balanced_plan",
+      "speaker": "muoi_den",
+      "text": "Bây giờ tâm trí bạn đã lấy lại sự cân bằng. Bước tiếp theo bạn muốn làm gì để chuẩn bị tốt nhất cho ngày mai?",
+      "mood": "determined",
+      "choices": [
+        {
+          "text": "Ôn lại các phần kiến thức cốt lõi thật thoải mái.",
+          "next_node_id": "node_12_study_core"
+        },
+        {
+          "text": "Dành thời gian nghỉ ngơi và ngủ sớm để phục hồi não bộ.",
+          "next_node_id": "node_12_sleep_early"
+        }
+      ]
+    },
+    {
+      "id": "node_12_study_core",
+      "speaker": "muoi_den",
+      "text": "Lựa chọn sáng suốt! Học trọng tâm và nhớ giải lao 5-10 phút sau mỗi 45 phút ôn bài nhé.",
+      "mood": "happy",
+      "choices": [
+        {
+          "text": "Cảm ơn Muội Đen nhiều nhé!",
+          "next_node_id": "node_13_summary"
+        }
+      ]
+    },
+    {
+      "id": "node_12_sleep_early",
+      "speaker": "muoi_den",
+      "text": "Tuyệt vời! Một giấc ngủ trọn vẹn sẽ giúp não bộ củng cố trí nhớ tốt hơn rất nhiều so với thức khuya học dồn đấy.",
+      "mood": "happy",
+      "choices": [
+        {
+          "text": "Cảm ơn Muội Đen nhiều nhé!",
+          "next_node_id": "node_13_summary"
+        }
+      ]
+    },
+    {
+      "id": "node_13_summary",
+      "speaker": "muoi_den",
+      "text": "Hôm nay bạn đã làm rất xuất sắc! Bạn đã biết cách hạ nhiệt cơ thể bằng hơi thở, vạch trần bẫy suy nghĩ và tìm lại cán cân công bằng cho chính mình.",
+      "mood": "happy",
+      "choices": [
+        {
+          "text": "Mình đã sẵn sàng bước vào phòng thi với tâm thế bình an.",
+          "next_node_id": "node_14_ending"
+        }
+      ]
+    },
+    {
+      "id": "node_14_ending",
+      "speaker": "muoi_den",
+      "text": "Mình sẽ luôn ở đây đồng hành cùng bạn. Hãy tự tin lên nhé, bạn đã nỗ lực rất nhiều rồi!",
+      "mood": "happy",
+      "choices": [
+        {
+          "text": "Hoàn thành câu chuyện",
+          "next_node_id": null,
+          "action": "complete_story"
+        }
+      ]
+    }
+  ]
+}
