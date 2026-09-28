@@ -91,21 +91,26 @@ class _AuthModalSheetState extends State<AuthModalSheet> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.darkCard,
-        title: const Text('Xác nhận đăng xuất', style: TextStyle(color: Colors.white, fontSize: 16)),
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text('Xác nhận đăng xuất', style: TextStyle(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.w700)),
         content: const Text(
           'Sau khi đăng xuất, ứng dụng sẽ chuyển về chế độ Ẩn danh mới.',
-          style: TextStyle(color: Colors.white70, fontSize: 13),
+          style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Hủy', style: TextStyle(color: Colors.white60)),
+            child: const Text('Hủy', style: TextStyle(color: AppColors.textSecondary)),
           ),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE07A5F)),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFE07A5F),
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Đăng xuất', style: TextStyle(color: Colors.white)),
+            child: const Text('Đăng xuất'),
           ),
         ],
       ),
@@ -129,10 +134,17 @@ class _AuthModalSheetState extends State<AuthModalSheet> {
 
     return Container(
       padding: EdgeInsets.fromLTRB(24, 16, 24, 24 + bottomInset),
-      decoration: const BoxDecoration(
-        color: Color(0xFF141F25),
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-        border: Border(top: BorderSide(color: Color(0xFF263C47), width: 1.5)),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+        border: Border(top: BorderSide(color: AppColors.border, width: 1.5)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.12),
+            blurRadius: 32,
+            offset: const Offset(0, -6),
+          ),
+        ],
       ),
       child: SingleChildScrollView(
         child: Column(
@@ -145,7 +157,7 @@ class _AuthModalSheetState extends State<AuthModalSheet> {
                 width: 38,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.25),
+                  color: AppColors.border,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -158,10 +170,10 @@ class _AuthModalSheetState extends State<AuthModalSheet> {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF2E6B65).withValues(alpha: 0.25),
+                    color: AppColors.primary.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(Icons.shield_outlined, color: Color(0xFF5DD9C1), size: 20),
+                  child: const Icon(Icons.shield_outlined, color: AppColors.primary, size: 20),
                 ),
                 const SizedBox(width: 12),
                 const Expanded(
@@ -173,14 +185,14 @@ class _AuthModalSheetState extends State<AuthModalSheet> {
                         style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                         ),
                       ),
                       Text(
                         'Chuẩn HIPAA/GDPR - Cầu nối trước trị liệu',
                         style: TextStyle(
                           fontSize: 11,
-                          color: Colors.white54,
+                          color: AppColors.textSecondary,
                         ),
                       ),
                     ],
@@ -195,21 +207,21 @@ class _AuthModalSheetState extends State<AuthModalSheet> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1B2B33),
+                  color: AppColors.surfaceMuted,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: const Color(0xFF5DD9C1).withValues(alpha: 0.3)),
+                  border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
-                        const Icon(Icons.check_circle_rounded, color: Color(0xFF5DD9C1), size: 18),
+                        const Icon(Icons.check_circle_rounded, color: AppColors.primary, size: 18),
                         const SizedBox(width: 8),
                         Text(
                           user.email!,
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontWeight: FontWeight.w700,
                             fontSize: 14,
                           ),
@@ -219,7 +231,7 @@ class _AuthModalSheetState extends State<AuthModalSheet> {
                     const SizedBox(height: 6),
                     Text(
                       'UID: ${user.id.substring(0, 8)}... (Dữ liệu được bảo vệ bằng Row-Level Security)',
-                      style: const TextStyle(color: Colors.white54, fontSize: 11),
+                      style: const TextStyle(color: AppColors.textSecondary, fontSize: 11),
                     ),
                   ],
                 ),
@@ -241,19 +253,19 @@ class _AuthModalSheetState extends State<AuthModalSheet> {
               Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF22323D),
+                  color: AppColors.surfaceMuted,
                   borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                  border: Border.all(color: AppColors.border),
                 ),
                 child: const Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(Icons.info_outline_rounded, color: Color(0xFFF4A261), size: 18),
+                    Icon(Icons.info_outline_rounded, color: Color(0xFFE76F51), size: 18),
                     SizedBox(width: 10),
                     Expanded(
                       child: Text(
                         'Bạn đang ở chế độ Khách Ẩn danh. Hãy đăng ký hoặc đăng nhập để lưu trữ 28 ngày lịch sử và đồng bộ khi đổi thiết bị.',
-                        style: TextStyle(color: Colors.white70, fontSize: 12, height: 1.35),
+                        style: TextStyle(color: AppColors.textSecondary, fontSize: 12, height: 1.35),
                       ),
                     ),
                   ],
@@ -265,8 +277,9 @@ class _AuthModalSheetState extends State<AuthModalSheet> {
               Container(
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF10191E),
+                  color: AppColors.surfaceMuted,
                   borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppColors.border),
                 ),
                 child: Row(
                   children: [
@@ -279,14 +292,14 @@ class _AuthModalSheetState extends State<AuthModalSheet> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 9),
                           decoration: BoxDecoration(
-                            color: !_isSignUp ? const Color(0xFF2E6B65) : Colors.transparent,
+                            color: !_isSignUp ? AppColors.primary : Colors.transparent,
                             borderRadius: BorderRadius.circular(9),
                           ),
                           alignment: Alignment.center,
                           child: Text(
                             'Đăng nhập',
                             style: TextStyle(
-                              color: !_isSignUp ? Colors.white : Colors.white60,
+                              color: !_isSignUp ? Colors.white : AppColors.textSecondary,
                               fontWeight: FontWeight.w600,
                               fontSize: 13,
                             ),
@@ -303,14 +316,14 @@ class _AuthModalSheetState extends State<AuthModalSheet> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 9),
                           decoration: BoxDecoration(
-                            color: _isSignUp ? const Color(0xFF2E6B65) : Colors.transparent,
+                            color: _isSignUp ? AppColors.primary : Colors.transparent,
                             borderRadius: BorderRadius.circular(9),
                           ),
                           alignment: Alignment.center,
                           child: Text(
                             'Đăng ký / Lưu đám mây',
                             style: TextStyle(
-                              color: _isSignUp ? Colors.white : Colors.white60,
+                              color: _isSignUp ? Colors.white : AppColors.textSecondary,
                               fontWeight: FontWeight.w600,
                               fontSize: 13,
                             ),
@@ -327,16 +340,24 @@ class _AuthModalSheetState extends State<AuthModalSheet> {
               TextField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
-                style: const TextStyle(color: Colors.white, fontSize: 14),
+                style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
                 decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.email_outlined, color: Colors.white60, size: 20),
+                  prefixIcon: const Icon(Icons.email_outlined, color: AppColors.textMuted, size: 20),
                   hintText: 'Email của bạn',
-                  hintStyle: const TextStyle(color: Colors.white38, fontSize: 13),
+                  hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 13),
                   filled: true,
-                  fillColor: const Color(0xFF1A262E),
+                  fillColor: AppColors.surfaceMuted,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(14),
-                    borderSide: BorderSide.none,
+                    borderSide: const BorderSide(color: AppColors.border),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: const BorderSide(color: AppColors.border),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
                   ),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 ),
@@ -345,24 +366,32 @@ class _AuthModalSheetState extends State<AuthModalSheet> {
               TextField(
                 controller: _passwordController,
                 obscureText: _obscurePassword,
-                style: const TextStyle(color: Colors.white, fontSize: 14),
+                style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
                 decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.lock_outline_rounded, color: Colors.white60, size: 20),
+                  prefixIcon: const Icon(Icons.lock_outline_rounded, color: AppColors.textMuted, size: 20),
                   suffixIcon: IconButton(
                     icon: Icon(
                       _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                      color: Colors.white60,
+                      color: AppColors.textMuted,
                       size: 20,
                     ),
                     onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                   ),
                   hintText: 'Mật khẩu (ít nhất 6 ký tự)',
-                  hintStyle: const TextStyle(color: Colors.white38, fontSize: 13),
+                  hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 13),
                   filled: true,
-                  fillColor: const Color(0xFF1A262E),
+                  fillColor: AppColors.surfaceMuted,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(14),
-                    borderSide: BorderSide.none,
+                    borderSide: const BorderSide(color: AppColors.border),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: const BorderSide(color: AppColors.border),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
                   ),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 ),
@@ -381,11 +410,11 @@ class _AuthModalSheetState extends State<AuthModalSheet> {
               ElevatedButton(
                 onPressed: _isLoading ? null : _handleSubmit,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF2E6B65),
+                  backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                  elevation: 0,
+                  elevation: 1,
                 ),
                 child: _isLoading
                     ? const SizedBox(

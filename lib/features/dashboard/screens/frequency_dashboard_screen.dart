@@ -27,7 +27,7 @@ class _FrequencyDashboardScreenState extends State<FrequencyDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.darkBg,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         bottom: false,
         child: Column(
@@ -92,24 +92,24 @@ class _FrequencyDashboardScreenState extends State<FrequencyDashboardScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
+          const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'Thống Kê Tần Suất',
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w800,
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   letterSpacing: -0.5,
                 ),
               ),
-              const SizedBox(height: 2),
+              SizedBox(height: 2),
               Text(
                 'Phân tích dữ liệu chu kỳ trước trị liệu',
                 style: TextStyle(
                   fontSize: 12,
-                  color: Colors.white.withValues(alpha: 0.6),
+                  color: AppColors.textSecondary,
                 ),
               ),
             ],
@@ -119,10 +119,10 @@ class _FrequencyDashboardScreenState extends State<FrequencyDashboardScreen> {
             icon: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: const Color(0xFFE07A5F).withValues(alpha: 0.18),
+                color: const Color(0xFFE07A5F).withValues(alpha: 0.12),
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: const Color(0xFFE07A5F).withValues(alpha: 0.4),
+                  color: const Color(0xFFE07A5F).withValues(alpha: 0.35),
                   width: 1,
                 ),
               ),
@@ -144,9 +144,9 @@ class _FrequencyDashboardScreenState extends State<FrequencyDashboardScreen> {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: AppColors.darkCard.withValues(alpha: 0.9),
+        color: AppColors.surfaceMuted,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.08), width: 1),
+        border: Border.all(color: AppColors.border, width: 1),
       ),
       child: Row(
         children: TimeframeOption.values.map((option) {
@@ -163,14 +163,17 @@ class _FrequencyDashboardScreenState extends State<FrequencyDashboardScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? AppColors.primary.withValues(alpha: 0.45)
+                      ? AppColors.primary
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(16),
-                  border: isSelected
-                      ? Border.all(
-                          color: AppColors.primaryLight.withValues(alpha: 0.6),
-                          width: 1,
-                        )
+                  boxShadow: isSelected
+                      ? [
+                          BoxShadow(
+                            color: AppColors.primary.withValues(alpha: 0.25),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ]
                       : null,
                 ),
                 alignment: Alignment.center,
@@ -179,7 +182,7 @@ class _FrequencyDashboardScreenState extends State<FrequencyDashboardScreen> {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                    color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.6),
+                    color: isSelected ? Colors.white : AppColors.textSecondary,
                   ),
                 ),
               ),
@@ -190,30 +193,21 @@ class _FrequencyDashboardScreenState extends State<FrequencyDashboardScreen> {
     );
   }
 
-
-
   Widget _buildPdfBridgeCta(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            const Color(0xFF2A2E44).withValues(alpha: 0.75),
-            AppColors.darkCard.withValues(alpha: 0.9),
-          ],
-        ),
+        color: const Color(0xFFF5F3FF),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: const Color(0xFFB388FF).withValues(alpha: 0.35),
+          color: const Color(0xFFDDD6FE),
           width: 1.2,
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF7C4DFF).withValues(alpha: 0.15),
-            blurRadius: 24,
-            offset: const Offset(0, 8),
+            color: const Color(0xFF7C4DFF).withValues(alpha: 0.08),
+            blurRadius: 18,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -230,7 +224,7 @@ class _FrequencyDashboardScreenState extends State<FrequencyDashboardScreen> {
                 ),
                 child: const Icon(
                   Icons.picture_as_pdf_rounded,
-                  color: Color(0xFFB388FF),
+                  color: Color(0xFF7C4DFF),
                   size: 22,
                 ),
               ),
@@ -241,18 +235,18 @@ class _FrequencyDashboardScreenState extends State<FrequencyDashboardScreen> {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
-                    color: Colors.white,
+                    color: Color(0xFF5B21B6),
                   ),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 12),
-          Text(
+          const Text(
             'Chuẩn bị cho phiên tham vấn đầu tiên? Chuyển hóa toàn bộ biểu đồ tần suất cờ đỏ, tiến trình DASS-21 và các trích đoạn nhật ký được chọn lọc thành Báo cáo PDF chuyên nghiệp gửi nhà tâm lý.',
             style: TextStyle(
               fontSize: 12,
-              color: Colors.white.withValues(alpha: 0.75),
+              color: Color(0xFF6D28D9),
               height: 1.4,
             ),
           ),

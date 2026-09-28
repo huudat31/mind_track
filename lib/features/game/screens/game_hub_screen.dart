@@ -272,7 +272,7 @@ class GameHubScreen extends ConsumerWidget {
         break;
     }
 
-    final cardBgColor = isLocked ? const Color(0xFFF8FAFC) : Colors.white;
+    final cardBgColor = isLocked ? AppColors.surfaceMuted : Colors.white;
     final borderColor = isLocked
         ? AppColors.border
         : (isCompleted ? const Color(0xFF86EFAC) : AppColors.primaryLight);
@@ -297,7 +297,7 @@ class GameHubScreen extends ConsumerWidget {
                           const Expanded(child: Text(GameStrings.lockedLevelMessage)),
                         ],
                       ),
-                      backgroundColor: AppColors.primaryDark,
+                      backgroundColor: AppColors.primary,
                       behavior: SnackBarBehavior.floating,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -345,7 +345,7 @@ class GameHubScreen extends ConsumerWidget {
                       height: 50,
                       decoration: BoxDecoration(
                         color: isLocked
-                            ? const Color(0xFFE2E8F0)
+                            ? AppColors.border
                             : (isCompleted
                                 ? const Color(0xFFDCFCE7)
                                 : AppColors.primary.withValues(alpha: 0.14)),

@@ -27,17 +27,17 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.darkCard.withValues(alpha: 0.85),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.08),
+          color: AppColors.border,
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.35),
-            blurRadius: 18,
-            offset: const Offset(0, 6),
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -50,35 +50,35 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF4A261).withValues(alpha: 0.2),
+                  color: const Color(0xFFF4A261).withValues(alpha: 0.18),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Icon(
                   Icons.flag_rounded,
-                  color: Color(0xFFF4A261),
+                  color: Color(0xFFE76F51),
                   size: 20,
                 ),
               ),
               const SizedBox(width: 12),
-              Expanded(
+              const Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Tần suất cờ đỏ lâm sàng',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         letterSpacing: -0.2,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Text(
                       'Xếp hạng triệu chứng theo tỷ lệ ngày xuất hiện',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.white.withValues(alpha: 0.6),
+                        color: AppColors.textSecondary,
                       ),
                     ),
                   ],
@@ -107,13 +107,13 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
                       ),
                       decoration: BoxDecoration(
                         color: isSelected
-                            ? AppColors.primary.withValues(alpha: 0.4)
-                            : Colors.white.withValues(alpha: 0.05),
+                            ? AppColors.primary.withValues(alpha: 0.12)
+                            : AppColors.surfaceMuted,
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
                           color: isSelected
-                              ? AppColors.primaryLight.withValues(alpha: 0.8)
-                              : Colors.white.withValues(alpha: 0.12),
+                              ? AppColors.primary
+                              : AppColors.border,
                           width: 1,
                         ),
                       ),
@@ -124,7 +124,7 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
                             const Icon(
                               Icons.check_rounded,
                               size: 14,
-                              color: AppColors.primaryLight,
+                              color: AppColors.primary,
                             ),
                             const SizedBox(width: 5),
                           ],
@@ -136,8 +136,8 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
                                   ? FontWeight.w700
                                   : FontWeight.w500,
                               color: isSelected
-                                  ? Colors.white
-                                  : Colors.white.withValues(alpha: 0.65),
+                                  ? AppColors.primary
+                                  : AppColors.textSecondary,
                             ),
                           ),
                         ],
@@ -167,7 +167,7 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
                       height: 24,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        color: AppColors.primaryLight,
+                        color: AppColors.primary,
                       ),
                     ),
                   ),
@@ -182,8 +182,8 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
                     child: Text(
                       'Chưa có cờ đỏ nào được ghi nhận trong ${_selectedCategory == 'Tất cả' ? 'thời gian này' : 'danh mục "$_selectedCategory"'}',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.5),
+                      style: const TextStyle(
+                        color: AppColors.textSecondary,
                         fontSize: 13,
                       ),
                     ),
@@ -211,24 +211,24 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.03),
+              color: AppColors.surfaceMuted,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+              border: Border.all(color: AppColors.border),
             ),
-            child: Row(
+            child: const Row(
               children: [
                 Icon(
                   Icons.shield_outlined,
-                  color: Colors.white.withValues(alpha: 0.5),
+                  color: AppColors.textMuted,
                   size: 16,
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     'Triệu chứng xuất hiện >50% số ngày được khuyến nghị ưu tiên trao đổi ở phiên đầu.',
                     style: TextStyle(
                       fontSize: 11,
-                      color: Colors.white.withValues(alpha: 0.55),
+                      color: AppColors.textSecondary,
                       height: 1.3,
                     ),
                   ),
@@ -251,7 +251,7 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
     } else if (pct >= 40) {
       barColor = const Color(0xFFF4A261); // Moderate amber
     } else {
-      barColor = const Color(0xFF7E9F9B); // Mild sage
+      barColor = AppColors.primary; // Mild sage
     }
 
     return Column(
@@ -266,13 +266,13 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: rank <= 3
-                    ? barColor.withValues(alpha: 0.25)
-                    : Colors.white.withValues(alpha: 0.06),
+                    ? barColor.withValues(alpha: 0.15)
+                    : AppColors.surfaceMuted,
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: rank <= 3
-                      ? barColor.withValues(alpha: 0.6)
-                      : Colors.white.withValues(alpha: 0.12),
+                      ? barColor
+                      : AppColors.border,
                   width: 1,
                 ),
               ),
@@ -283,7 +283,7 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
                   fontWeight: FontWeight.w700,
                   color: rank <= 3
                       ? barColor
-                      : Colors.white.withValues(alpha: 0.6),
+                      : AppColors.textSecondary,
                 ),
               ),
             ),
@@ -293,7 +293,7 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
             Icon(
               item.flag.icon,
               size: 18,
-              color: Colors.white.withValues(alpha: 0.8),
+              color: AppColors.textPrimary,
             ),
             const SizedBox(width: 8),
 
@@ -304,7 +304,7 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                 ),
               ),
             ),
@@ -313,14 +313,16 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.06),
+                color: AppColors.surfaceMuted,
                 borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: AppColors.border),
               ),
               child: Text(
                 item.flag.category,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 10,
-                  color: Colors.white.withValues(alpha: 0.65),
+                  color: AppColors.textSecondary,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
@@ -329,9 +331,9 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
             // Count & Percentage
             Text(
               '${item.count}/${item.totalDays} ngày',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 12,
-                color: Colors.white.withValues(alpha: 0.65),
+                color: AppColors.textSecondary,
               ),
             ),
             const SizedBox(width: 6),
@@ -355,7 +357,7 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
               height: 6,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.08),
+                color: AppColors.surfaceMuted,
                 borderRadius: BorderRadius.circular(3),
               ),
             ),
@@ -370,7 +372,7 @@ class _SymptomFrequencyTrackerState extends State<SymptomFrequencyTracker> {
                   borderRadius: BorderRadius.circular(3),
                   boxShadow: [
                     BoxShadow(
-                      color: barColor.withValues(alpha: 0.3),
+                      color: barColor.withValues(alpha: 0.25),
                       blurRadius: 4,
                       offset: const Offset(0, 1),
                     ),

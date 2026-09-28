@@ -31,7 +31,7 @@ class _PdfReportScreenState extends State<PdfReportScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.darkBg,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         bottom: false,
         child: Column(
@@ -56,25 +56,25 @@ class _PdfReportScreenState extends State<PdfReportScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(
+          const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Báo Cáo Trước Trị Liệu',
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w800,
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                     letterSpacing: -0.5,
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 Text(
                   'Tài liệu định lượng cho phiên gặp đầu tiên',
                   style: TextStyle(
                     fontSize: 12,
-                    color: Colors.white.withValues(alpha: 0.6),
+                    color: AppColors.textSecondary,
                   ),
                 ),
               ],
@@ -93,10 +93,10 @@ class _PdfReportScreenState extends State<PdfReportScreen> {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.primaryLight.withValues(alpha: 0.15),
+                    color: AppColors.primary.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(
-                      color: AppColors.primaryLight.withValues(alpha: 0.4),
+                      color: AppColors.primary.withValues(alpha: 0.35),
                       width: 1,
                     ),
                   ),
@@ -105,7 +105,7 @@ class _PdfReportScreenState extends State<PdfReportScreen> {
                     children: [
                       Icon(
                         Icons.tune_rounded,
-                        color: AppColors.primaryLight,
+                        color: AppColors.primary,
                         size: 15,
                       ),
                       SizedBox(width: 5),
@@ -114,7 +114,7 @@ class _PdfReportScreenState extends State<PdfReportScreen> {
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.primaryLight,
+                          color: AppColors.primary,
                         ),
                       ),
                     ],
@@ -160,12 +160,19 @@ class _PdfReportScreenState extends State<PdfReportScreen> {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 4, 16, 8),
       decoration: BoxDecoration(
-        color: AppColors.darkCard.withValues(alpha: 0.85),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.08),
+          color: AppColors.border,
           width: 1,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 12,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
       child: Material(
         color: Colors.transparent,
@@ -179,12 +186,12 @@ class _PdfReportScreenState extends State<PdfReportScreen> {
                 Container(
                   padding: const EdgeInsets.all(7),
                   decoration: BoxDecoration(
-                    color: AppColors.primaryLight.withValues(alpha: 0.16),
+                    color: AppColors.primary.withValues(alpha: 0.12),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
                     Icons.shield_outlined,
-                    color: AppColors.primaryLight,
+                    color: AppColors.primary,
                     size: 16,
                   ),
                 ),
@@ -201,7 +208,7 @@ class _PdfReportScreenState extends State<PdfReportScreen> {
                               style: const TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w700,
-                                color: Colors.white,
+                                color: AppColors.textPrimary,
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -213,14 +220,15 @@ class _PdfReportScreenState extends State<PdfReportScreen> {
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.08),
+                              color: AppColors.surfaceMuted,
                               borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: AppColors.border),
                             ),
                             child: Text(
                               _config.timeframe.label,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 10,
-                                color: Colors.white.withValues(alpha: 0.8),
+                                color: AppColors.textSecondary,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -228,19 +236,20 @@ class _PdfReportScreenState extends State<PdfReportScreen> {
                         ],
                       ),
                       const SizedBox(height: 2),
-                      Text(
+                      const Text(
                         'Chạm để xem tóm tắt lâm sàng & tùy chỉnh nội dung',
                         style: TextStyle(
                           fontSize: 11,
-                          color: AppColors.primaryLight.withValues(alpha: 0.9),
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ],
                   ),
                 ),
-                Icon(
+                const Icon(
                   Icons.chevron_right_rounded,
-                  color: Colors.white.withValues(alpha: 0.4),
+                  color: AppColors.textMuted,
                   size: 20,
                 ),
               ],
@@ -267,17 +276,17 @@ class _PdfReportScreenState extends State<PdfReportScreen> {
           maxPageWidth: 700,
           pdfFileName:
               'MindTrack_PreTherapy_${_config.isAnonymous ? _config.anonymousCode : "Report"}.pdf',
-          loadingWidget: Center(
+          loadingWidget: const Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const CircularProgressIndicator(color: AppColors.primaryLight),
-                const SizedBox(height: 14),
+                CircularProgressIndicator(color: AppColors.primary),
+                SizedBox(height: 14),
                 Text(
                   'Đang tạo báo cáo lâm sàng...',
                   style: TextStyle(
                     fontSize: 13,
-                    color: Colors.white.withValues(alpha: 0.7),
+                    color: AppColors.textSecondary,
                   ),
                 ),
               ],
@@ -285,7 +294,7 @@ class _PdfReportScreenState extends State<PdfReportScreen> {
           ),
           onError: (context, error) {
             return Container(
-              color: AppColors.darkCard,
+              color: Colors.white,
               padding: const EdgeInsets.all(24),
               child: Center(
                 child: Column(
@@ -299,7 +308,7 @@ class _PdfReportScreenState extends State<PdfReportScreen> {
                       ),
                       child: const Icon(
                         Icons.sync_problem_rounded,
-                        color: Color(0xFFF4A261),
+                        color: Color(0xFFE76F51),
                         size: 40,
                       ),
                     ),
@@ -307,7 +316,7 @@ class _PdfReportScreenState extends State<PdfReportScreen> {
                     const Text(
                       'Cần khởi động lại ứng dụng',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                       ),
@@ -316,8 +325,8 @@ class _PdfReportScreenState extends State<PdfReportScreen> {
                     Text(
                       'Thư viện xuất PDF vừa được thêm mới cần được nạp qua việc khởi động lại ứng dụng trên thiết bị.\n\nChi tiết kỹ thuật: $error',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.7),
+                      style: const TextStyle(
+                        color: AppColors.textSecondary,
                         fontSize: 12,
                         height: 1.4,
                       ),
@@ -345,8 +354,8 @@ class _PdfReportScreenState extends State<PdfReportScreen> {
                       icon: const Icon(Icons.share_rounded, size: 18),
                       label: const Text('Thử Xuất / Chia Sẻ File PDF'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primaryLight,
-                        foregroundColor: AppColors.darkBg,
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,
                           vertical: 12,

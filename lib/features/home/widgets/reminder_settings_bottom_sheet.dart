@@ -53,19 +53,19 @@ class _ReminderSettingsBottomSheetState
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.dark(
-              primary: AppColors.primaryLight,
-              onPrimary: Colors.black,
-              surface: Color(0xFF16252C),
-              onSurface: Colors.white,
+            colorScheme: const ColorScheme.light(
+              primary: AppColors.primary,
+              onPrimary: Colors.white,
+              surface: Colors.white,
+              onSurface: AppColors.textPrimary,
             ),
             timePickerTheme: TimePickerThemeData(
-              backgroundColor: const Color(0xFF16252C),
-              hourMinuteTextColor: Colors.white,
-              dayPeriodTextColor: Colors.white,
-              dialBackgroundColor: const Color(0xFF0E1418),
-              dialHandColor: AppColors.primaryLight,
-              dialTextColor: Colors.white,
+              backgroundColor: Colors.white,
+              hourMinuteTextColor: AppColors.textPrimary,
+              dayPeriodTextColor: AppColors.textPrimary,
+              dialBackgroundColor: AppColors.surfaceMuted,
+              dialHandColor: AppColors.primary,
+              dialTextColor: AppColors.textPrimary,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
@@ -96,7 +96,7 @@ class _ReminderSettingsBottomSheetState
             children: [
               Icon(
                 Icons.check_circle_rounded,
-                color: AppColors.primaryLight,
+                color: Colors.white,
                 size: 20,
               ),
               SizedBox(width: 10),
@@ -107,7 +107,7 @@ class _ReminderSettingsBottomSheetState
               ),
             ],
           ),
-          backgroundColor: const Color(0xFF16252C),
+          backgroundColor: AppColors.primary,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -135,7 +135,7 @@ class _ReminderSettingsBottomSheetState
             children: [
               const Icon(
                 Icons.alarm_on_rounded,
-                color: AppColors.primaryLight,
+                color: Colors.white,
                 size: 20,
               ),
               const SizedBox(width: 10),
@@ -148,7 +148,7 @@ class _ReminderSettingsBottomSheetState
               ),
             ],
           ),
-          backgroundColor: const Color(0xFF16252C),
+          backgroundColor: AppColors.primary,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -166,15 +166,15 @@ class _ReminderSettingsBottomSheetState
       margin: EdgeInsets.only(bottom: bottomInset),
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
       decoration: BoxDecoration(
-        color: const Color(0xFF141F25),
+        color: Colors.white,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.1),
+          color: AppColors.border,
           width: 1.2,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.6),
+            color: Colors.black.withValues(alpha: 0.12),
             blurRadius: 32,
             offset: const Offset(0, -6),
           ),
@@ -184,7 +184,7 @@ class _ReminderSettingsBottomSheetState
           ? const SizedBox(
               height: 250,
               child: Center(
-                child: CircularProgressIndicator(color: AppColors.primaryLight),
+                child: CircularProgressIndicator(color: AppColors.primary),
               ),
             )
           : Column(
@@ -197,7 +197,7 @@ class _ReminderSettingsBottomSheetState
                     width: 40,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
+                      color: AppColors.border,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -210,12 +210,12 @@ class _ReminderSettingsBottomSheetState
                     Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.2),
+                        color: AppColors.primary.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(14),
                       ),
                       child: const Icon(
                         Icons.notifications_active_rounded,
-                        color: AppColors.primaryLight,
+                        color: AppColors.primary,
                         size: 24,
                       ),
                     ),
@@ -229,7 +229,7 @@ class _ReminderSettingsBottomSheetState
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w800,
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               letterSpacing: -0.3,
                             ),
                           ),
@@ -238,7 +238,7 @@ class _ReminderSettingsBottomSheetState
                             'Tự động nhắc bạn lắng nghe tâm trí định kỳ',
                             style: TextStyle(
                               fontSize: 12,
-                              color: Colors.white60,
+                              color: AppColors.textSecondary,
                             ),
                           ),
                         ],
@@ -256,12 +256,12 @@ class _ReminderSettingsBottomSheetState
                     vertical: 12,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.04),
+                    color: AppColors.surfaceMuted,
                     borderRadius: BorderRadius.circular(18),
                     border: Border.all(
                       color: _isEnabled
                           ? AppColors.primary.withValues(alpha: 0.4)
-                          : Colors.white.withValues(alpha: 0.08),
+                          : AppColors.border,
                     ),
                   ),
                   child: Row(
@@ -275,7 +275,7 @@ class _ReminderSettingsBottomSheetState
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,
-                                color: Colors.white,
+                                color: AppColors.textPrimary,
                               ),
                             ),
                             const SizedBox(height: 2),
@@ -286,8 +286,8 @@ class _ReminderSettingsBottomSheetState
                               style: TextStyle(
                                 fontSize: 12,
                                 color: _isEnabled
-                                    ? AppColors.primaryLight
-                                    : Colors.white38,
+                                    ? AppColors.primary
+                                    : AppColors.textSecondary,
                               ),
                             ),
                           ],
@@ -295,9 +295,9 @@ class _ReminderSettingsBottomSheetState
                       ),
                       Switch.adaptive(
                         value: _isEnabled,
-                        activeColor: AppColors.primaryLight,
+                        activeColor: AppColors.primary,
                         activeTrackColor: AppColors.primary.withValues(
-                          alpha: 0.5,
+                          alpha: 0.3,
                         ),
                         onChanged: (val) => setState(() => _isEnabled = val),
                       ),
@@ -325,7 +325,7 @@ class _ReminderSettingsBottomSheetState
                     title: 'Tổng kết cuối ngày (Tối)',
                     subtitle: 'Giải tỏa căng thẳng trước khi ngủ',
                     icon: Icons.nights_stay_rounded,
-                    iconColor: const Color(0xFF9D4EDD),
+                    iconColor: const Color(0xFF7E9F9B),
                     time: _eveningTime,
                     onTap: () => _pickTime(isMorning: false),
                   ),
@@ -341,12 +341,12 @@ class _ReminderSettingsBottomSheetState
                     icon: const Icon(
                       Icons.ring_volume_rounded,
                       size: 18,
-                      color: AppColors.primaryLight,
+                      color: AppColors.primary,
                     ),
                     label: const Text(
                       'Gửi thử thông báo ngay bây giờ',
                       style: TextStyle(
-                        color: AppColors.primaryLight,
+                        color: AppColors.primary,
                         fontWeight: FontWeight.w600,
                         fontSize: 13,
                       ),
@@ -354,12 +354,12 @@ class _ReminderSettingsBottomSheetState
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       side: BorderSide(
-                        color: AppColors.primaryLight.withValues(alpha: 0.35),
+                        color: AppColors.primary.withValues(alpha: 0.35),
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
-                      backgroundColor: Colors.white.withValues(alpha: 0.02),
+                      backgroundColor: Colors.white,
                     ),
                   ),
                 ),
@@ -390,8 +390,7 @@ class _ReminderSettingsBottomSheetState
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18),
                       ),
-                      elevation: 4,
-                      shadowColor: AppColors.primary.withValues(alpha: 0.5),
+                      elevation: 2,
                     ),
                   ),
                 ),
@@ -414,9 +413,9 @@ class _ReminderSettingsBottomSheetState
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.03),
+          color: AppColors.surfaceMuted,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+          border: Border.all(color: AppColors.border),
         ),
         child: Row(
           children: [
@@ -438,13 +437,13 @@ class _ReminderSettingsBottomSheetState
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     subtitle,
-                    style: const TextStyle(fontSize: 11, color: Colors.white54),
+                    style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
                   ),
                 ],
               ),
@@ -452,10 +451,10 @@ class _ReminderSettingsBottomSheetState
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.25),
+                color: AppColors.primary.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: AppColors.primaryLight.withValues(alpha: 0.4),
+                  color: AppColors.primary.withValues(alpha: 0.35),
                 ),
               ),
               child: Row(
@@ -466,14 +465,14 @@ class _ReminderSettingsBottomSheetState
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w800,
-                      color: Colors.white,
+                      color: AppColors.primary,
                     ),
                   ),
                   const SizedBox(width: 4),
                   const Icon(
                     Icons.edit_rounded,
                     size: 14,
-                    color: AppColors.primaryLight,
+                    color: AppColors.primary,
                   ),
                 ],
               ),

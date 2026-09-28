@@ -16,14 +16,14 @@ class CoOccurrenceCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.darkCard.withValues(alpha: 0.85),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.08), width: 1),
+        border: Border.all(color: AppColors.border, width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.35),
-            blurRadius: 18,
-            offset: const Offset(0, 6),
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -36,35 +36,35 @@ class CoOccurrenceCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppColors.accentTeal.withValues(alpha: 0.2),
+                  color: AppColors.primary.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Icon(
                   Icons.hub_rounded,
-                  color: AppColors.accentTeal,
+                  color: AppColors.primary,
                   size: 20,
                 ),
               ),
               const SizedBox(width: 12),
-              Expanded(
+              const Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Thống kê Đồng Xuất Hiện (Co-occurrence)',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         letterSpacing: -0.2,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Text(
                       'Mối liên hệ lặp lại giữa cảm xúc, bối cảnh & thể chất',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.white.withValues(alpha: 0.6),
+                        color: AppColors.textSecondary,
                       ),
                     ),
                   ],
@@ -79,44 +79,44 @@ class CoOccurrenceCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: const Color(0xFFF4A261).withValues(alpha: 0.1),
+              color: const Color(0xFFF4A261).withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: const Color(0xFFF4A261).withValues(alpha: 0.3),
+                color: const Color(0xFFF4A261).withValues(alpha: 0.4),
                 width: 1,
               ),
             ),
-            child: Row(
+            child: const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(top: 2.0),
                   child: Icon(
                     Icons.warning_amber_rounded,
-                    color: Color(0xFFF4A261),
+                    color: Color(0xFFE76F51),
                     size: 18,
                   ),
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'LƯU Ý CHUYÊN MÔN: KHÔNG SUY DIỄN NHÂN QUẢ',
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w700,
-                          color: Color(0xFFF4A261),
+                          color: Color(0xFFD97706),
                           letterSpacing: 0.3,
                         ),
                       ),
-                      const SizedBox(height: 3),
+                      SizedBox(height: 3),
                       Text(
                         'Số liệu phản ánh các sự kiện có xu hướng xuất hiện cùng lúc trong chu kỳ theo dõi của bạn, không khẳng định yếu tố này là nguyên nhân trực tiếp gây ra yếu tố kia. Hãy mang dữ liệu này đối thoại cùng nhà tham vấn.',
                         style: TextStyle(
                           fontSize: 11,
-                          color: Colors.white.withValues(alpha: 0.75),
+                          color: AppColors.textSecondary,
                           height: 1.35,
                         ),
                       ),
@@ -140,7 +140,7 @@ class CoOccurrenceCard extends StatelessWidget {
                     child: SizedBox(
                       width: 24,
                       height: 24,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.accentTeal),
+                      child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
                     ),
                   ),
                 );
@@ -148,14 +148,14 @@ class CoOccurrenceCard extends StatelessWidget {
 
               final insights = snapshot.data ?? [];
               if (insights.isEmpty) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                return const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16.0),
                   child: Center(
                     child: Text(
                       'Cần tối thiểu 3 ngày ghi nhận cảm xúc và cờ đỏ để hệ thống phân tích các quy luật đồng xuất hiện lâm sàng của bạn.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.5),
+                        color: AppColors.textSecondary,
                         fontSize: 12,
                         height: 1.4,
                       ),
@@ -185,10 +185,10 @@ class CoOccurrenceCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.04),
+        color: AppColors.surfaceMuted,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: insight.accentColor.withValues(alpha: 0.25),
+          color: insight.accentColor.withValues(alpha: 0.35),
           width: 1,
         ),
       ),
@@ -200,7 +200,7 @@ class CoOccurrenceCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: insight.accentColor.withValues(alpha: 0.18),
+                  color: insight.accentColor.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
@@ -216,17 +216,17 @@ class CoOccurrenceCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                   ),
                 ),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
-                  color: insight.accentColor.withValues(alpha: 0.2),
+                  color: insight.accentColor.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: insight.accentColor.withValues(alpha: 0.45),
+                    color: insight.accentColor.withValues(alpha: 0.4),
                     width: 1,
                   ),
                 ),
@@ -248,12 +248,12 @@ class CoOccurrenceCard extends StatelessWidget {
           Row(
             children: [
               _buildFactorTag(insight.factorA),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 6.0),
                 child: Icon(
                   Icons.sync_alt_rounded,
                   size: 14,
-                  color: Colors.white.withValues(alpha: 0.4),
+                  color: AppColors.textMuted,
                 ),
               ),
               _buildFactorTag(insight.factorB),
@@ -264,9 +264,9 @@ class CoOccurrenceCard extends StatelessWidget {
 
           Text(
             insight.observation,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 12,
-              color: Colors.white.withValues(alpha: 0.7),
+              color: AppColors.textSecondary,
               height: 1.35,
             ),
           ),
@@ -279,15 +279,16 @@ class CoOccurrenceCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.07),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppColors.border),
       ),
       child: Text(
         label,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 11,
-          fontWeight: FontWeight.w500,
-          color: Colors.white.withValues(alpha: 0.85),
+          fontWeight: FontWeight.w600,
+          color: AppColors.textPrimary,
         ),
       ),
     );

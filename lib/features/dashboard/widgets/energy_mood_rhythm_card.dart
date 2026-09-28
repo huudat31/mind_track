@@ -30,14 +30,14 @@ class EnergyMoodRhythmCard extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: AppColors.darkCard.withValues(alpha: 0.85),
+            color: Colors.white,
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.08), width: 1),
+            border: Border.all(color: AppColors.border, width: 1),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.35),
-                blurRadius: 18,
-                offset: const Offset(0, 6),
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: 16,
+                offset: const Offset(0, 4),
               ),
             ],
           ),
@@ -50,35 +50,35 @@ class EnergyMoodRhythmCard extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF2A9D8F).withValues(alpha: 0.2),
+                      color: AppColors.primary.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Icon(
                       Icons.bolt_rounded,
-                      color: Color(0xFF2A9D8F),
+                      color: AppColors.primary,
                       size: 20,
                     ),
                   ),
                   const SizedBox(width: 12),
-                  Expanded(
+                  const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           'Nhịp điệu Năng lượng & Cảm xúc',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             letterSpacing: -0.2,
                           ),
                         ),
-                        const SizedBox(height: 2),
+                        SizedBox(height: 2),
                         Text(
                           'Xu hướng biến thiên năng lượng và trạng thái tâm lý',
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.white.withValues(alpha: 0.6),
+                            color: AppColors.textSecondary,
                           ),
                         ),
                       ],
@@ -96,7 +96,7 @@ class EnergyMoodRhythmCard extends StatelessWidget {
                     child: SizedBox(
                       width: 24,
                       height: 24,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF2A9D8F)),
+                      child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
                     ),
                   ),
                 )
@@ -107,8 +107,8 @@ class EnergyMoodRhythmCard extends StatelessWidget {
                     child: Text(
                       'Chưa có dữ liệu cảm xúc & năng lượng trong ${timeframe.label}.\nHãy ghi nhận cảm xúc hôm nay để bắt đầu hình thành nhịp điệu.',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.5),
+                      style: const TextStyle(
+                        color: AppColors.textSecondary,
                         fontSize: 12,
                         height: 1.4,
                       ),
@@ -133,7 +133,7 @@ class EnergyMoodRhythmCard extends StatelessWidget {
                         label: 'Tâm trạng TB',
                         value: '${avgMood.toStringAsFixed(1)} / 5.0',
                         icon: Icons.mood_rounded,
-                        color: const Color(0xFF2A9D8F),
+                        color: AppColors.primary,
                       ),
                     ),
                   ],
@@ -144,10 +144,10 @@ class EnergyMoodRhythmCard extends StatelessWidget {
                 // Daily rhythm spark horizontal scroll
                 Text(
                   'Chi tiết từng ngày (${timeline.length} ngày ghi nhận)',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white.withValues(alpha: 0.7),
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -182,9 +182,9 @@ class EnergyMoodRhythmCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.04),
+        color: color.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: color.withValues(alpha: 0.3), width: 1),
+        border: Border.all(color: color.withValues(alpha: 0.25), width: 1),
       ),
       child: Row(
         children: [
@@ -195,9 +195,9 @@ class EnergyMoodRhythmCard extends StatelessWidget {
             children: [
               Text(
                 label,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 10,
-                  color: Colors.white.withValues(alpha: 0.55),
+                  color: AppColors.textSecondary,
                 ),
               ),
               const SizedBox(height: 2),
@@ -222,7 +222,7 @@ class EnergyMoodRhythmCard extends StatelessWidget {
       2 => const Color(0xFFF4A261),
       3 => const Color(0xFF818AA3),
       4 => const Color(0xFF7E9F9B),
-      5 => const Color(0xFF2A9D8F),
+      5 => AppColors.primary,
       _ => const Color(0xFF818AA3),
     };
 
@@ -230,12 +230,12 @@ class EnergyMoodRhythmCard extends StatelessWidget {
       width: 44,
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.04),
+        color: AppColors.surfaceMuted,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: item.energyLevel <= 2
-              ? const Color(0xFFE07A5F).withValues(alpha: 0.3)
-              : Colors.white.withValues(alpha: 0.08),
+              ? const Color(0xFFE07A5F).withValues(alpha: 0.4)
+              : AppColors.border,
         ),
       ),
       child: Column(
@@ -245,10 +245,10 @@ class EnergyMoodRhythmCard extends StatelessWidget {
           Text(
             item.dayLabel,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w500,
-              color: Colors.white.withValues(alpha: 0.6),
+              color: AppColors.textSecondary,
             ),
           ),
 
@@ -257,7 +257,7 @@ class EnergyMoodRhythmCard extends StatelessWidget {
             width: 22,
             height: 22,
             decoration: BoxDecoration(
-              color: moodColor.withValues(alpha: 0.25),
+              color: moodColor.withValues(alpha: 0.15),
               shape: BoxShape.circle,
               border: Border.all(color: moodColor, width: 1.5),
             ),
@@ -284,7 +284,7 @@ class EnergyMoodRhythmCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isFilled
                       ? const Color(0xFFF4A261)
-                      : Colors.white.withValues(alpha: 0.1),
+                      : const Color(0xFFCBD5E1),
                   borderRadius: BorderRadius.circular(2),
                 ),
               );

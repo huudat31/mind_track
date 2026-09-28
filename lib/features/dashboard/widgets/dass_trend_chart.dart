@@ -57,9 +57,9 @@ class _DassTrendChartState extends State<DassTrendChart> {
     return todayMidnight.subtract(Duration(days: daysAgo));
   }
 
-  static const Color depressionColor = Color(0xFFFF2A85); // Vibrant Hot Pink / Magenta
-  static const Color anxietyColor = Color(0xFF00E5FF);    // Vibrant Neon Cyan
-  static const Color stressColor = Color(0xFF22E570);     // Vibrant Lime Green
+  static const Color depressionColor = Color(0xFFD81B60); // Rich Magenta
+  static const Color anxietyColor = Color(0xFF0288D1);    // Vibrant Sky Blue
+  static const Color stressColor = Color(0xFF2E7D32);     // Forest Green
 
   @override
   Widget build(BuildContext context) {
@@ -67,9 +67,16 @@ class _DassTrendChartState extends State<DassTrendChart> {
       return Container(
         padding: const EdgeInsets.all(22),
         decoration: BoxDecoration(
-          color: AppColors.darkCard.withValues(alpha: 0.85),
+          color: Colors.white,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.08), width: 1),
+          border: Border.all(color: AppColors.border, width: 1),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Column(
           children: [
@@ -78,16 +85,16 @@ class _DassTrendChartState extends State<DassTrendChart> {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.2),
+                    color: AppColors.primary.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Icon(Icons.quiz_outlined, color: AppColors.primaryLight, size: 20),
+                  child: const Icon(Icons.quiz_outlined, color: AppColors.primary, size: 20),
                 ),
                 const SizedBox(width: 12),
                 const Expanded(
                   child: Text(
                     'Tiến Trình Đánh Giá DASS-21',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
                   ),
                 ),
               ],
@@ -96,23 +103,23 @@ class _DassTrendChartState extends State<DassTrendChart> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.03),
+                color: AppColors.surfaceMuted,
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                border: Border.all(color: AppColors.border),
               ),
               child: Column(
                 children: [
-                  const Icon(Icons.history_edu_rounded, color: AppColors.primaryLight, size: 32),
+                  const Icon(Icons.history_edu_rounded, color: AppColors.primary, size: 32),
                   const SizedBox(height: 10),
                   const Text(
                     'Chưa có dữ liệu DASS-21',
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 14),
+                    style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w700, fontSize: 14),
                   ),
                   const SizedBox(height: 6),
-                  Text(
+                  const Text(
                     'Bạn chưa lưu bài đánh giá DASS-21 nào trên tài khoản này. Hãy làm bài test ở tab "DASS-21" để bắt đầu theo dõi biểu đồ tiến triển lâm sàng.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white.withValues(alpha: 0.6), fontSize: 12, height: 1.4),
+                    style: TextStyle(color: AppColors.textSecondary, fontSize: 12, height: 1.4),
                   ),
                 ],
               ),
@@ -125,14 +132,14 @@ class _DassTrendChartState extends State<DassTrendChart> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.darkCard.withValues(alpha: 0.85),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.08), width: 1),
+        border: Border.all(color: AppColors.border, width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.35),
-            blurRadius: 18,
-            offset: const Offset(0, 6),
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -145,35 +152,35 @@ class _DassTrendChartState extends State<DassTrendChart> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.2),
+                  color: AppColors.primary.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Icon(
                   Icons.trending_down_rounded,
-                  color: AppColors.primaryLight,
+                  color: AppColors.primary,
                   size: 20,
                 ),
               ),
               const SizedBox(width: 12),
-              Expanded(
+              const Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Tiến trình DASS-21 qua thời gian',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         letterSpacing: -0.2,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Text(
                       'So sánh điểm số giữa các mốc theo dõi',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.white.withValues(alpha: 0.6),
+                        color: AppColors.textSecondary,
                       ),
                     ),
                   ],
@@ -192,7 +199,7 @@ class _DassTrendChartState extends State<DassTrendChart> {
                 _buildFilterChip(
                   label: 'Tất cả (3 thang đo)',
                   isSelected: _selectedCategory == null,
-                  color: AppColors.primaryLight,
+                  color: AppColors.primary,
                   onTap: () => setState(() => _selectedCategory = null),
                 ),
                 const SizedBox(width: 8),
@@ -252,10 +259,10 @@ class _DassTrendChartState extends State<DassTrendChart> {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: isSelected ? color.withValues(alpha: 0.22) : Colors.white.withValues(alpha: 0.05),
+          color: isSelected ? color.withValues(alpha: 0.12) : AppColors.surfaceMuted,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected ? color.withValues(alpha: 0.8) : Colors.white.withValues(alpha: 0.1),
+            color: isSelected ? color : AppColors.border,
             width: 1,
           ),
         ),
@@ -266,7 +273,7 @@ class _DassTrendChartState extends State<DassTrendChart> {
               width: 8,
               height: 8,
               decoration: BoxDecoration(
-                color: isSelected ? color : Colors.white.withValues(alpha: 0.4),
+                color: isSelected ? color : AppColors.textMuted,
                 shape: BoxShape.circle,
               ),
             ),
@@ -275,8 +282,8 @@ class _DassTrendChartState extends State<DassTrendChart> {
               label,
               style: TextStyle(
                 fontSize: 12,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.65),
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                color: isSelected ? color : AppColors.textSecondary,
               ),
             ),
           ],
@@ -388,7 +395,7 @@ class _DassTrendChartState extends State<DassTrendChart> {
         drawVerticalLine: false,
         horizontalInterval: 7,
         getDrawingHorizontalLine: (value) => FlLine(
-          color: Colors.white.withValues(alpha: 0.06),
+          color: Colors.black.withValues(alpha: 0.06),
           strokeWidth: 1,
           dashArray: [4, 4],
         ),
@@ -404,8 +411,8 @@ class _DassTrendChartState extends State<DassTrendChart> {
             getTitlesWidget: (value, meta) {
               return Text(
                 value.toInt().toString(),
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.35),
+                style: const TextStyle(
+                  color: AppColors.textMuted,
                   fontSize: 10,
                 ),
               );
@@ -436,8 +443,8 @@ class _DassTrendChartState extends State<DassTrendChart> {
                   label,
                   style: TextStyle(
                     color: isToday
-                        ? AppColors.primaryLight
-                        : Colors.white.withValues(alpha: 0.65),
+                        ? AppColors.primary
+                        : AppColors.textSecondary,
                     fontSize: 10,
                     fontWeight: isToday ? FontWeight.w700 : FontWeight.w500,
                   ),
@@ -453,17 +460,17 @@ class _DassTrendChartState extends State<DassTrendChart> {
           // Clinical Reference Line: Ngưỡng Vừa Phải / Nặng (~20 điểm)
           HorizontalLine(
             y: 20,
-            color: const Color(0xFFE07A5F).withValues(alpha: 0.3),
+            color: const Color(0xFFE07A5F).withValues(alpha: 0.45),
             strokeWidth: 1,
             dashArray: [6, 4],
             label: HorizontalLineLabel(
               show: true,
               alignment: Alignment.topRight,
               padding: const EdgeInsets.only(right: 6, bottom: 2),
-              style: TextStyle(
-                color: const Color(0xFFE07A5F).withValues(alpha: 0.7),
+              style: const TextStyle(
+                color: Color(0xFFD9534F),
                 fontSize: 9,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
               ),
               labelResolver: (line) => 'Ngưỡng Nặng',
             ),
@@ -471,17 +478,17 @@ class _DassTrendChartState extends State<DassTrendChart> {
           // Clinical Reference Line: Ngưỡng Bình Thường (~9 điểm)
           HorizontalLine(
             y: 9,
-            color: const Color(0xFF7E9F9B).withValues(alpha: 0.3),
+            color: AppColors.primary.withValues(alpha: 0.4),
             strokeWidth: 1,
             dashArray: [6, 4],
             label: HorizontalLineLabel(
               show: true,
               alignment: Alignment.topRight,
               padding: const EdgeInsets.only(right: 6, bottom: 2),
-              style: TextStyle(
-                color: const Color(0xFF7E9F9B).withValues(alpha: 0.7),
+              style: const TextStyle(
+                color: AppColors.primary,
                 fontSize: 9,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
               ),
               labelResolver: (line) => 'Ngưỡng Bình thường',
             ),
@@ -491,9 +498,9 @@ class _DassTrendChartState extends State<DassTrendChart> {
       lineTouchData: LineTouchData(
         enabled: true,
         touchTooltipData: LineTouchTooltipData(
-          getTooltipColor: (_) => const Color(0xFF142229).withValues(alpha: 0.95),
-          tooltipBorder: BorderSide(
-            color: Colors.white.withValues(alpha: 0.2),
+          getTooltipColor: (_) => Colors.white,
+          tooltipBorder: const BorderSide(
+            color: AppColors.border,
             width: 1,
           ),
           getTooltipItems: (touchedSpots) {
@@ -505,14 +512,14 @@ class _DassTrendChartState extends State<DassTrendChart> {
               final dateLabel = isToday ? 'Hôm nay' : '${date.day}/${date.month}';
 
               String subscaleName = '';
-              Color textColor = Colors.white;
+              Color textColor = AppColors.textPrimary;
 
               if (spot.barIndex == 0) {
                 if (_selectedCategory != null) {
                   subscaleName = _selectedCategory == DassCategory.depression
                       ? 'Trầm cảm'
                       : (_selectedCategory == DassCategory.anxiety ? 'Lo âu' : 'Căng thẳng');
-                  textColor = spot.bar.color ?? Colors.white;
+                  textColor = spot.bar.color ?? AppColors.textPrimary;
                 } else {
                   subscaleName = 'Trầm cảm';
                   textColor = depressionColor;
@@ -530,7 +537,7 @@ class _DassTrendChartState extends State<DassTrendChart> {
                 TextStyle(
                   color: textColor,
                   fontSize: 11,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
                   height: 1.3,
                 ),
               );
@@ -552,7 +559,7 @@ class _DassTrendChartState extends State<DassTrendChart> {
       curveSmoothness: 0.50,
       preventCurveOverShooting: true,
       color: color,
-      barWidth: 3.8,
+      barWidth: 3.5,
       isStrokeCapRound: true,
       dotData: const FlDotData(show: false),
       belowBarData: BarAreaData(
@@ -561,7 +568,7 @@ class _DassTrendChartState extends State<DassTrendChart> {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            color.withValues(alpha: 0.20),
+            color.withValues(alpha: 0.16),
             color.withValues(alpha: 0.0),
           ],
         ),
@@ -587,19 +594,21 @@ class _DassTrendChartState extends State<DassTrendChart> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.04),
+        color: isImproving
+            ? AppColors.primary.withValues(alpha: 0.08)
+            : AppColors.surfaceMuted,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: isImproving
               ? AppColors.primary.withValues(alpha: 0.3)
-              : Colors.white.withValues(alpha: 0.08),
+              : AppColors.border,
         ),
       ),
       child: Row(
         children: [
           Icon(
             isImproving ? Icons.check_circle_outline_rounded : Icons.info_outline_rounded,
-            color: isImproving ? AppColors.primaryLight : const Color(0xFFF4A261),
+            color: isImproving ? AppColors.primary : const Color(0xFFE07A5F),
             size: 18,
           ),
           const SizedBox(width: 10),
@@ -608,9 +617,9 @@ class _DassTrendChartState extends State<DassTrendChart> {
               isImproving
                   ? 'Xu hướng tích cực: Căng thẳng giảm ${stressChange.abs()}đ, Lo âu giảm ${anxietyChange.abs()}đ so với mốc ban đầu.'
                   : 'Điểm số có sự dao động. Bạn nên ghi lại bối cảnh cụ thể để đối chiếu.',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 12,
-                color: Colors.white.withValues(alpha: 0.85),
+                color: AppColors.textPrimary,
                 height: 1.3,
               ),
             ),

@@ -64,50 +64,50 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
       threshold: 0.08,
       label: 'Rất khó chịu',
       accentColor: Color(0xFF7D54BA),
-      bgCenter: Color(0xFF2E1C44),
-      bgEdge: Color(0xFF181122),
+      bgCenter: Color(0xFFF3ECFA),
+      bgEdge: Color(0xFFFAF9F6),
     ),
     _MoodTier(
       threshold: 0.25,
       label: 'Khó chịu',
       accentColor: Color(0xFF4E6DC9),
-      bgCenter: Color(0xFF1D2647),
-      bgEdge: Color(0xFF121626),
+      bgCenter: Color(0xFFEFF6FF),
+      bgEdge: Color(0xFFFAF9F6),
     ),
     _MoodTier(
       threshold: 0.42,
       label: 'Hơi khó chịu',
       accentColor: Color(0xFF288CD6),
-      bgCenter: Color(0xFF192F4A),
-      bgEdge: Color(0xFF101C2B),
+      bgCenter: Color(0xFFF0F9FF),
+      bgEdge: Color(0xFFFAF9F6),
     ),
     _MoodTier(
       threshold: 0.58,
       label: 'Bình thường',
       accentColor: Color(0xFF439A86),
-      bgCenter: Color(0xFF1A332E),
-      bgEdge: Color(0xFF11201D),
+      bgCenter: Color(0xFFECFDF5),
+      bgEdge: Color(0xFFFAF9F6),
     ),
     _MoodTier(
       threshold: 0.75,
       label: 'Hơi dễ chịu',
       accentColor: Color(0xFF4CA04B),
-      bgCenter: Color(0xFF203820),
-      bgEdge: Color(0xFF142414),
+      bgCenter: Color(0xFFF0FDFA),
+      bgEdge: Color(0xFFFAF9F6),
     ),
     _MoodTier(
       threshold: 0.92,
       label: 'Dễ chịu',
       accentColor: Color(0xFFD6A018),
-      bgCenter: Color(0xFF383216),
-      bgEdge: Color(0xFF221E0E),
+      bgCenter: Color(0xFFFEF3C7),
+      bgEdge: Color(0xFFFAF9F6),
     ),
     _MoodTier(
       threshold: 1.00,
       label: 'Rất dễ chịu',
       accentColor: Color(0xFFEB6834),
-      bgCenter: Color(0xFF3D2116),
-      bgEdge: Color(0xFF24140E),
+      bgCenter: Color(0xFFFFEDD5),
+      bgEdge: Color(0xFFFAF9F6),
     ),
   ];
 
@@ -255,7 +255,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1E2428),
+        backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Row(
           children: [
@@ -268,7 +268,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
             const Text(
               'Ghi nhận thành công',
               style: TextStyle(
-                color: Colors.white,
+                color: AppColors.textPrimary,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -282,7 +282,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
             Text(
               'Dữ liệu cảm xúc "${_currentTier.label}" và ${_selectedFlags.length} triệu chứng đã được lưu vào hồ sơ tự theo dõi.',
               style: const TextStyle(
-                color: Colors.white70,
+                color: AppColors.textSecondary,
                 fontSize: 13,
                 height: 1.4,
               ),
@@ -291,12 +291,13 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.06),
+                color: AppColors.surfaceMuted,
                 borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: AppColors.border),
               ),
               child: const Text(
                 AppStrings.clinicalDisclaimer,
-                style: TextStyle(color: Colors.white38, fontSize: 11),
+                style: TextStyle(color: AppColors.textMuted, fontSize: 11),
               ),
             ),
           ],
@@ -357,9 +358,9 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                         const Text(
                           'Cảm xúc',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         const SizedBox(height: 2),
@@ -409,7 +410,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
             'Chọn cảm giác của bạn\nngay lúc này',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.white,
+              color: AppColors.textPrimary,
               fontSize: 24,
               fontWeight: FontWeight.bold,
               height: 1.3,
@@ -436,7 +437,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
             tier.label,
             key: ValueKey(tier.label),
             style: const TextStyle(
-              color: Colors.white,
+              color: AppColors.textPrimary,
               fontSize: 26,
               fontWeight: FontWeight.bold,
             ),
@@ -523,7 +524,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                       Text(
                         'Cảm xúc: ${tier.label}',
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
                         ),
@@ -537,7 +538,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                 'Năng lượng & Dấu hiệu thực thể',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                 ),
@@ -546,7 +547,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
               const Text(
                 'Chọn mức năng lượng và các phản ứng cơ thể bạn cảm nhận',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white54, fontSize: 13),
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
               ),
               const SizedBox(height: 24),
               _buildGlassSection(
@@ -619,7 +620,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                     const Text(
                       'Chạm nhanh các phản ứng bạn gặp hôm nay để hỗ trợ buổi làm việc với chuyên gia:',
                       style: TextStyle(
-                        color: Colors.white60,
+                        color: AppColors.textSecondary,
                         fontSize: 12,
                         height: 1.3,
                       ),
@@ -1010,9 +1011,16 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.07),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+        border: Border.all(color: AppColors.border, width: 1.2),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1023,7 +1031,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
               Text(
                 title,
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
                 ),
@@ -1053,20 +1061,21 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected
-              ? tier.accentColor.withValues(alpha: 0.28)
-              : Colors.white.withValues(alpha: 0.08),
+              ? tier.accentColor.withValues(alpha: 0.12)
+              : AppColors.surfaceMuted,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected
                 ? tier.accentColor
-                : Colors.white.withValues(alpha: 0.14),
+                : AppColors.border,
             width: isSelected ? 1.5 : 1.0,
           ),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: tier.accentColor.withValues(alpha: 0.3),
-                    blurRadius: 10,
+                    color: tier.accentColor.withValues(alpha: 0.15),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
                   ),
                 ]
               : null,
@@ -1077,15 +1086,15 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
             Icon(
               icon,
               size: 14,
-              color: isSelected ? Colors.white : Colors.white60,
+              color: isSelected ? tier.accentColor : AppColors.textSecondary,
             ),
             const SizedBox(width: 6),
             Text(
               label,
               style: TextStyle(
-                color: isSelected ? Colors.white : Colors.white70,
+                color: isSelected ? tier.accentColor : AppColors.textPrimary,
                 fontSize: 12,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
               ),
             ),
           ],
@@ -1124,35 +1133,31 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
         TextField(
           controller: controller,
           onChanged: _checkCrisisKeywords,
-          style: const TextStyle(color: Colors.white, fontSize: 13),
+          style: const TextStyle(color: AppColors.textPrimary, fontSize: 13),
           maxLines: 2,
           minLines: 1,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: TextStyle(
-              color: Colors.white.withValues(alpha: 0.3),
+            hintStyle: const TextStyle(
+              color: AppColors.textMuted,
               fontSize: 12,
             ),
             filled: true,
-            fillColor: Colors.white.withValues(alpha: isBalanced ? 0.10 : 0.05),
+            fillColor: AppColors.surfaceMuted,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 14,
               vertical: 10,
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: isBalanced
-                    ? tier.accentColor.withValues(alpha: 0.4)
-                    : Colors.white.withValues(alpha: 0.12),
+              borderSide: const BorderSide(
+                color: AppColors.border,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: isBalanced
-                    ? tier.accentColor.withValues(alpha: 0.4)
-                    : Colors.white.withValues(alpha: 0.12),
+              borderSide: const BorderSide(
+                color: AppColors.border,
               ),
             ),
             focusedBorder: OutlineInputBorder(
@@ -1283,10 +1288,18 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
         height: 44,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.16),
+          color: Colors.white,
           shape: BoxShape.circle,
+          border: Border.all(color: AppColors.border),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
-        child: Icon(icon, color: Colors.white, size: 18),
+        child: Icon(icon, color: AppColors.textPrimary, size: 18),
       ),
     );
   }

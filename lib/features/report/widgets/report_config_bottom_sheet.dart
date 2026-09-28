@@ -84,15 +84,15 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
       height: MediaQuery.of(context).size.height * 0.85,
       padding: EdgeInsets.fromLTRB(20, 16, 20, 20 + keyboardPadding),
       decoration: BoxDecoration(
-        color: const Color(0xFF142026),
+        color: Colors.white,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.12),
+          color: AppColors.border,
           width: 1.2,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.6),
+            color: Colors.black.withValues(alpha: 0.12),
             blurRadius: 36,
             offset: const Offset(0, -10),
           ),
@@ -107,7 +107,7 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.25),
+                color: AppColors.border,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -118,24 +118,24 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
+              const Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Tóm Tắt & Cấu Hình Báo Cáo',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Text(
                       'Định hướng lâm sàng & tùy chỉnh quyền riêng tư trước khi xuất file',
                       style: TextStyle(
                         fontSize: 11,
-                        color: Colors.white.withValues(alpha: 0.6),
+                        color: AppColors.textSecondary,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -145,7 +145,7 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
               ),
               IconButton(
                 onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.close_rounded, color: Colors.white60),
+                icon: const Icon(Icons.close_rounded, color: AppColors.textMuted),
               ),
             ],
           ),
@@ -177,7 +177,7 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
                       contentPadding: EdgeInsets.zero,
                       value: _isAnonymous,
                       onChanged: (val) => setState(() => _isAnonymous = val),
-                      activeColor: AppColors.primaryLight,
+                      activeColor: AppColors.primary,
                       title: Text(
                         _isAnonymous
                             ? 'Đang bật: Hồ sơ ẩn danh (MT-89421)'
@@ -185,16 +185,16 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
                         style: const TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                         ),
                       ),
                       subtitle: Text(
                         _isAnonymous
                             ? 'Thông tin danh tính cá nhân sẽ được ẩn hoàn toàn trên file PDF.'
                             : 'Họ tên tài khoản sẽ được in trên phần đầu trang báo cáo.',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 11,
-                          color: Colors.white.withValues(alpha: 0.6),
+                          color: AppColors.textSecondary,
                         ),
                       ),
                     ),
@@ -218,13 +218,13 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
                               padding: const EdgeInsets.symmetric(vertical: 8),
                               decoration: BoxDecoration(
                                 color: isSel
-                                    ? AppColors.primary.withValues(alpha: 0.4)
-                                    : Colors.white.withValues(alpha: 0.05),
+                                    ? AppColors.primary.withValues(alpha: 0.15)
+                                    : Colors.white,
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
                                   color: isSel
-                                      ? AppColors.primaryLight
-                                      : Colors.white.withValues(alpha: 0.1),
+                                      ? AppColors.primary
+                                      : AppColors.border,
                                 ),
                               ),
                               alignment: Alignment.center,
@@ -235,7 +235,7 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
                                   fontWeight: isSel
                                       ? FontWeight.w700
                                       : FontWeight.w500,
-                                  color: isSel ? Colors.white : Colors.white60,
+                                  color: isSel ? AppColors.primary : AppColors.textSecondary,
                                 ),
                               ),
                             ),
@@ -293,7 +293,7 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
                                 height: 20,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  color: AppColors.primaryLight,
+                                  color: AppColors.primary,
                                 ),
                               ),
                             ),
@@ -301,14 +301,14 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
                         }
 
                         if (journals.isEmpty) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 12.0),
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 12.0),
                             child: Center(
                               child: Text(
                                 'Chưa có trích đoạn nhật ký CBT nào được ghi nhận.\nBạn có thể hoàn thành form CBT 3 bước ở màn hình "Cảm xúc".',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.5),
+                                  color: AppColors.textSecondary,
                                   fontSize: 12,
                                   height: 1.4,
                                 ),
@@ -326,14 +326,12 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
                               margin: const EdgeInsets.only(bottom: 8),
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.03),
+                                color: Colors.white,
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
                                   color: isChecked
-                                      ? AppColors.primaryLight.withValues(
-                                          alpha: 0.5,
-                                        )
-                                      : Colors.white.withValues(alpha: 0.08),
+                                      ? AppColors.primary
+                                      : AppColors.border,
                                 ),
                               ),
                               child: Row(
@@ -341,8 +339,8 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
                                 children: [
                                   Checkbox(
                                     value: isChecked,
-                                    activeColor: AppColors.primaryLight,
-                                    checkColor: AppColors.darkBg,
+                                    activeColor: AppColors.primary,
+                                    checkColor: Colors.white,
                                     onChanged: (val) {
                                       setState(() {
                                         if (val == true) {
@@ -364,32 +362,30 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
                                             Container(
                                               padding:
                                                   const EdgeInsets.symmetric(
-                                                    horizontal: 6,
-                                                    vertical: 2,
-                                                  ),
+                                                horizontal: 6,
+                                                vertical: 2,
+                                              ),
                                               decoration: BoxDecoration(
-                                                color: Colors.white.withValues(
-                                                  alpha: 0.08,
-                                                ),
+                                                color: AppColors.surfaceMuted,
                                                 borderRadius:
                                                     BorderRadius.circular(6),
+                                                border: Border.all(color: AppColors.border),
                                               ),
                                               child: Text(
                                                 journal.contextTag,
                                                 style: const TextStyle(
                                                   fontSize: 10,
-                                                  color: Colors.white70,
+                                                  color: AppColors.textSecondary,
+                                                  fontWeight: FontWeight.w500,
                                                 ),
                                               ),
                                             ),
                                             const SizedBox(width: 6),
                                             Text(
                                               journal.dateLabel,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 fontSize: 11,
-                                                color: Colors.white.withValues(
-                                                  alpha: 0.5,
-                                                ),
+                                                color: AppColors.textMuted,
                                               ),
                                             ),
                                           ],
@@ -400,17 +396,15 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
                                           style: const TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.w600,
-                                            color: Colors.white,
+                                            color: AppColors.textPrimary,
                                           ),
                                         ),
                                         const SizedBox(height: 2),
                                         Text(
                                           'Suy nghĩ: ${journal.automaticThought}',
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 11,
-                                            color: Colors.white.withValues(
-                                              alpha: 0.7,
-                                            ),
+                                            color: AppColors.textSecondary,
                                           ),
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
@@ -437,32 +431,33 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
                     child: TextField(
                       controller: _noteController,
                       maxLines: 3,
-                      style: const TextStyle(fontSize: 12, color: Colors.white),
+                      style: const TextStyle(fontSize: 12, color: AppColors.textPrimary),
                       decoration: InputDecoration(
                         hintText:
                             'Nhập ghi chú hoặc câu hỏi muốn gửi chuyên gia...',
-                        hintStyle: TextStyle(
+                        hintStyle: const TextStyle(
                           fontSize: 12,
-                          color: Colors.white.withValues(alpha: 0.3),
+                          color: AppColors.textMuted,
                         ),
                         filled: true,
-                        fillColor: Colors.white.withValues(alpha: 0.04),
+                        fillColor: Colors.white,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: Colors.white.withValues(alpha: 0.1),
+                          borderSide: const BorderSide(
+                            color: AppColors.border,
                           ),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: Colors.white.withValues(alpha: 0.1),
+                          borderSide: const BorderSide(
+                            color: AppColors.border,
                           ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: AppColors.primaryLight,
+                            color: AppColors.primary,
+                            width: 1.5,
                           ),
                         ),
                       ),
@@ -486,13 +481,13 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primaryLight,
-                foregroundColor: AppColors.darkBg,
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
-                elevation: 4,
+                elevation: 2,
               ),
             ),
           ),
@@ -509,9 +504,9 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.04),
+        color: AppColors.surfaceMuted,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+        border: Border.all(color: AppColors.border),
       ),
       child: Material(
         color: Colors.transparent,
@@ -523,15 +518,15 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
-                color: Colors.white,
+                color: AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 2),
             Text(
               subtitle,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 11,
-                color: Colors.white.withValues(alpha: 0.55),
+                color: AppColors.textSecondary,
               ),
             ),
             const SizedBox(height: 12),
@@ -555,13 +550,13 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
           Expanded(
             child: Text(
               label,
-              style: const TextStyle(fontSize: 12, color: Colors.white),
+              style: const TextStyle(fontSize: 12, color: AppColors.textPrimary),
             ),
           ),
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: AppColors.primaryLight,
+            activeColor: AppColors.primary,
           ),
         ],
       ),
@@ -572,10 +567,10 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0xFF1B3B36).withValues(alpha: 0.45),
+        color: AppColors.primary.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: AppColors.primaryLight.withValues(alpha: 0.3),
+          color: AppColors.primary.withValues(alpha: 0.25),
         ),
       ),
       child: Row(
@@ -584,34 +579,34 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.3),
+              color: AppColors.primary.withValues(alpha: 0.15),
               shape: BoxShape.circle,
             ),
             child: const Icon(
               Icons.lightbulb_outline_rounded,
-              color: AppColors.primaryLight,
+              color: AppColors.primary,
               size: 18,
             ),
           ),
           const SizedBox(width: 12),
-          Expanded(
+          const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Giá Trị Của Báo Cáo Trước Trị Liệu',
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.primaryLight,
+                    color: AppColors.primary,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   'Giúp tiết kiệm 20–30 phút thu thập bệnh sử ban đầu, giúp chuyên gia tâm lý nắm bắt ngay các vòng lặp triệu chứng thể chất, chỉ số DASS-21 và bối cảnh cốt lõi.',
                   style: TextStyle(
                     fontSize: 11,
-                    color: Colors.white.withValues(alpha: 0.8),
+                    color: AppColors.textPrimary,
                     height: 1.4,
                   ),
                 ),
@@ -627,9 +622,9 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.04),
+        color: AppColors.surfaceMuted,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -639,7 +634,7 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w700,
-              color: Colors.white,
+              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 10),
@@ -688,7 +683,7 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
             isEnabled
                 ? Icons.check_circle_rounded
                 : Icons.remove_circle_outline_rounded,
-            color: isEnabled ? AppColors.primaryLight : Colors.white24,
+            color: isEnabled ? AppColors.primary : AppColors.textMuted,
             size: 15,
           ),
           const SizedBox(width: 8),
@@ -701,14 +696,14 @@ class _ReportConfigBottomSheetState extends State<ReportConfigBottomSheet> {
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
-                    color: isEnabled ? Colors.white : Colors.white38,
+                    color: isEnabled ? AppColors.textPrimary : AppColors.textMuted,
                   ),
                 ),
                 Text(
                   subtitle,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 10,
-                    color: Colors.white.withValues(alpha: 0.5),
+                    color: AppColors.textSecondary,
                   ),
                 ),
               ],

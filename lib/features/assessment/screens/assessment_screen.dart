@@ -80,33 +80,33 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
     final shouldExit = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xFF16252C),
+        backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text(
           'Dừng làm bài đánh giá?',
           style: TextStyle(
-            color: Colors.white,
+            color: AppColors.textPrimary,
             fontSize: 17,
             fontWeight: FontWeight.bold,
           ),
         ),
         content: const Text(
           'Tiến trình làm bài hiện tại sẽ không được lưu nếu bạn quay lại trang chủ.',
-          style: TextStyle(color: Colors.white70, fontSize: 14),
+          style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
             child: const Text(
               'Tiếp tục làm',
-              style: TextStyle(color: AppColors.primaryLight),
+              style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600),
             ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
             child: const Text(
               'Thoát về trang chủ',
-              style: TextStyle(color: AppColors.accentCoral),
+              style: TextStyle(color: AppColors.accentCoral, fontWeight: FontWeight.w600),
             ),
           ),
         ],
@@ -207,15 +207,10 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
         _handleBack();
       },
       child: Scaffold(
-        backgroundColor: AppColors.darkBg,
+        backgroundColor: AppColors.background,
         body: Container(
           decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Color(0xFF16252C), Color(0xFF0E1418), Color(0xFF0A0E11)],
-              stops: [0.0, 0.45, 1.0],
-            ),
+            color: AppColors.background,
           ),
           child: SafeArea(
             child: Padding(
@@ -236,12 +231,20 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                           height: 44,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.1),
+                            color: Colors.white,
                             shape: BoxShape.circle,
+                            border: Border.all(color: AppColors.border),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.04),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
                           ),
                           child: const Icon(
                             Icons.arrow_back_ios_new_rounded,
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             size: 18,
                           ),
                         ),
@@ -251,16 +254,16 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                         const Text(
                           'Đánh giá DASS-21',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         const SizedBox(height: 2),
                         Text(
                           'Câu ${_currentIndex + 1} / ${Dass21Data.questions.length}',
                           style: const TextStyle(
-                            color: AppColors.primaryLight,
+                            color: AppColors.primary,
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
                           ),
@@ -275,7 +278,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                         height: 44,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: AppColors.accentCoral.withValues(alpha: 0.15),
+                          color: AppColors.accentCoral.withValues(alpha: 0.12),
                           shape: BoxShape.circle,
                           border: Border.all(
                             color: AppColors.accentCoral.withValues(
@@ -298,18 +301,19 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'Tiến trình đánh giá',
                       style: TextStyle(
-                        fontSize: 11,
-                        color: Colors.white.withValues(alpha: 0.5),
+                        fontSize: 11.5,
+                        color: AppColors.textSecondary,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                     Text(
                       '${(progress * 100).toInt()}%',
                       style: const TextStyle(
-                        fontSize: 11,
-                        color: AppColors.primaryLight,
+                        fontSize: 12,
+                        color: AppColors.primary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -320,30 +324,31 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                   borderRadius: BorderRadius.circular(4),
                   child: LinearProgressIndicator(
                     value: progress,
-                    backgroundColor: Colors.white.withValues(alpha: 0.1),
+                    backgroundColor: AppColors.surfaceMuted,
                     valueColor: const AlwaysStoppedAnimation(
-                      AppColors.primaryLight,
+                      AppColors.primary,
                     ),
                     minHeight: 5,
                   ),
                 ),
                 const SizedBox(height: 24),
 
-                // Question Plate Card (Dark Frosted Glass)
+                // Question Plate Card
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.07),
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(22),
                     border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.14),
+                      color: AppColors.border,
+                      width: 1.2,
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.3),
-                        blurRadius: 20,
-                        offset: const Offset(0, 6),
+                        color: AppColors.primary.withValues(alpha: 0.05),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
                       ),
                     ],
                   ),
@@ -359,10 +364,10 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: catColor.withValues(alpha: 0.2),
+                              color: catColor.withValues(alpha: 0.12),
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
-                                color: catColor.withValues(alpha: 0.4),
+                                color: catColor.withValues(alpha: 0.3),
                               ),
                             ),
                             child: Text(
@@ -374,11 +379,11 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                               ),
                             ),
                           ),
-                          Text(
+                          const Text(
                             'Trong 7 ngày qua',
                             style: TextStyle(
-                              fontSize: 11,
-                              color: Colors.white.withValues(alpha: 0.4),
+                              fontSize: 11.5,
+                              color: AppColors.textMuted,
                             ),
                           ),
                         ],
@@ -390,10 +395,10 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                           question.text,
                           key: ValueKey(question.id),
                           style: const TextStyle(
-                            fontSize: 19,
+                            fontSize: 18.5,
                             fontWeight: FontWeight.bold,
                             height: 1.45,
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                           ),
                         ),
                       ),
@@ -420,26 +425,24 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                         ),
                         decoration: BoxDecoration(
                           color: isSelected
-                              ? AppColors.primary.withValues(alpha: 0.35)
-                              : Colors.white.withValues(alpha: 0.06),
+                              ? AppColors.primary.withValues(alpha: 0.1)
+                              : Colors.white,
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
                             color: isSelected
-                                ? AppColors.primaryLight
-                                : Colors.white.withValues(alpha: 0.12),
+                                ? AppColors.primary
+                                : AppColors.border,
                             width: isSelected ? 1.8 : 1.0,
                           ),
-                          boxShadow: isSelected
-                              ? [
-                                  BoxShadow(
-                                    color: AppColors.primary.withValues(
-                                      alpha: 0.4,
-                                    ),
-                                    blurRadius: 14,
-                                    offset: const Offset(0, 4),
-                                  ),
-                                ]
-                              : null,
+                          boxShadow: [
+                            BoxShadow(
+                              color: isSelected
+                                  ? AppColors.primary.withValues(alpha: 0.15)
+                                  : Colors.black.withValues(alpha: 0.03),
+                              blurRadius: isSelected ? 10 : 6,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
                         ),
                         child: Row(
                           children: [
@@ -450,8 +453,8 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: isSelected
-                                    ? AppColors.primaryLight
-                                    : Colors.white.withValues(alpha: 0.1),
+                                    ? AppColors.primary
+                                    : AppColors.surfaceMuted,
                               ),
                               child: isSelected
                                   ? const Icon(
@@ -461,12 +464,10 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                                     )
                                   : Text(
                                       '$index',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.white.withValues(
-                                          alpha: 0.6,
-                                        ),
+                                        color: AppColors.textSecondary,
                                       ),
                                     ),
                             ),
@@ -480,8 +481,8 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                                       ? FontWeight.bold
                                       : FontWeight.w500,
                                   color: isSelected
-                                      ? Colors.white
-                                      : Colors.white70,
+                                      ? AppColors.primaryDark
+                                      : AppColors.textPrimary,
                                 ),
                               ),
                             ),
@@ -501,11 +502,11 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                       icon: const Icon(
                         Icons.arrow_back_rounded,
                         size: 14,
-                        color: Colors.white54,
+                        color: AppColors.textSecondary,
                       ),
                       label: const Text(
                         'Quay lại câu trước',
-                        style: TextStyle(color: Colors.white54, fontSize: 12),
+                        style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
                       ),
                     ),
                   ),

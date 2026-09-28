@@ -44,15 +44,10 @@ class AssessmentResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.darkBg,
+      backgroundColor: AppColors.background,
       body: Container(
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF16252C), Color(0xFF0E1418), Color(0xFF0A0E11)],
-            stops: [0.0, 0.45, 1.0],
-          ),
+          color: AppColors.background,
         ),
         child: SafeArea(
           child: ListView(
@@ -65,7 +60,7 @@ class AssessmentResultScreen extends StatelessWidget {
                   const Text(
                     'Kết Quả Tự Đánh Giá',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       letterSpacing: -0.5,
@@ -79,7 +74,7 @@ class AssessmentResultScreen extends StatelessWidget {
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.accentCoral.withValues(alpha: 0.15),
+                        color: AppColors.accentCoral.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
                           color: AppColors.accentCoral.withValues(alpha: 0.35),
@@ -112,11 +107,19 @@ class AssessmentResultScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.07),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.12),
+                    color: AppColors.border,
+                    width: 1.2,
                   ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primary.withValues(alpha: 0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,14 +129,12 @@ class AssessmentResultScreen extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: AppColors.primaryLight.withValues(
-                              alpha: 0.2,
-                            ),
+                            color: AppColors.primary.withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: const Icon(
                             Icons.assignment_turned_in_rounded,
-                            color: AppColors.primaryLight,
+                            color: AppColors.primary,
                             size: 20,
                           ),
                         ),
@@ -143,17 +144,17 @@ class AssessmentResultScreen extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 10),
-                    Text(
+                    const Text(
                       'Kết quả này phản ánh mức độ cảm nhận của bạn trong 7 ngày qua và đã được lưu trữ để đưa vào Bản báo cáo trước trị liệu.',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.white.withValues(alpha: 0.65),
+                        color: AppColors.textSecondary,
                         height: 1.4,
                       ),
                     ),
@@ -167,7 +168,7 @@ class AssessmentResultScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: AppColors.accentCoral.withValues(alpha: 0.12),
+                    color: AppColors.accentCoral.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(18),
                     border: Border.all(
                       color: AppColors.accentCoral.withValues(alpha: 0.3),
@@ -198,7 +199,7 @@ class AssessmentResultScreen extends StatelessWidget {
                               'Một số chỉ số đang ở mức cần lưu tâm. Bạn có thể cân nhắc đặt lịch với chuyên viên tâm lý hoặc liên hệ đường dây hỗ trợ.',
                               style: TextStyle(
                                 fontSize: 11,
-                                color: Colors.white.withValues(alpha: 0.8),
+                                color: AppColors.textSecondary.withValues(alpha: 0.9),
                                 height: 1.3,
                               ),
                             ),
@@ -244,27 +245,27 @@ class AssessmentResultScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.04),
+                  color: AppColors.surfaceMuted,
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.08),
+                    color: AppColors.border,
                   ),
                 ),
-                child: Row(
+                child: const Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.gavel_rounded,
                       size: 16,
-                      color: Colors.white38,
+                      color: AppColors.textMuted,
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         AppStrings.clinicalDisclaimer,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 11,
-                          color: Colors.white54,
+                          color: AppColors.textSecondary,
                           height: 1.4,
                         ),
                       ),
@@ -281,6 +282,7 @@ class AssessmentResultScreen extends StatelessWidget {
                   onPressed: () => _returnHome(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
                     ),
@@ -334,9 +336,16 @@ class AssessmentResultScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.06),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+        border: Border.all(color: AppColors.border, width: 1.2),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -349,7 +358,7 @@ class AssessmentResultScreen extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                 ),
               ),
               Container(
@@ -358,9 +367,9 @@ class AssessmentResultScreen extends StatelessWidget {
                   vertical: 4,
                 ),
                 decoration: BoxDecoration(
-                  color: accentColor.withValues(alpha: 0.22),
+                  color: accentColor.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: accentColor.withValues(alpha: 0.5)),
+                  border: Border.all(color: accentColor.withValues(alpha: 0.4)),
                 ),
                 child: Text(
                   severity,
@@ -376,9 +385,9 @@ class AssessmentResultScreen extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             subtitle,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 11,
-              color: Colors.white.withValues(alpha: 0.5),
+              color: AppColors.textSecondary,
               height: 1.3,
             ),
           ),
@@ -391,7 +400,7 @@ class AssessmentResultScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(6),
                   child: LinearProgressIndicator(
                     value: fraction,
-                    backgroundColor: Colors.white.withValues(alpha: 0.08),
+                    backgroundColor: AppColors.surfaceMuted,
                     valueColor: AlwaysStoppedAnimation(accentColor),
                     minHeight: 8,
                   ),
@@ -403,7 +412,7 @@ class AssessmentResultScreen extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                 ),
               ),
             ],
