@@ -5,18 +5,20 @@ class StateOfMindFlower extends StatelessWidget {
   final double moodValue; // 0.0 (Rất khó chịu) -> 1.0 (Rất dễ chịu)
   final Color accentColor;
   final double pulseAnimation; // 0.0 -> 1.0 for subtle breathing pulse
+  final double size;
 
   const StateOfMindFlower({
     super.key,
     required this.moodValue,
     required this.accentColor,
     this.pulseAnimation = 0.0,
+    this.size = 295.0,
   });
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      size: const Size(250, 250),
+      size: Size(size, size),
       painter: _AppleStateOfMindPainter(
         moodValue: moodValue.clamp(0.0, 1.0),
         accentColor: accentColor,
