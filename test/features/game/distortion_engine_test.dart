@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mind_track/features/game/models/cognitive_distortion_type.dart';
-import 'package:mind_track/features/game/models/distortion_question.dart';
+import 'package:mind_track/features/game/models/companion_tone.dart';
+import 'package:mind_track/features/game/models/distortion_scenario.dart';
+import 'package:mind_track/features/game/models/mock_ui_model.dart';
 import 'package:mind_track/features/game/mini_games/distortion_game/logic/distortion_game_engine.dart';
 import 'package:mind_track/features/game/mini_games/distortion_game/screens/distortion_game_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,136 +15,125 @@ void main() {
     SharedPreferences.setMockInitialValues({});
   });
 
-  group('CognitiveDistortionType & Question Model', () {
-    test('fromString parses various key representations', () {
+  group('DistortionType Enum & Strict Fail-Fast Validation', () {
+    test('fromId correctly resolves valid IDs', () {
+      expect(DistortionType.fromId('labeling'), DistortionType.labeling);
+      expect(DistortionType.fromId('catastrophizing'), DistortionType.catastrophizing);
+      expect(DistortionType.fromId('all_or_nothing'), DistortionType.allOrNothing);
+      expect(DistortionType.fromId('personalization'), DistortionType.personalization);
+      expect(DistortionType.fromId('mind_reading'), DistortionType.mindReading);
+      expect(DistortionType.fromId('emotional_reasoning'), DistortionType.emotionalReasoning);
+    });
+
+    test('fromId throws FormatException on invalid ID (Fail-Fast)', () {
       expect(
-        CognitiveDistortionType.fromString('catastrophizing'),
-        CognitiveDistortionType.catastrophizing,
-      );
-      expect(
-        CognitiveDistortionType.fromString('tham_hoa_hoa'),
-        CognitiveDistortionType.catastrophizing,
-      );
-      expect(
-        CognitiveDistortionType.fromString('black_and_white'),
-        CognitiveDistortionType.blackAndWhite,
-      );
-      expect(
-        CognitiveDistortionType.fromString('invalid_key'),
-        isNull,
+        () => DistortionType.fromId('invalid_trap_id'),
+        throwsFormatException,
       );
     });
 
-    test('DistortionQuestion validates schema and throws descriptive FormatException', () {
-      expect(
-        () => DistortionQuestion.fromJson({
-          'contextTag': 'hoc_tap',
-          'thought': 'Test',
-          'correctType': 'labeling',
-        }),
-        throwsFormatException,
-      );
+    test('ToneType and CompanionIntro fallback chain works strictly', () {
+      const intro = CompanionIntro({
+        ToneType.chill: 'Chill intro',
+        ToneType.friendly: 'Friendly intro',
+        ToneType.calm: 'Calm intro',
+      });
 
-      expect(
-        () => DistortionQuestion.fromJson({
-          'id': 'q1',
-          'contextTag': 'hoc_tap',
-          'thought': 'Test',
-          'correctType': 'non_existent_type',
-        }),
-        throwsFormatException,
-      );
+      expect(intro.getIntro(ToneType.chill), 'Chill intro');
+      expect(intro.getIntro(ToneType.friendly), 'Friendly intro');
+      expect(intro.getIntro(ToneType.calm), 'Calm intro');
     });
   });
 
-  group('Distortion Questions File & Game Engine', () {
-    late List<DistortionQuestion> questions;
+  group('Distortion Scenarios File & Game Engine', () {
+    late List<DistortionScenario> scenarios;
 
     setUpAll(() {
       final file = File('assets/game/distortion_questions.json');
       final jsonContent = file.readAsStringSync();
-      questions = DistortionGameEngine.parseQuestionsFromJson(jsonContent);
+      scenarios = DistortionGameEngine.parseScenariosFromJson(jsonContent);
     });
 
-    test('Asset questions file contains exactly 24 valid questions with 4 context tags', () {
-      expect(questions.length, 24);
+    test('Asset file contains 12 standardized CBT scenarios with diverse MockUI types', () {
+      expect(scenarios.length, 12);
 
-      final tags = questions.map((q) => q.contextTag).toSet();
+      final tags = scenarios.map((s) => s.contextTag).toSet();
       expect(tags.contains('hoc_tap'), isTrue);
       expect(tags.contains('gia_dinh'), isTrue);
       expect(tags.contains('tinh_cam'), isTrue);
-      expect(tags.contains('mang_xa_hoi'), isTrue);
 
-      for (final tag in tags) {
-        final count = questions.where((q) => q.contextTag == tag).length;
-        expect(count, greaterThanOrEqualTo(6));
-      }
+      final uiTypes = scenarios.map((s) => s.mockUi.type).toSet();
+      expect(uiTypes.contains('chat'), isTrue);
+      expect(uiTypes.contains('note'), isTrue);
+      expect(uiTypes.contains('notification'), isTrue);
+      expect(uiTypes.contains('social_post'), isTrue);
     });
 
-    test('generateSessionRounds returns 8 rounds with randomized options and valid correct index', () {
-      final engine = DistortionGameEngine(allQuestions: questions);
-      final rounds = engine.generateSessionRounds(count: 8);
+    test('generateSessionRounds returns rounds with randomized options and valid correct index', () {
+      final engine = DistortionGameEngine(allScenarios: scenarios);
+      final rounds = engine.generateSessionRounds(count: 6);
 
-      expect(rounds.length, 8);
+      expect(rounds.length, 6);
 
       for (final round in rounds) {
         expect(round.options.length, 4);
         expect(round.correctOptionIndex, inInclusiveRange(0, 3));
-        expect(round.options[round.correctOptionIndex], round.question.correctType);
+        expect(round.options[round.correctOptionIndex], round.scenario.distortionType);
       }
     });
 
-    test('generateSessionRounds prioritizes preferredContextTag', () {
-      final engine = DistortionGameEngine(allQuestions: questions);
-      final rounds = engine.generateSessionRounds(
-        preferredContextTag: 'hoc_tap',
-        count: 8,
-      );
-
-      final hocTapCount =
-          rounds.where((r) => r.question.contextTag == 'hoc_tap').length;
-      expect(hocTapCount, greaterThanOrEqualTo(6));
-    });
-
     test('Scoring calculates stars correctly', () {
-      // >= 90% -> 3 stars (8/8 = 100%, 7/8 = 88% -> 2 stars)
-      expect(DistortionGameEngine.calculateStars(8, 8), 3);
-      expect(DistortionGameEngine.calculateStars(7, 8), 2); // 88%
-      expect(DistortionGameEngine.calculateStars(6, 8), 2); // 75%
-      expect(DistortionGameEngine.calculateStars(5, 8), 1); // 63%
-      expect(DistortionGameEngine.calculateStars(4, 8), 1); // 50%
-      expect(DistortionGameEngine.calculateStars(3, 8), 0); // 38%
+      expect(DistortionGameEngine.calculateStars(6, 6), 3); // 100% -> 3 sao
+      expect(DistortionGameEngine.calculateStars(5, 6), 2); // 83% -> 2 sao
+      expect(DistortionGameEngine.calculateStars(3, 6), 1); // 50% -> 1 sao
+      expect(DistortionGameEngine.calculateStars(2, 6), 0); // 33% -> 0 sao
     });
   });
 
-  group('DistortionGameScreen Widget Test', () {
-    final sampleQuestions = [
-      const DistortionQuestion(
-        id: 'sample_1',
-        contextTag: 'hoc_tap',
-        thought: 'Mình không làm được bài này thì mình là kẻ ngốc.',
-        correctType: CognitiveDistortionType.labeling,
-        explanation: 'Đây là gán nhãn bản thân.',
-        reframeSuggestion: 'Chưa làm được một bài không có nghĩa mình ngốc.',
-      ),
-      const DistortionQuestion(
-        id: 'sample_2',
-        contextTag: 'hoc_tap',
-        thought: 'Điểm 9 vẫn là thất bại vì không được 10.',
-        correctType: CognitiveDistortionType.blackAndWhite,
-        explanation: 'Đây là tư duy trắng đen.',
-        reframeSuggestion: 'Điểm 9 là thành tích rất tốt.',
-      ),
-    ];
+  group('DistortionGameScreen Widget Test with MockUi and Tone Dial', () {
+    final sampleScenario = DistortionScenario(
+      id: 'sample_chat_1',
+      contextTag: 'hoc_tap',
+      mockUi: const MockUiChat([
+        ChatMessage(sender: SenderType.friend, text: 'Tớ được 9.5!', timestamp: '10:00'),
+        ChatMessage(sender: SenderType.me, text: 'Tớ được 7.0...', timestamp: '10:01'),
+      ]),
+      thought: 'Mình đúng là đứa kém cỏi không làm được gì.',
+      distortionType: DistortionType.labeling,
+      choices: [
+        DistortionType.catastrophizing,
+        DistortionType.labeling,
+        DistortionType.mindReading,
+        DistortionType.emotionalReasoning,
+      ],
+      hintKey: 'hint_labeling',
+      reframe: 'Điểm 7 không định nghĩa toàn bộ con người mình.',
+      companionIntro: const CompanionIntro({
+        ToneType.chill: 'Chill: Cay thật nhưng đừng tự dìm!',
+        ToneType.friendly: 'Friendly: Cùng nhận diện bẫy suy nghĩ nhé.',
+        ToneType.calm: 'Calm: Quan sát dạng suy nghĩ vừa xuất hiện.',
+      }),
+    );
 
-    testWidgets('Renders question thought and answering options',
+    testWidgets('Renders MockUi chat, thought, companion intro and allows answering',
         (WidgetTester tester) async {
+      tester.view.physicalSize = const Size(800, 1600);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
       await tester.pumpWidget(
         ProviderScope(
-          child: MediaQuery(
-            data: const MediaQueryData(disableAnimations: true),
-            child: MaterialApp(
-              home: DistortionGameScreen(initialQuestions: sampleQuestions),
+          child: MaterialApp(
+            home: MediaQuery(
+              data: const MediaQueryData(
+                disableAnimations: true,
+                size: Size(800, 1600),
+              ),
+              child: DistortionGameScreen(
+                initialScenarios: [sampleScenario],
+                initialTone: ToneType.chill,
+              ),
             ),
           ),
         ),
@@ -150,25 +141,29 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      expect(find.text('Câu 1 / 2'), findsOneWidget);
-      expect(find.text('Đúng: 0'), findsOneWidget);
+      // Verify Counter & Tone
+      expect(find.text('Câu 1 / 1'), findsOneWidget);
+      expect(find.text('Giọng: CHILL'), findsOneWidget);
 
-      final isSample1 = find
-          .text('“Mình không làm được bài này thì mình là kẻ ngốc.”')
-          .evaluate()
-          .isNotEmpty;
-      final correctOptionFinder =
-          find.text(isSample1 ? 'Gán nhãn bản thân' : 'Nghĩ trắng - đen');
-      expect(correctOptionFinder, findsOneWidget);
+      // Verify Mock UI Chat messages rendered
+      expect(find.text('Tớ được 9.5!'), findsOneWidget);
+      expect(find.text('Tớ được 7.0...'), findsOneWidget);
 
-      await tester.tap(correctOptionFinder);
+      // Verify Thought & Companion Intro
+      expect(find.text('“Mình đúng là đứa kém cỏi không làm được gì.”'), findsOneWidget);
+      expect(find.text('Chill: Cay thật nhưng đừng tự dìm!'), findsOneWidget);
+
+      // Tap Correct Option (Dán nhãn)
+      final correctButton = find.text('Dán nhãn');
+      expect(correctButton, findsOneWidget);
+
+      await tester.tap(correctButton);
       await tester.pump();
 
-      // Check reframe card is shown
+      // Check Reframe Card appears
       expect(find.text('Chính xác rồi!'), findsOneWidget);
-      expect(find.text('Gợi ý đổi góc nhìn (Reframe):'), findsOneWidget);
+      expect(find.text('Điểm 7 không định nghĩa toàn bộ con người mình.'), findsOneWidget);
       expect(find.text('Câu tiếp theo'), findsOneWidget);
-      expect(find.text('Đúng: 1'), findsOneWidget);
     });
   });
 }

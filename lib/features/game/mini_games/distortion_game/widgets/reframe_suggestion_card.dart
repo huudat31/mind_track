@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mind_track/core/constants/app_colors.dart';
 import '../../../constants/game_strings.dart';
-import '../../../models/distortion_question.dart';
+import '../../../models/distortion_scenario.dart';
 
 class ReframeSuggestionCard extends StatelessWidget {
-  final DistortionQuestion question;
+  final DistortionScenario scenario;
   final bool isCorrect;
   final VoidCallback onNext;
 
   const ReframeSuggestionCard({
     super.key,
-    required this.question,
+    required this.scenario,
     required this.isCorrect,
     required this.onNext,
   });
@@ -67,9 +67,9 @@ class ReframeSuggestionCard extends StatelessWidget {
 
           // Lời giải thích bản chất bẫy tư duy
           Text(
-            question.explanation,
+            '${scenario.distortionType.displayName}: ${scenario.distortionType.shortDescription}',
             style: GoogleFonts.plusJakartaSans(
-              fontSize: 13.5,
+              fontSize: 13,
               height: 1.4,
               color: AppColors.textPrimary,
             ),
@@ -97,7 +97,7 @@ class ReframeSuggestionCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  question.reframeSuggestion,
+                  scenario.reframe,
                   style: GoogleFonts.plusJakartaSans(
                     fontSize: 13,
                     fontStyle: FontStyle.italic,

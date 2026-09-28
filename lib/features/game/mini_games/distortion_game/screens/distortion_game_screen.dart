@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mind_track/core/constants/app_colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../../core/constants/app_colors.dart';
 import '../../../constants/game_strings.dart';
 import '../../../models/cognitive_distortion_type.dart';
-import '../../../models/distortion_question.dart';
+import '../../../models/companion_tone.dart';
+import '../../../models/distortion_scenario.dart';
 import '../../../models/game_level.dart';
 import '../../../progress/game_progress_provider.dart';
 import '../../../widgets/game_scaffold.dart';
@@ -14,16 +16,19 @@ import '../../../widgets/result_dialog.dart';
 import '../../../widgets/speech_bubble.dart';
 import '../logic/distortion_game_engine.dart';
 import '../widgets/distortion_choice_button.dart';
+import '../widgets/mock_ui_display_widget.dart';
 import '../widgets/reframe_suggestion_card.dart';
 
 class DistortionGameScreen extends ConsumerStatefulWidget {
-  final List<DistortionQuestion>? initialQuestions;
+  final List<DistortionScenario>? initialScenarios;
   final String? preferredContextTag;
+  final ToneType initialTone;
 
   const DistortionGameScreen({
     super.key,
-    this.initialQuestions,
+    this.initialScenarios,
     this.preferredContextTag,
+    this.initialTone = ToneType.friendly,
   });
 
   @override
@@ -31,37 +36,61 @@ class DistortionGameScreen extends ConsumerStatefulWidget {
 }
 
 class _DistortionGameScreenState extends ConsumerState<DistortionGameScreen> {
+  static const String _tonePrefKey = 'game_user_tone_preference_v1';
+
   bool _isLoading = true;
   String? _errorMessage;
-  List<DistortionQuestionRound> _rounds = [];
+  List<DistortionScenarioRound> _rounds = [];
   int _currentRoundIndex = 0;
   int _correctCount = 0;
+  ToneType _currentTone = ToneType.friendly;
 
-  CognitiveDistortionType? _selectedOption;
+  DistortionType? _selectedOption;
   bool _hasAnsweredCurrent = false;
   bool _isAnswerCorrect = false;
 
   @override
   void initState() {
     super.initState();
-    _loadQuestionsAndStart();
+    _currentTone = widget.initialTone;
+    _initToneAndLoadScenarios();
   }
 
-  Future<void> _loadQuestionsAndStart() async {
+  Future<void> _initToneAndLoadScenarios() async {
     try {
-      List<DistortionQuestion> questions;
-      if (widget.initialQuestions != null && widget.initialQuestions!.isNotEmpty) {
-        questions = widget.initialQuestions!;
+      final prefs = await SharedPreferences.getInstance();
+      final savedToneId = prefs.getString(_tonePrefKey);
+      if (savedToneId != null) {
+        try {
+          _currentTone = ToneType.fromId(savedToneId);
+        } catch (_) {}
+      }
+
+      await _loadScenariosAndStart();
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _errorMessage = 'Không thể tải câu hỏi: $e';
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _loadScenariosAndStart() async {
+    try {
+      List<DistortionScenario> scenarios;
+      if (widget.initialScenarios != null && widget.initialScenarios!.isNotEmpty) {
+        scenarios = widget.initialScenarios!;
       } else {
         final jsonString =
             await rootBundle.loadString('assets/game/distortion_questions.json');
-        questions = DistortionGameEngine.parseQuestionsFromJson(jsonString);
+        scenarios = DistortionGameEngine.parseScenariosFromJson(jsonString);
       }
 
-      final engine = DistortionGameEngine(allQuestions: questions);
+      final engine = DistortionGameEngine(allScenarios: scenarios);
       final sessionRounds = engine.generateSessionRounds(
         preferredContextTag: widget.preferredContextTag,
-        count: 8,
+        count: 6,
       );
 
       if (!mounted) return;
@@ -82,11 +111,11 @@ class _DistortionGameScreenState extends ConsumerState<DistortionGameScreen> {
     }
   }
 
-  void _onOptionSelected(CognitiveDistortionType option) {
+  void _onOptionSelected(DistortionType option) {
     if (_hasAnsweredCurrent) return;
 
     final currentRound = _rounds[_currentRoundIndex];
-    final isCorrect = option == currentRound.question.correctType;
+    final isCorrect = option == currentRound.scenario.distortionType;
 
     HapticFeedback.mediumImpact();
 
@@ -136,7 +165,7 @@ class _DistortionGameScreenState extends ConsumerState<DistortionGameScreen> {
       stars: stars,
       score: accuracy,
       onReplay: () {
-        _loadQuestionsAndStart();
+        _loadScenariosAndStart();
       },
       onContinue: () {
         Navigator.pop(context, true);
@@ -144,10 +173,16 @@ class _DistortionGameScreenState extends ConsumerState<DistortionGameScreen> {
     );
   }
 
+  void _changeTone(ToneType newTone) async {
+    setState(() => _currentTone = newTone);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_tonePrefKey, newTone.id);
+  }
+
   SootMood get _sootMood {
-    if (!_hasAnsweredCurrent) return SootMood.worried;
+    if (!_hasAnsweredCurrent) return SootMood.thinking;
     if (_isAnswerCorrect) return SootMood.happy;
-    return SootMood.thinking;
+    return SootMood.calm;
   }
 
   @override
@@ -187,7 +222,8 @@ class _DistortionGameScreenState extends ConsumerState<DistortionGameScreen> {
     }
 
     final currentRound = _rounds[_currentRoundIndex];
-    final question = currentRound.question;
+    final scenario = currentRound.scenario;
+    final companionText = scenario.companionIntro.getIntro(_currentTone);
 
     return GameScaffold(
       title: level.title,
@@ -195,25 +231,68 @@ class _DistortionGameScreenState extends ConsumerState<DistortionGameScreen> {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
           children: [
-            // Question Counter Bar
+            // Top Bar: Question Counter + Tone Selector Chip
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Câu ${_currentRoundIndex + 1} / ${_rounds.length}',
-                  style: GoogleFonts.plusJakartaSans(
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primary,
+                Expanded(
+                  child: Text(
+                    'Câu ${_currentRoundIndex + 1} / ${_rounds.length}',
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primary,
+                    ),
                   ),
                 ),
-                Text(
-                  'Đúng: $_correctCount',
-                  style: GoogleFonts.plusJakartaSans(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textSecondary,
+                const SizedBox(width: 8),
+                // Tone Dial Popup Menu
+                PopupMenuButton<ToneType>(
+                  tooltip: 'Đổi giọng điệu Muội Đen',
+                  initialValue: _currentTone,
+                  onSelected: _changeTone,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: AppColors.primary.withValues(alpha: 0.3),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.tune_rounded, size: 14, color: AppColors.primary),
+                        const SizedBox(width: 4),
+                        Text(
+                          'Giọng: ${_currentTone.name.toUpperCase()}',
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primaryDark,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      value: ToneType.chill,
+                      child: Text(ToneType.chill.displayName),
+                    ),
+                    PopupMenuItem(
+                      value: ToneType.friendly,
+                      child: Text(ToneType.friendly.displayName),
+                    ),
+                    PopupMenuItem(
+                      value: ToneType.calm,
+                      child: Text(ToneType.calm.displayName),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -229,41 +308,92 @@ class _DistortionGameScreenState extends ConsumerState<DistortionGameScreen> {
                 valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
               ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 16),
 
-            // Muội Đen & Suy nghĩ tự động
+            // 1. Mock UI Display Widget (Giao diện đời thực)
+            MockUiDisplayWidget(mockUi: scenario.mockUi),
+            const SizedBox(height: 14),
+
+            // 2. Suy nghĩ tự động (Thought Box)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFEF3C7),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: const Color(0xFFFDE68A), width: 1.2),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.psychology_alt_outlined,
+                        size: 16,
+                        color: Color(0xFFB45309),
+                      ),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          'Suy nghĩ lóe lên trong đầu:',
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 11.5,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFF92400E),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '“${scenario.thought}”',
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 13.5,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xFF78350F),
+                      height: 1.35,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 14),
+
+            // 3. Muội Đen & Lời dẫn theo Tone đã chọn
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                MuoiDenWidget(mood: _sootMood, size: 76),
-                const SizedBox(width: 12),
+                MuoiDenWidget(mood: _sootMood, size: 68),
+                const SizedBox(width: 10),
                 Expanded(
                   child: SpeechBubble(
                     speakerName: GameStrings.sootName,
-                    text: '“${question.thought}”',
+                    text: companionText,
                     enableTypewriter: false,
                     tailPosition: BubbleTailPosition.left,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 16),
 
+            // Tiêu đề câu hỏi
             Text(
               GameStrings.distortionInstruction,
               style: GoogleFonts.plusJakartaSans(
-                fontSize: 14,
+                fontSize: 13.5,
                 fontWeight: FontWeight.w700,
                 color: AppColors.textPrimary,
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
 
-            // 4 Option Buttons
+            // 4 Option Buttons (Đã được xáo trộn)
             ...currentRound.options.map((option) {
               ChoiceFeedbackState state = ChoiceFeedbackState.idle;
               if (_hasAnsweredCurrent) {
-                if (option == question.correctType) {
+                if (option == scenario.distortionType) {
                   state = ChoiceFeedbackState.correct;
                 } else if (option == _selectedOption) {
                   state = ChoiceFeedbackState.wrong;
@@ -278,11 +408,11 @@ class _DistortionGameScreenState extends ConsumerState<DistortionGameScreen> {
               );
             }),
 
-            // Reframe Suggestion Card when answered
+            // 4. Reframe Suggestion Card khi đã trả lời
             if (_hasAnsweredCurrent) ...[
               const SizedBox(height: 12),
               ReframeSuggestionCard(
-                question: question,
+                scenario: scenario,
                 isCorrect: _isAnswerCorrect,
                 onNext: _onNextQuestion,
               ),
