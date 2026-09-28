@@ -23,7 +23,7 @@ class DistortionQuestion {
       throw const FormatException('Trường "id" trong câu hỏi méo mó nhận thức bị thiếu hoặc rỗng.');
     }
 
-    final contextTag = json['contextTag'] as String?;
+    final contextTag = (json['context_tag'] ?? json['contextTag']) as String?;
     if (contextTag == null || contextTag.isEmpty) {
       throw FormatException('Câu hỏi $id bị thiếu trường "contextTag".');
     }
@@ -33,18 +33,20 @@ class DistortionQuestion {
       throw FormatException('Câu hỏi $id bị thiếu trường "thought".');
     }
 
-    final rawType = json['correctType'] as String?;
+    final rawType = (json['distortion_type'] ?? json['correctType']) as String?;
     if (rawType == null) {
       throw FormatException('Câu hỏi $id bị thiếu trường "correctType".');
     }
 
-    final correctType = CognitiveDistortionType.fromString(rawType);
+    final correctType = DistortionType.fromString(rawType);
     if (correctType == null) {
       throw FormatException('Câu hỏi $id có "correctType" không hợp lệ: $rawType');
     }
 
-    final explanation = json['explanation'] as String? ?? '';
-    final reframeSuggestion = json['reframeSuggestion'] as String? ?? '';
+    final explanation =
+        (json['explanation'] as String?) ?? correctType.shortDescription;
+    final reframeSuggestion =
+        (json['reframe'] ?? json['reframeSuggestion']) as String? ?? '';
 
     return DistortionQuestion(
       id: id,
@@ -59,11 +61,11 @@ class DistortionQuestion {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'contextTag': contextTag,
+      'context_tag': contextTag,
       'thought': thought,
-      'correctType': correctType.name,
+      'distortion_type': correctType.id,
       'explanation': explanation,
-      'reframeSuggestion': reframeSuggestion,
+      'reframe': reframeSuggestion,
     };
   }
 }
