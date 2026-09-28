@@ -456,7 +456,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                   Text(
                     'RẤT KHÓ CHỊU',
                     style: TextStyle(
-                      color: Colors.white38,
+                      color: AppColors.textSecondary,
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
                       letterSpacing: 0.5,
@@ -465,7 +465,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                   Text(
                     'RẤT DỄ CHỊU',
                     style: TextStyle(
-                      color: Colors.white38,
+                      color: AppColors.textSecondary,
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
                       letterSpacing: 0.5,
@@ -567,9 +567,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                       data: SliderTheme.of(context).copyWith(
                         trackHeight: 6,
                         activeTrackColor: tier.accentColor,
-                        inactiveTrackColor: Colors.white.withValues(
-                          alpha: 0.15,
-                        ),
+                        inactiveTrackColor: AppColors.surfaceMuted,
                         thumbColor: Colors.white,
                         overlayColor: tier.accentColor.withValues(alpha: 0.25),
                         thumbShape: const RoundSliderThumbShape(
@@ -594,7 +592,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                         return Text(
                           '${i + 1}',
                           style: TextStyle(
-                            color: isCur ? Colors.white : Colors.white38,
+                            color: isCur ? AppColors.textPrimary : AppColors.textMuted,
                             fontSize: 11,
                             fontWeight: isCur
                                 ? FontWeight.bold
@@ -612,7 +610,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                 title: 'Cờ đỏ triệu chứng lâm sàng',
                 trailing: Text(
                   '${_selectedFlags.length} đã chọn',
-                  style: const TextStyle(color: Colors.white54, fontSize: 12),
+                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -736,7 +734,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                 'Bản Ghi Nhận Hôm Nay',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                 ),
@@ -745,23 +743,23 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
               const Text(
                 'Tổng hợp dữ liệu chuẩn bị cho bản báo cáo trước trị liệu',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white54, fontSize: 13),
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
               ),
               const SizedBox(height: 20),
               Container(
                 padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.08),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: tier.accentColor.withValues(alpha: 0.35),
-                    width: 1.5,
+                    color: AppColors.border,
+                    width: 1.2,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: tier.accentColor.withValues(alpha: 0.15),
-                      blurRadius: 20,
-                      spreadRadius: -4,
+                      color: Colors.black.withValues(alpha: 0.04),
+                      blurRadius: 16,
+                      offset: const Offset(0, 4),
                     ),
                   ],
                 ),
@@ -776,7 +774,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                             Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                color: tier.accentColor.withValues(alpha: 0.25),
+                                color: tier.accentColor.withValues(alpha: 0.15),
                                 shape: BoxShape.circle,
                               ),
                               child: Icon(
@@ -792,8 +790,9 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                                 const Text(
                                   'CẢM XÚC CHỦ ĐẠO',
                                   style: TextStyle(
-                                    color: Colors.white54,
+                                    color: AppColors.textSecondary,
                                     fontSize: 10,
+                                    fontWeight: FontWeight.w600,
                                     letterSpacing: 0.5,
                                   ),
                                 ),
@@ -815,13 +814,14 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                             vertical: 5,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.1),
+                            color: AppColors.surfaceMuted,
                             borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: AppColors.border),
                           ),
                           child: Text(
                             'Năng lượng: ${_energyLevel.toInt()}/5',
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                             ),
@@ -829,11 +829,11 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                         ),
                       ],
                     ),
-                    const Divider(color: Colors.white12, height: 24),
+                    const Divider(color: AppColors.border, height: 24),
                     const Text(
                       'Triệu chứng ghi nhận:',
                       style: TextStyle(
-                        color: Colors.white70,
+                        color: AppColors.textPrimary,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                       ),
@@ -843,7 +843,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                       const Text(
                         '• Không ghi nhận triệu chứng bất thường',
                         style: TextStyle(
-                          color: Colors.white38,
+                          color: AppColors.textMuted,
                           fontSize: 12,
                           fontStyle: FontStyle.italic,
                         ),
@@ -859,14 +859,16 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: tier.accentColor.withValues(alpha: 0.18),
+                              color: tier.accentColor.withValues(alpha: 0.12),
                               borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: tier.accentColor.withValues(alpha: 0.3)),
                             ),
                             child: Text(
                               '• $name',
-                              style: const TextStyle(
-                                color: Colors.white,
+                              style: TextStyle(
+                                color: tier.accentColor,
                                 fontSize: 11,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           );
@@ -876,7 +878,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                     const Text(
                       'Ngữ cảnh liên quan:',
                       style: TextStyle(
-                        color: Colors.white70,
+                        color: AppColors.textPrimary,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                       ),
@@ -887,8 +889,9 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                           ? 'Không gắn tag'
                           : _selectedTags.join(' · '),
                       style: TextStyle(
-                        color: tier.accentColor.withValues(alpha: 0.85),
+                        color: tier.accentColor,
                         fontSize: 12,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],
@@ -900,7 +903,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                 title: 'Nhật ký cân bằng (CBT 3 bước)',
                 trailing: const Icon(
                   Icons.auto_stories_outlined,
-                  color: Colors.white54,
+                  color: AppColors.textSecondary,
                   size: 16,
                 ),
                 child: Column(
@@ -909,7 +912,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                     const Text(
                       'Dành 1-2 phút ghi lại sự việc để chuyên gia hiểu rõ bối cảnh:',
                       style: TextStyle(
-                        color: Colors.white60,
+                        color: AppColors.textSecondary,
                         fontSize: 12,
                         height: 1.3,
                       ),
@@ -962,7 +965,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                                 'Có vẻ bạn đang trải qua cảm giác quá tải. Bạn có muốn gọi ai đó lắng nghe không?',
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: Colors.white,
+                                  color: AppColors.textPrimary,
                                 ),
                               ),
                             ),

@@ -178,50 +178,44 @@ class MainNavigationScreenState extends State<MainNavigationScreen> {
     final Color activeBg = isSpecial
         ? const Color(0xFFEB6834)
         : AppColors.primary;
-    const Color activeTextColor = Colors.white;
+    const Color activeIconColor = Colors.white;
     const Color inactiveIconColor = AppColors.textSecondary;
 
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () => _switchTab(index),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        padding: EdgeInsets.symmetric(
-          horizontal: isSelected ? 14 : 10,
-          vertical: 8,
-        ),
-        decoration: BoxDecoration(
-          color: isSelected ? activeBg : Colors.transparent,
-          borderRadius: BorderRadius.circular(22),
-          border: isSelected
-              ? Border.all(
-                  color: isSpecial
-                      ? const Color(0xFFEB6834).withValues(alpha: 0.3)
-                      : AppColors.primary.withValues(alpha: 0.2),
-                  width: 1,
-                )
-              : null,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              isSelected ? activeIcon : icon,
-              size: 20,
-              color: isSelected ? activeTextColor : inactiveIconColor,
+    return Semantics(
+      label: label,
+      selected: isSelected,
+      button: true,
+      child: Tooltip(
+        message: label,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => _switchTab(index),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeInOut,
+            width: 48,
+            height: 44,
+            decoration: BoxDecoration(
+              color: isSelected ? activeBg : Colors.transparent,
+              borderRadius: BorderRadius.circular(22),
+              boxShadow: isSelected
+                  ? [
+                      BoxShadow(
+                        color: activeBg.withValues(alpha: 0.35),
+                        blurRadius: 10,
+                        offset: const Offset(0, 3),
+                      ),
+                    ]
+                  : null,
             ),
-            if (isSelected) ...[
-              const SizedBox(width: 6),
-              Text(
-                label,
-                style: TextStyle(
-                  color: activeTextColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
+            child: Center(
+              child: Icon(
+                isSelected ? activeIcon : icon,
+                size: 22,
+                color: isSelected ? activeIconColor : inactiveIconColor,
               ),
-            ],
-          ],
+            ),
+          ),
         ),
       ),
     );
