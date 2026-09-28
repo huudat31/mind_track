@@ -1226,8 +1226,10 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
     return LayoutBuilder(
       builder: (context, constraints) {
         final trackWidth = constraints.maxWidth;
-        const trackHeight = 36.0;
+        const trackHeight = 38.0;
         const thumbDiameter = 32.0;
+        final thumbLeft = (_sliderValue * (trackWidth - thumbDiameter - 6)) + 3;
+        final activeWidth = (thumbLeft + thumbDiameter / 2).clamp(0.0, trackWidth);
 
         return GestureDetector(
           onHorizontalDragUpdate: (details) {
@@ -1247,27 +1249,79 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
             height: trackHeight,
             width: trackWidth,
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.16),
+              color: const Color(0xFFE8ECE9),
               borderRadius: BorderRadius.circular(trackHeight / 2),
+              border: Border.all(
+                color: const Color(0xFFCFD6D2),
+                width: 1.5,
+              ),
             ),
             child: Stack(
               alignment: Alignment.centerLeft,
               children: [
+                // Active colored progress fill
                 Positioned(
-                  left: (_sliderValue * (trackWidth - thumbDiameter - 4)) + 2,
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: activeWidth,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: accentColor.withValues(alpha: 0.22),
+                      borderRadius: BorderRadius.circular(trackHeight / 2),
+                    ),
+                  ),
+                ),
+
+                // Center neutral marker (Bình thường - 0.5)
+                Positioned(
+                  left: (trackWidth / 2) - 1.5,
+                  top: (trackHeight - 12) / 2,
+                  child: Container(
+                    width: 3,
+                    height: 12,
+                    decoration: BoxDecoration(
+                      color: AppColors.textMuted.withValues(alpha: 0.4),
+                      borderRadius: BorderRadius.circular(1.5),
+                    ),
+                  ),
+                ),
+
+                // Interactive thumb with accent ring and center dot
+                Positioned(
+                  left: thumbLeft,
                   child: Container(
                     width: thumbDiameter,
                     height: thumbDiameter,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       color: Colors.white,
                       shape: BoxShape.circle,
+                      border: Border.all(
+                        color: accentColor,
+                        width: 3.5,
+                      ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black38,
-                          blurRadius: 8,
-                          offset: Offset(0, 2),
+                          color: accentColor.withValues(alpha: 0.35),
+                          blurRadius: 10,
+                          offset: const Offset(0, 3),
+                        ),
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.12),
+                          blurRadius: 4,
+                          offset: const Offset(0, 1),
                         ),
                       ],
+                    ),
+                    child: Center(
+                      child: Container(
+                        width: 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: accentColor,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
                     ),
                   ),
                 ),
