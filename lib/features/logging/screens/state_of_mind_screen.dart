@@ -1226,13 +1226,12 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
     return LayoutBuilder(
       builder: (context, constraints) {
         final trackWidth = constraints.maxWidth;
-        const totalHeight = 44.0;
-        const trackHeight = 10.0;
-        const thumbDiameter = 28.0;
-        final thumbLeft = (_sliderValue * (trackWidth - thumbDiameter)).clamp(
-          0.0,
-          trackWidth - thumbDiameter,
-        );
+        const trackHeight = 38.0;
+        const thumbDiameter = 30.0;
+        const trackPadding = 4.0;
+        final thumbLeft =
+            (_sliderValue * (trackWidth - thumbDiameter - (trackPadding * 2))) +
+            trackPadding;
         final activeWidth = (thumbLeft + thumbDiameter / 2).clamp(
           0.0,
           trackWidth,
@@ -1253,65 +1252,38 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
             );
             _onSliderChanged(newValue);
           },
-          child: SizedBox(
-            height: totalHeight,
+          child: Container(
+            height: trackHeight,
             width: trackWidth,
+            decoration: BoxDecoration(
+              color: accentColor.withValues(alpha: 0.16),
+              borderRadius: BorderRadius.circular(trackHeight / 2),
+              border: Border.all(
+                color: accentColor.withValues(alpha: 0.35),
+                width: 1.5,
+              ),
+            ),
             child: Stack(
               alignment: Alignment.centerLeft,
               children: [
-                // Inactive base track
-                Center(
-                  child: Container(
-                    height: trackHeight,
-                    width: trackWidth,
-                    decoration: BoxDecoration(
-                      color: accentColor.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(trackHeight / 2),
-                    ),
-                  ),
-                ),
-
-                // Active progress track (Exact same vibrant color as the button)
+                // Active progress fill - exact same color as the button
                 Positioned(
                   left: 0,
-                  top: (totalHeight - trackHeight) / 2,
+                  top: 0,
+                  bottom: 0,
+                  width: activeWidth,
                   child: Container(
-                    height: trackHeight,
-                    width: activeWidth,
                     decoration: BoxDecoration(
                       color: accentColor,
                       borderRadius: BorderRadius.circular(trackHeight / 2),
-                      boxShadow: [
-                        BoxShadow(
-                          color: accentColor.withValues(alpha: 0.35),
-                          blurRadius: 6,
-                          offset: const Offset(0, 1),
-                        ),
-                      ],
                     ),
                   ),
                 ),
 
-                // Center neutral notch (0.5 - Bình thường)
-                Positioned(
-                  left: (trackWidth / 2) - 1.25,
-                  top: (totalHeight - 14) / 2,
-                  child: Container(
-                    width: 2.5,
-                    height: 14,
-                    decoration: BoxDecoration(
-                      color: _sliderValue >= 0.5
-                          ? Colors.white.withValues(alpha: 0.75)
-                          : accentColor.withValues(alpha: 0.45),
-                      borderRadius: BorderRadius.circular(1.5),
-                    ),
-                  ),
-                ),
-
-                // Tactile floating Apple-style knob
+                // Clean pristine white floating knob (no inner dot, no arrow)
                 Positioned(
                   left: thumbLeft,
-                  top: (totalHeight - thumbDiameter) / 2,
+                  top: (trackHeight - thumbDiameter) / 2,
                   child: Container(
                     width: thumbDiameter,
                     height: thumbDiameter,
@@ -1319,31 +1291,21 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                       color: Colors.white,
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: Colors.black.withValues(alpha: 0.06),
+                        color: Colors.black.withValues(alpha: 0.05),
                         width: 0.5,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.15),
-                          blurRadius: 8,
-                          offset: const Offset(0, 3),
-                        ),
-                        BoxShadow(
-                          color: accentColor.withValues(alpha: 0.35),
-                          blurRadius: 10,
+                          color: Colors.black.withValues(alpha: 0.18),
+                          blurRadius: 6,
                           offset: const Offset(0, 2),
                         ),
-                      ],
-                    ),
-                    child: Center(
-                      child: Container(
-                        width: 10,
-                        height: 10,
-                        decoration: BoxDecoration(
-                          color: accentColor,
-                          shape: BoxShape.circle,
+                        BoxShadow(
+                          color: accentColor.withValues(alpha: 0.25),
+                          blurRadius: 6,
+                          offset: const Offset(0, 1),
                         ),
-                      ),
+                      ],
                     ),
                   ),
                 ),
