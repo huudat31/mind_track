@@ -1249,17 +1249,17 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
             height: trackHeight,
             width: trackWidth,
             decoration: BoxDecoration(
-              color: const Color(0xFFD8DFDA),
+              color: accentColor.withValues(alpha: 0.16),
               borderRadius: BorderRadius.circular(trackHeight / 2),
               border: Border.all(
-                color: const Color(0xFFAEBDB5),
+                color: accentColor.withValues(alpha: 0.38),
                 width: 1.8,
               ),
             ),
             child: Stack(
               alignment: Alignment.centerLeft,
               children: [
-                // Active colored progress fill
+                // Active progress fill - exact same color as the button
                 Positioned(
                   left: 0,
                   top: 0,
@@ -1267,7 +1267,7 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                   width: activeWidth,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: accentColor.withValues(alpha: 0.38),
+                      color: accentColor,
                       borderRadius: BorderRadius.circular(trackHeight / 2),
                     ),
                   ),
@@ -1281,7 +1281,9 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                     width: 3.5,
                     height: 14,
                     decoration: BoxDecoration(
-                      color: AppColors.textPrimary.withValues(alpha: 0.35),
+                      color: _sliderValue >= 0.5
+                          ? Colors.white.withValues(alpha: 0.7)
+                          : accentColor.withValues(alpha: 0.55),
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -1298,17 +1300,17 @@ class _StateOfMindScreenState extends State<StateOfMindScreen>
                       shape: BoxShape.circle,
                       border: Border.all(
                         color: accentColor,
-                        width: 4.0,
+                        width: 3.5,
                       ),
                       boxShadow: [
                         BoxShadow(
                           color: accentColor.withValues(alpha: 0.45),
-                          blurRadius: 12,
+                          blurRadius: 10,
                           offset: const Offset(0, 3),
                         ),
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.16),
-                          blurRadius: 6,
+                          color: Colors.black.withValues(alpha: 0.15),
+                          blurRadius: 5,
                           offset: const Offset(0, 2),
                         ),
                       ],
