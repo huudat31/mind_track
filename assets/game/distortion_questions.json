@@ -1,0 +1,194 @@
+[
+  {
+    "id": "q_hoc_tap_01",
+    "contextTag": "hoc_tap",
+    "thought": "Bài kiểm tra giữa kỳ này mà trượt là coi như tương lai của mình chấm dứt.",
+    "correctType": "catastrophizing",
+    "explanation": "Tâm trí đang phóng đại một kỳ thi thành sự sụp đổ của toàn bộ tương lai.",
+    "reframeSuggestion": "Một bài thi chỉ phản ánh kết quả của một đợt học, không quyết định cả chặng đường dài phía trước."
+  },
+  {
+    "id": "q_hoc_tap_02",
+    "contextTag": "hoc_tap",
+    "thought": "Nếu không đạt điểm A môn này thì mọi nỗ lực cả học kỳ đều vô nghĩa.",
+    "correctType": "black_and_white",
+    "explanation": "Đang nhìn nhận kết quả chỉ ở hai cực: hoặc điểm tuyệt đối hoặc thất bại hoàn toàn.",
+    "reframeSuggestion": "Dù không đạt điểm tối đa, quá trình ôn tập và kiến thức mình tích lũy được vẫn rất giá trị."
+  },
+  {
+    "id": "q_hoc_tap_03",
+    "contextTag": "hoc_tap",
+    "thought": "Mình quên mất một công thức khi thuyết trình, mình đúng là kẻ thất bại bất tài.",
+    "correctType": "labeling",
+    "explanation": "Đang dùng một sự cố nhỏ để chụp một cái nhãn tiêu cực lên toàn bộ năng lực bản thân.",
+    "reframeSuggestion": "Quên công thức là chuyện bình thường khi hồi hộp, điều đó không khiến mình trở thành kẻ bất tài."
+  },
+  {
+    "id": "q_hoc_tap_04",
+    "contextTag": "hoc_tap",
+    "thought": "Thầy giáo nhìn mình nhíu mày, chắc chắn thầy đang nghĩ bài tập của mình quá tệ.",
+    "correctType": "arbitrary_inference",
+    "explanation": "Đang tự đọc suy nghĩ của người khác mà không có bằng chứng xác thực.",
+    "reframeSuggestion": "Thầy nhíu mày có thể vì đang tập trung đọc kỹ hoặc mỏi mắt, mình không thể biết chắc nếu chưa hỏi."
+  },
+  {
+    "id": "q_hoc_tap_05",
+    "contextTag": "hoc_tap",
+    "thought": "Nhóm bị điểm trừ vì nộp muộn, tất cả là do mình không nhắc nhở mọi người liên tục.",
+    "correctType": "over_personalization",
+    "explanation": "Đang tự gánh toàn bộ trách nhiệm về sự việc tập thể nằm ngoài tầm kiểm soát cá nhân.",
+    "reframeSuggestion": "Bài tập nhóm là trách nhiệm chung của cả đội, ai cũng có phần nỗ lực và quản lý thời gian."
+  },
+  {
+    "id": "q_hoc_tap_06",
+    "contextTag": "hoc_tap",
+    "thought": "Là sinh viên giỏi thì lúc nào mình cũng phải hiểu bài ngay lập tức, không được phép hỏi câu ngớ ngẩn.",
+    "correctType": "rigid_shoulds",
+    "explanation": "Đang tự đặt ra nguyên tắc cứng nhắc 'phải' khiến bản thân căng thẳng và sợ sai.",
+    "reframeSuggestion": "Học tập là một quá trình tìm tòi, đặt câu hỏi khi chưa hiểu là cách nhanh nhất để tiến bộ."
+  },
+  {
+    "id": "q_gia_dinh_01",
+    "contextTag": "gia_dinh",
+    "thought": "Bố mẹ không cười lúc ăn cơm chắc chắn là đang giận và thất vọng về mình.",
+    "correctType": "arbitrary_inference",
+    "explanation": "Đang suy đoán cảm xúc và suy nghĩ của bố mẹ mà không dựa trên lời nói hay chứng cứ thực tế.",
+    "reframeSuggestion": "Người lớn cũng có những mệt mỏi trong công việc hàng ngày, chưa chắc sự trầm lặng đó liên quan đến mình."
+  },
+  {
+    "id": "q_gia_dinh_02",
+    "contextTag": "gia_dinh",
+    "thought": "Hôm nay bố mẹ cãi nhau, nếu mình ngoan ngoãn hơn thì gia đình đã không căng thẳng thế này.",
+    "correctType": "over_personalization",
+    "explanation": "Tự ôm lấy lỗi lầm về mối quan hệ giữa người lớn vốn không nằm trong quyền quyết định của mình.",
+    "reframeSuggestion": "Mâu thuẫn giữa bố mẹ là chuyện của người lớn, mình không phải là nguyên nhân gây ra điều đó."
+  },
+  {
+    "id": "q_gia_dinh_03",
+    "contextTag": "gia_dinh",
+    "thought": "Mình đã làm vỡ chiếc bình mẹ thích, mình chẳng bao giờ làm được việc gì nên hồn cả.",
+    "correctType": "labeling",
+    "explanation": "Đang quy chụp một sơ suất vô ý thành bản chất vụng về, vô dụng của bản thân.",
+    "reframeSuggestion": "Ai cũng có lúc lỡ tay làm vỡ đồ, mình xin lỗi và dọn dẹp cẩn thận là được."
+  },
+  {
+    "id": "q_gia_dinh_04",
+    "contextTag": "gia_dinh",
+    "thought": "Gia đình mình không hoàn hảo như nhà người ta, cuộc sống coi như bế tắc.",
+    "correctType": "catastrophizing",
+    "explanation": "So sánh và đẩy khó khăn hiện tại thành bế tắc tuyệt đối.",
+    "reframeSuggestion": "Mỗi gia đình đều có những khó khăn riêng mà người ngoài không thấy, mình có thể trân trọng những điều tốt đẹp đang có."
+  },
+  {
+    "id": "q_gia_dinh_05",
+    "contextTag": "gia_dinh",
+    "thought": "Đã là con cả trong nhà thì mình phải luôn gương mẫu và không bao giờ được tỏ ra yếu lòng.",
+    "correctType": "rigid_shoulds",
+    "explanation": "Quy tắc 'phải luôn luôn' ngăn cản bạn bộc lộ cảm xúc tự nhiên của con người.",
+    "reframeSuggestion": "Là con cả hay con thứ thì mình cũng có quyền được mệt mỏi và cần sự chia sẻ từ gia đình."
+  },
+  {
+    "id": "q_gia_dinh_06",
+    "contextTag": "gia_dinh",
+    "thought": "Mẹ chỉ trích kiểu tóc mới của mình, mẹ ghét bỏ tất cả những gì thuộc về mình rồi.",
+    "correctType": "black_and_white",
+    "explanation": "Phóng chiếu từ một bất đồng ý kiến nhỏ thành sự phủ định toàn bộ tình yêu thương.",
+    "reframeSuggestion": "Bố mẹ có gu thẩm mỹ khác thế hệ mình, không đồng tình một điểm không có nghĩa là ghét bỏ con cái."
+  },
+  {
+    "id": "q_tinh_cam_01",
+    "contextTag": "tinh_cam",
+    "thought": "Người ấy không trả lời tin nhắn sau 30 phút, chắc chắn họ đã chán và sắp chia tay mình.",
+    "correctType": "catastrophizing",
+    "explanation": "Từ một khoảng lặng tạm thời nhảy cóc ngay tới kết cục tồi tệ nhất là chia tay.",
+    "reframeSuggestion": "Họ có thể đang bận học, làm việc hoặc để điện thoại ở chế độ im lặng, mình nên kiên nhẫn chờ."
+  },
+  {
+    "id": "q_tinh_cam_02",
+    "contextTag": "tinh_cam",
+    "thought": "Hôm nay bạn ấy có vẻ ít nói, chắc mình đã lỡ lời nói điều gì xúc phạm rồi.",
+    "correctType": "over_personalization",
+    "explanation": "Tự gán tâm trạng ít nói của người khác vào trách nhiệm của bản thân.",
+    "reframeSuggestion": "Người ấy có thể đang có chuyện bận tâm riêng hoặc đơn giản là muốn nghỉ ngơi."
+  },
+  {
+    "id": "q_tinh_cam_03",
+    "contextTag": "tinh_cam",
+    "thought": "Nếu họ thực sự yêu mình, họ phải tự hiểu mình đang buồn mà không cần mình phải nói ra.",
+    "correctType": "arbitrary_inference",
+    "explanation": "Đang kỳ vọng người khác đọc được suy nghĩ của mình và đặt ra tiêu chuẩn phi thực tế.",
+    "reframeSuggestion": "Giao tiếp cởi mở là chìa khóa, chia sẻ trực tiếp cảm xúc sẽ giúp cả hai hiểu nhau hơn."
+  },
+  {
+    "id": "q_tinh_cam_04",
+    "contextTag": "tinh_cam",
+    "thought": "Trong tình yêu, nếu không có cảm xúc nồng nhiệt mỗi ngày thì mối quan hệ này coi như thất bại.",
+    "correctType": "black_and_white",
+    "explanation": "Coi tình cảm chỉ có hai thái cực: lúc nào cũng nồng nhiệt hoặc là hoàn toàn nguội lạnh.",
+    "reframeSuggestion": "Tình cảm lâu dài có những giai đoạn êm đềm, bình lặng để cả hai cùng phát triển cuộc sống riêng."
+  },
+  {
+    "id": "q_tinh_cam_05",
+    "contextTag": "tinh_cam",
+    "thought": "Mình bị từ chối lời tỏ tình, mình là một kẻ kém cỏi và không xứng đáng được ai yêu thương.",
+    "correctType": "labeling",
+    "explanation": "Lấy việc không phù hợp với một người để hạ thấp toàn bộ giá trị bản thân.",
+    "reframeSuggestion": "Bị từ chối chỉ đơn giản là hai người chưa phù hợp về thời điểm hoặc định hướng, không giảm đi giá trị của mình."
+  },
+  {
+    "id": "q_tinh_cam_06",
+    "contextTag": "tinh_cam",
+    "thought": "Mình nên là một người hoàn hảo thì người ta mới không rời bỏ mình.",
+    "correctType": "rigid_shoulds",
+    "explanation": "Ép bản thân vào tiêu chuẩn 'nên hoàn hảo' tạo ra áp lực tâm lý vô hình.",
+    "reframeSuggestion": "Không ai là hoàn hảo, sự chân thành và biết thấu hiểu mới là nền tảng bền vững."
+  },
+  {
+    "id": "q_mang_xa_hoi_01",
+    "contextTag": "mang_xa_hoi",
+    "thought": "Bài đăng của mình chỉ có vài lượt thích, chắc chắn bạn bè thấy mình mờ nhạt và đáng cười chê.",
+    "correctType": "arbitrary_inference",
+    "explanation": "Đoán mò suy nghĩ của người khác chỉ dựa trên số lượt tương tác thuật toán.",
+    "reframeSuggestion": "Lượt thích phụ thuộc vào thuật toán hiển thị của mạng xã hội, không phản ánh sự yêu mến của bạn bè ngoài đời."
+  },
+  {
+    "id": "q_mang_xa_hoi_02",
+    "contextTag": "mang_xa_hoi",
+    "thought": "Lỡ viết một bình luận hơi ngô nghê, mọi người trên mạng sẽ nhớ mãi và coi thường mình suốt đời.",
+    "correctType": "catastrophizing",
+    "explanation": "Thổi phồng sự chú ý của cộng đồng mạng thành sự phán xét vĩnh viễn.",
+    "reframeSuggestion": "Thông tin trên mạng trôi qua rất nhanh, mọi người hầu như chỉ tập trung vào việc của chính họ."
+  },
+  {
+    "id": "q_mang_xa_hoi_03",
+    "contextTag": "mang_xa_hoi",
+    "thought": "Thấy bạn bè cùng trang lứa trên mạng ai cũng thành công, đi du lịch khắp nơi, còn mình thì dậm chân tại chỗ.",
+    "correctType": "black_and_white",
+    "explanation": "Đánh giá cuộc sống theo kiểu họ có tất cả còn mình không có gì.",
+    "reframeSuggestion": "Mạng xã hội là nơi người ta trưng bày những khoảnh khắc đẹp nhất, không phải toàn bộ bức tranh cuộc sống."
+  },
+  {
+    "id": "q_mang_xa_hoi_04",
+    "contextTag": "mang_xa_hoi",
+    "thought": "Mình không theo kịp các trào lưu mới, mình đúng là kẻ lạc hậu và thất bại.",
+    "correctType": "labeling",
+    "explanation": "Gán cho bản thân nhãn 'lạc hậu, thất bại' chỉ vì không quan tâm đến xu hướng mạng.",
+    "reframeSuggestion": "Mỗi người có sở thích và nhịp sống riêng, tập trung vào điều mình thích mới là điều quan trọng."
+  },
+  {
+    "id": "q_mang_xa_hoi_05",
+    "contextTag": "mang_xa_hoi",
+    "thought": "Bạn mình đăng story tâm trạng buồn, chắc chắn là do mình hôm trước chưa trả lời tin nhắn.",
+    "correctType": "over_personalization",
+    "explanation": "Tự nhận cảm xúc buồn của người khác là do lỗi của bản thân.",
+    "reframeSuggestion": "Họ có thể có những chuyện cá nhân khác, nếu lo lắng mình có thể chủ động nhắn tin hỏi thăm."
+  },
+  {
+    "id": "q_mang_xa_hoi_06",
+    "contextTag": "mang_xa_hoi",
+    "thought": "Mỗi bài đăng trên trang cá nhân của mình phải thật lộng lẫy và thu hút nhiều bình luận tán thưởng.",
+    "correctType": "rigid_shoulds",
+    "explanation": "Áp lực 'phải thật lộng lẫy' biến mạng xã hội từ nơi kết nối thành gánh nặng phán xét.",
+    "reframeSuggestion": "Trang cá nhân là nơi lưu giữ kỷ niệm chân thật của bản thân, không cần phải chạy theo sự tán thưởng của số đông."
+  }
+]
