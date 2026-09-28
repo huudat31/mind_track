@@ -147,7 +147,6 @@ class MainNavigationScreenState extends State<MainNavigationScreen> {
             Icons.spa_outlined,
             Icons.spa_rounded,
             'Cảm xúc',
-            isSpecial: true,
           ),
           _buildNavItem(
             3,
@@ -170,14 +169,11 @@ class MainNavigationScreenState extends State<MainNavigationScreen> {
     int index,
     IconData icon,
     IconData activeIcon,
-    String label, {
-    bool isSpecial = false,
-  }) {
+    String label,
+  ) {
     final isSelected = _currentIndex == index;
 
-    final Color activeBg = isSpecial
-        ? const Color(0xFFEB6834)
-        : AppColors.primary;
+    const Color activeBg = AppColors.primary;
     const Color activeIconColor = Colors.white;
     const Color inactiveIconColor = AppColors.textSecondary;
 
